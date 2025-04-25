@@ -1,5 +1,5 @@
 ---
-description: C# Project Conventions And Best Practices
+description: C# Project Guidelines And Best Practices
 globs: **/*.cs
 alwaysApply: false
 ---

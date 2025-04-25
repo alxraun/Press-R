@@ -1,5 +1,5 @@
 ---
-description: C# Project Conventions Additional
+description: C# Project Guidelines Additional
 globs: **/*.cs
 alwaysApply: false
 ---
