@@ -1,11 +1,11 @@
 ---
-description: C# Conventions for UI Component Style
+description: C# Guidelines for UI Component Style
 globs: **/UI/**/*.cs
 alwaysApply: false
 ---
-# RimWorld UI: Component Style Conventions
+# RimWorld UI: Component Style Guidelines
 
-This document outlines conventions for developing RimWorld Mod UIs (especially settings windows) using a component-based approach inspired by modern UI frameworks like React, while adhering to the constraints of RimWorld's IMGUI system (`Verse.Listing_Standard`, `Verse.Widgets`). The goal is to achieve more organized, maintainable, and reusable UI code.
+This document outlines guidelines for developing RimWorld Mod UIs (especially settings windows) using a component-based approach inspired by modern UI frameworks like React, while adhering to the constraints of RimWorld's IMGUI system (`Verse.Listing_Standard`, `Verse.Widgets`). The goal is to achieve more organized, maintainable, and reusable UI code.
 
 ## Core Principles
 
@@ -14,7 +14,7 @@ This document outlines conventions for developing RimWorld Mod UIs (especially s
 3.  **Encapsulation:** Each component should encapsulate its own drawing logic (how it uses `Verse.Widgets` and arranges elements within its bounds) and hide these internal details from its consumer.
 4.  **Declarative Usage (at Container Level):** The primary UI container class (e.g., the settings window) should focus on *declaring which* components to render and *what* data (`props`) or content (`children`) to pass to them. It should minimize direct `Verse.Widgets` calls for elements that are part of a component.
 
-## Implementation Conventions
+## Implementation Guidelines
 
 ### 1. Component Representation
 
@@ -182,4 +182,4 @@ namespace YourMod.UI
 }
 ```
 
-By following these conventions, mod UIs can become more structured, easier to understand, and significantly more maintainable, leveraging the benefits of component-based design within the RimWorld environment.
+By following these guidelines, mod UIs can become more structured, easier to understand, and significantly more maintainable, leveraging the benefits of component-based design within the RimWorld environment.
