@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+  <!-- Settings Reset Button -->
+  <PressR.Settings.ResetButton.Label>Alapértékek visszaállítása</PressR.Settings.ResetButton.Label>
+  <PressR.Settings.ResetButton.Tooltip>Minden Press-R beállítás visszaállítása az alapértelmezett értékekre.</PressR.Settings.ResetButton.Tooltip>
+  <PressR.Settings.ResetButton.Message>A Press-R beállításai visszaállítva az alapértelmezett értékekre.</PressR.Settings.ResetButton.Message>
+
+  <!-- Mod Settings Container -->
+  <!-- Tab Lens Feature Section -->
+  <PressR.Settings.TabLens.Feature.Label>Tab Lens Funkció</PressR.Settings.TabLens.Feature.Label>
+  <PressR.Settings.TabLens.Feature.Description>Tárgybeállítások kezelése a térképen történő interakcióval, amikor a releváns fülek nyitva vannak.</PressR.Settings.TabLens.Feature.Description>
+  <PressR.Settings.TabLens.StorageLens.Enable.Label>Storage Lens Engedélyezése</PressR.Settings.TabLens.StorageLens.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.Enable.Description>Használja a Tab Lens-t a 'Tároló' fülön a tárgyak engedélyezésének váltásához a térképre kattintva.</PressR.Settings.TabLens.StorageLens.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.Overlays.Enable.Label>Tárgyfedések megjelenítése</PressR.Settings.TabLens.StorageLens.Overlays.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.Overlays.Enable.Description>Színes fedések megjelenítése a tárgyakon, jelezve azok engedélyezett/letiltott állapotát a tárolóban.</PressR.Settings.TabLens.StorageLens.Overlays.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>UI Állapot Visszaállítása Kilépéskor</PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>Előző felhasználói felület állapotának (fül, keresés, görgetés) visszaállítása, amikor a Storage Lens deaktiválódik.</PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>Automatikus 'Tároló' Fül Megnyitása</PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>Automatikusan nyissa meg a 'Tároló' fület, amikor egy tárgyra fókuszál.</PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>Tárgy Fókuszálása a Fülön Kattintáskor</PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>Szűrje a fül listáját a kattintott tárgyra/kategóriára.</PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>Tárgy Fókuszálása a Fülön Lebegtetéskor</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>Szűrje a fül listáját a fölé vitt tárgyra/kategóriára.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>
+  <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>A 'Tárgy Fókuszálása a Fülön Kattintáskor' opciót engedélyezni kell.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>
+
+  <!-- Direct Haul Feature Section -->
+  <PressR.Settings.DirectHaul.Feature.Label>Direct Haul Funkció</PressR.Settings.DirectHaul.Feature.Label>
+  <PressR.Settings.DirectHaul.Feature.Description>Közvetlenül utasítsa a kolonistákat a kiválasztott tárgyak meghatározott helyre történő szállítására.</PressR.Settings.DirectHaul.Feature.Description>
+  <PressR.Settings.DirectHaul.RadiusIndicator.Enable.Label>Sugárjelző megjelenítése</PressR.Settings.DirectHaul.RadiusIndicator.Enable.Label>
+  <PressR.Settings.DirectHaul.RadiusIndicator.Enable.Description>Egy kört mutat, amely magában foglalja az összes elhelyezési helyet.</PressR.Settings.DirectHaul.RadiusIndicator.Enable.Description>
+  <PressR.Settings.DirectHaul.InvertKeys.Enable.Label>Standard/Tároló Gombok Felcserélése</PressR.Settings.DirectHaul.InvertKeys.Enable.Label>
+  <PressR.Settings.DirectHaul.InvertKeys.Enable.Description>Cserélje fel a Standard szállítás és a Tároló módhoz használt módosító gombokat.</PressR.Settings.DirectHaul.InvertKeys.Enable.Description>
+
+  <!-- Direct Haul Gizmos -->
+  <PressR.DirectHaul.CancelHeldStatusGizmo.Label>Tartott Állapot Törlése</PressR.DirectHaul.CancelHeldStatusGizmo.Label>
+  <PressR.DirectHaul.CancelHeldStatusGizmo.Desc>Törölje a tartott állapotot ennél a tárgynál a Direct Haul-ban.</PressR.DirectHaul.CancelHeldStatusGizmo.Desc>
+  <PressR.DirectHaul.CancelPendingStatusGizmo.Label>Függőben Lévő Állapot Törlése</PressR.DirectHaul.CancelPendingStatusGizmo.Label>
+  <PressR.DirectHaul.CancelPendingStatusGizmo.Desc>Törölje a függőben lévő állapotot ennél a tárgynál a Direct Haul-ban.</PressR.DirectHaul.CancelPendingStatusGizmo.Desc>
+  
+</LanguageData>

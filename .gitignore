@@ -1,0 +1,62 @@
+# Unity temp files
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Ll]ogs/
+/[Bb]uild/
+/[Bb]uilds/
+/[Uu]ser[Ss]ettings/
+
+# Compiler files
+*.pdb
+*.cache
+*.csproj.user
+*.dll
+*obj/
+*bin/
+
+# IDE
+*.suo
+*.user
+*.userprefs
+*.sln.docstates
+*.sln
+/.idea/
+/.vscode/
+/.vs/
+/.config/
+*.swp
+*.swo
+
+# OS temp files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Assemblies and build files
+/Assemblies/*.pdb
+/Source/obj/
+/Source/bin/
+/Source/packages/
+
+# User data files etc.
+*.user
+*.bak
+*.tmp
+*~
+
+# Text editors
+*.log
+*.swp
+
+# Logs
+log/
+
+# Libs
+lib/
+
+# Temp
+temp/
+
+# TODO
+todo.md

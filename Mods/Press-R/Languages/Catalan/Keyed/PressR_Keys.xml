@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+  <!-- Settings Reset Button -->
+  <PressR.Settings.ResetButton.Label>Restablir als valors predeterminats</PressR.Settings.ResetButton.Label>
+  <PressR.Settings.ResetButton.Tooltip>Restablir tots els paràmetres de Press-R a leurs valors predeterminats.</PressR.Settings.ResetButton.Tooltip>
+  <PressR.Settings.ResetButton.Message>Paràmetres de Press-R restablerts als valors predeterminats.</PressR.Settings.ResetButton.Message>
+
+  <!-- Mod Settings Container -->
+  <!-- Tab Lens Feature Section -->
+  <PressR.Settings.TabLens.Feature.Label>Funció Tab Lens</PressR.Settings.TabLens.Feature.Label>
+  <PressR.Settings.TabLens.Feature.Description>Gestionar la configuració d'objectes mitjançant la interacció al mapa quan les pestanyes rellevants estan obertes.</PressR.Settings.TabLens.Feature.Description>
+  <PressR.Settings.TabLens.StorageLens.Enable.Label>Activar Storage Lens</PressR.Settings.TabLens.StorageLens.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.Enable.Description>Utilitzar Tab Lens amb la pestanya 'Emmagatzematge' per alternar el permís d'objectes fent clic al mapa.</PressR.Settings.TabLens.StorageLens.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.Overlays.Enable.Label>Mostrar superposicions d'objectes</PressR.Settings.TabLens.StorageLens.Overlays.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.Overlays.Enable.Description>Mostrar superposicions acolorides als objectes indicant el seu estat (permès/prohibit) a l'emmagatzematge.</PressR.Settings.TabLens.StorageLens.Overlays.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>Restaurar l'estat de la IU en sortir</PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>Restaurar l'estat anterior de la interfície d'usuari (pestanya, cerca, desplaçament) quan Storage Lens es desactiva.</PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>Obrir automàticament la pestanya 'Emmagatzematge'</PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>Obrir automàticament la pestanya 'Emmagatzematge' en enfocar un objecte.</PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>Enfocar l'objecte a la pestanya en fer clic</PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>Filtrar la llista de la pestanya a l'objecte/categoria seleccionat.</PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>Enfocar l'objecte a la pestanya en passar el cursor</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>Filtrar la llista de la pestanya a l'objecte/categoria sobre el qual està el cursor.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>
+  <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>Requereix que 'Enfocar l'objecte a la pestanya en fer clic' estigui activat.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>
+
+  <!-- Direct Haul Feature Section -->
+  <PressR.Settings.DirectHaul.Feature.Label>Funció Direct Haul</PressR.Settings.DirectHaul.Feature.Label>
+  <PressR.Settings.DirectHaul.Feature.Description>Ordenar directament als colons que transportin els objectes seleccionats a una ubicació específica.</PressR.Settings.DirectHaul.Feature.Description>
+  <PressR.Settings.DirectHaul.PlacementGhosts.Enable.Label>Mostrar fantasmes de col·locació</PressR.Settings.DirectHaul.PlacementGhosts.Enable.Label>
+  <PressR.Settings.DirectHaul.PlacementGhosts.Enable.Description>Mostrar fantasmes que indiquen on es col·locaran els objectes.</PressR.Settings.DirectHaul.PlacementGhosts.Enable.Description>
+  <PressR.Settings.DirectHaul.StatusOverlays.Enable.Label>Mostrar superposicions d'estat</PressR.Settings.DirectHaul.StatusOverlays.Enable.Label>
+  <PressR.Settings.DirectHaul.StatusOverlays.Enable.Description>Mostrar superposicions als objectes indicant el seu estat 'Pendent' o 'Retingut' per a Direct Haul.</PressR.Settings.DirectHaul.StatusOverlays.Enable.Description>
+  <PressR.Settings.DirectHaul.RadiusIndicator.Enable.Label>Mostrar indicador de radi</PressR.Settings.DirectHaul.RadiusIndicator.Enable.Label>
+  <PressR.Settings.DirectHaul.RadiusIndicator.Enable.Description>Mostrar un cercle que abasti totes les ubicacions de col·locació.</PressR.Settings.DirectHaul.RadiusIndicator.Enable.Description>
+  <PressR.Settings.DirectHaul.StorageCreationPreview.Enable.Label>Mostrar previsualització de creació d'emmagatzematge</PressR.Settings.DirectHaul.StorageCreationPreview.Enable.Label>
+  <PressR.Settings.DirectHaul.StorageCreationPreview.Enable.Description>Mostrar una previsualització rectangular en crear/expandir zones d'emmagatzematge mitjançant l'arrossegament.</PressR.Settings.DirectHaul.StorageCreationPreview.Enable.Description>
+  <PressR.Settings.DirectHaul.StorageHighlight.Enable.Label>Ressaltar emmagatzematge en passar el cursor</PressR.Settings.DirectHaul.StorageHighlight.Enable.Label>
+  <PressR.Settings.DirectHaul.StorageHighlight.Enable.Description>Ressaltar zones/edificis d'emmagatzematge existents en passar el cursor en mode Emmagatzematge.</PressR.Settings.DirectHaul.StorageHighlight.Enable.Description>
+  <PressR.Settings.DirectHaul.InvertKeys.Enable.Label>Invertir tecles Estàndard/Emmagatzematge</PressR.Settings.DirectHaul.InvertKeys.Enable.Label>
+  <PressR.Settings.DirectHaul.InvertKeys.Enable.Description>Intercanviar les tecles modificadores utilitzades per al transport Estàndard i el mode Emmagatzematge a Direct Haul.</PressR.Settings.DirectHaul.InvertKeys.Enable.Description>
+
+  <!-- Direct Haul Gizmos -->
+  <PressR.DirectHaul.CancelHeldStatusGizmo.Label>Cancel·lar estat 'Retingut'</PressR.DirectHaul.CancelHeldStatusGizmo.Label>
+  <PressR.DirectHaul.CancelHeldStatusGizmo.Desc>Cancel·lar l'estat 'Retingut' per a aquest objecte a Direct Haul.</PressR.DirectHaul.CancelHeldStatusGizmo.Desc>
+  <PressR.DirectHaul.CancelPendingStatusGizmo.Label>Cancel·lar estat 'Pendent'</PressR.DirectHaul.CancelPendingStatusGizmo.Label>
+  <PressR.DirectHaul.CancelPendingStatusGizmo.Desc>Cancel·lar l'estat 'Pendent' per a aquest objecte a Direct Haul.</PressR.DirectHaul.CancelPendingStatusGizmo.Desc>
+  
+</LanguageData>

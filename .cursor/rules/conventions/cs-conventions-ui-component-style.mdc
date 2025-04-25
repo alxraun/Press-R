@@ -1,0 +1,185 @@
+---
+description: C# Conventions for UI Component Style
+globs: **/UI/**/*.cs
+alwaysApply: false
+---
+# RimWorld UI: Component Style Conventions
+
+This document outlines conventions for developing RimWorld Mod UIs (especially settings windows) using a component-based approach inspired by modern UI frameworks like React, while adhering to the constraints of RimWorld's IMGUI system (`Verse.Listing_Standard`, `Verse.Widgets`). The goal is to achieve more organized, maintainable, and reusable UI code.
+
+## Core Principles
+
+1.  **Decomposition:** Break down complex UIs into the smallest meaningful, reusable units ("Components"). A component typically represents a distinct piece of the UI, like a single setting row, a section header, or a custom input field.
+2.  **Composition:** Build larger, more complex UI structures by nesting and combining these smaller components. A settings window is composed of sections, which are composed of individual setting items.
+3.  **Encapsulation:** Each component should encapsulate its own drawing logic (how it uses `Verse.Widgets` and arranges elements within its bounds) and hide these internal details from its consumer.
+4.  **Declarative Usage (at Container Level):** The primary UI container class (e.g., the settings window) should focus on *declaring which* components to render and *what* data (`props`) or content (`children`) to pass to them. It should minimize direct `Verse.Widgets` calls for elements that are part of a component.
+
+## Implementation Conventions
+
+### 1. Component Representation
+
+*   **Structure:** Each UI component is implemented as a `public static class`.
+*   **Naming Best Practices:**
+    *   **Semantic & Specific:** Name should accurately reflect the component's *purpose* and *role* in the UI (e.g., `SettingsItem`, `CollapsibleSection`, `ResourceReadout`). Avoid overly generic names (`Item`, `Box`, `Container`) unless the component is truly generic.
+    *   **Consistency:** Maintain a consistent naming scheme across the project. If one settings element is `SettingsItem`, others might be `SettingsSlider`, `SettingsTextInput`.
+    *   **Standard UI Terms:** Use common UI terms where applicable (`Button`, `Checkbox`, `Slider`, `Panel`, `List`).
+    *   **No Redundant Suffixes:** Usually, no need for suffixes like `Component` or `UI` (prefer `SettingsItem` over `SettingsItemComponent`).
+*   **Rationale:** UI components in RimWorld's IMGUI are stateless drawing functions. Static classes group these functions without requiring instantiation.
+*   **Example:** `public static class SettingsItem { ... }`
+
+### 2. File Structure
+
+*   **One Component per File:** Each static class component resides in its own `.cs` file.
+*   **Filename:** The filename must match the class name (e.g., `SettingsItem.cs`).
+*   **Organization (Recommended: Feature-First):**
+    *   Create a dedicated root directory for UI components (e.g., `Source/UI/Components/`).
+    *   **Group by Feature/Domain:** Components specific to a particular mod feature should be placed in a subdirectory named after that feature (e.g., `Source/UI/Components/MyFeature/MyFeatureSpecificComponent.cs`). This keeps related code together.
+    *   **Shared/Common Components:** Place generic, reusable components (like `SettingsItem`, `FeatureSection`, `Button`) either directly in the root `Components/` directory or in a dedicated `Components/Common/` subdirectory.
+    *   **Avoid Grouping by UI Type:** Do **not** organize folders by UI element type (e.g., `Components/Buttons/`, `Components/Inputs/`). This scatters feature-related code.
+    *   **Simplicity for Small Mods:** For very simple UIs with few components, a flat structure within `Components/` is acceptable.
+    *   **Example Structure:**
+        ```
+        Source/
+         └─ UI/
+            ├─ Components/
+            │   ├─ Common/             // Shared components
+            │   │   ├─ SettingsItem.cs
+            │   │   └─ FeatureSection.cs
+            │   └─ SpecificFeature/    // Feature-specific components
+            │       └─ SpecificControl.cs// public static class SpecificControl { public static void Draw(...); }
+            ├─ YourModSettingsWindow.cs  // The main container class
+            └─ UIConstants.cs        // public static class UIConstants { ... }
+        ```
+
+### 3. Namespace
+
+*   **Single Namespace:** Use a **single, shared namespace** for *all* UI component classes (e.g., `YourMod.UI.Components`), regardless of their location within the subdirectory structure.
+
+### 4. Drawing Method
+
+*   **Signature:** Each component class must define a primary `public static void Draw(...)` method responsible for rendering the component.
+*   **Parameters (`Props` and `State Refs`):
+    *   The first parameter should typically be `Listing_Standard listing` (or `Rect` if not using a listing).
+    *   Subsequent parameters represent the component's inputs ("props"): data for display (`string label`, `bool currentValue`), configuration (`string tooltip`, `bool disabled`).
+    *   For reporting state changes initiated by user interaction within the component (e.g., toggling a checkbox, changing text input), use callback delegate parameters, typically of type `Action<T>` (e.g., `Action<bool> onValueChanged`, `Action<string> onInputChanged`). The component invokes this callback, passing the new value, when the user initiates a change.
+    *   **Example:** `public static void Draw(Listing_Standard l, string label, bool currentValue, Action<bool> onValueChanged, string tooltip = null, bool disabled = false)`
+
+### 5. Content Projection (`Children` / `Render Props`)
+
+*   **Mechanism:** To allow a component to render arbitrary content provided by its parent (like the body of a section or panel), use an `Action<Listing_Standard>` parameter.
+*   **Invocation:** The component invokes this `Action` internally, passing the appropriate `Listing_Standard` (or `Rect`) for the content area.
+*   **Example:**
+    ```csharp
+    // FeatureSection.cs
+    public static void Draw(
+        Listing_Standard listing,
+        // ... other params ...
+        Action<Listing_Standard> drawContentAction
+    )
+    {
+        // ... draw header ...
+        if (featureEnabled)
+        {
+            Listing_Standard contentListing = listing.BeginSection(...);
+            // ... setup indent ...
+            drawContentAction?.Invoke(contentListing); // Render content
+            // ... outdent, end section ...
+        }
+    }
+    ```
+
+### 6. Usage and Composition
+
+*   **Explicit Calls:** Components are invoked using their full static class name: `ComponentName.Draw(...)`.
+    *   **Example:** `SettingsItem.Draw(listing, "My Setting", ref settings.myBool);`
+*   **Composition:** Build complex UIs by calling component `Draw` methods within the main UI container or within the `drawContentAction` delegate passed to a parent component.
+
+### 7. Constants
+
+*   **Shared Constants:** Define common layout constants (gaps, padding, sizes) in a separate `public static class UIConstants` (e.g., in `Source/UI/UIConstants.cs`).
+*   **Usage:** Use `using static YourMod.UI.UIConstants;` in both component classes and container classes for easy access to constants like `ElementGap`, `CheckboxSize`, etc.
+
+### 8. Internal Helpers
+
+*   If a component requires internal helper functions for its drawing logic, implement them as `private static` methods within the component's own static class.
+
+### 9. State Management
+
+*   Components are **stateless**. All data comes from parameters.
+*   Components **must not** modify state passed via parameters directly (e.g., do not use `ref` for mutable state). Instead, they should invoke passed-in callback delegates (`Action<T>`) to signal the need for a state change to the parent component or owning class.
+*   The owning class (e.g., the `ModSettings` class or the class managing the `Window`) holds the actual state and is responsible for updating it based on the callbacks invoked by the components.
+
+### 10. Handling IMGUI Limitations
+
+*   **`BeginSection` Height:** The `Listing_Standard.BeginSection` method requires an estimated height *before* content is drawn. This is an IMGUI limitation.
+    *   **Recommendation:** Provide a reasonably large fixed estimate (e.g., `500f`) as a default parameter in components like `FeatureSection` to prevent content clipping, accepting potential extra whitespace. Alternatively, calculate a tighter (but more brittle) estimate if layout density is critical.
+
+## Example Structure
+
+```
+Source/
+ └─ UI/
+    ├─ Components/
+    │   ├─ Common/             // Shared components
+    │   │   ├─ FeatureSection.cs // public static class FeatureSection { public static void Draw(...); ... }
+    │   │   └─ SettingsItem.cs   // public static class SettingsItem { public static void Draw(...); }
+    │   └─ SpecificFeature/    // Feature-specific components
+    │       └─ SpecificControl.cs// public static class SpecificControl { public static void Draw(...); }
+    ├─ YourModSettingsWindow.cs  // The main container class
+    └─ UIConstants.cs        // public static class UIConstants { ... }
+```
+
+```csharp
+// YourModSettingsWindow.cs
+using UnityEngine;
+using Verse;
+using YourMod.Settings; // Assuming settings data class is here
+using YourMod.UI.Components.Common; // Or just YourMod.UI.Components if no Common folder
+using YourMod.UI.Components.SpecificFeature; // If using specific components
+using static YourMod.UI.UIConstants;
+
+namespace YourMod.UI
+{
+    public class YourModSettingsWindow // Or your Mod class override
+    {
+        public void DoSettingsWindowContents(Rect inRect)
+        {
+            Listing_Standard listing = new Listing_Standard();
+            listing.Begin(inRect.ContractedBy(10f));
+
+            // Use FeatureSection component (assuming it's in Common)
+            FeatureSection.Draw(
+                listing,
+                ref ModSettings.Instance.featureAEnabled,
+                "Feature A Title",
+                "Feature A Description",
+                "Tooltip for Feature A",
+                (contentListing) => // Pass content via Action delegate
+                {
+                    // Use SettingsItem component (assuming it's in Common)
+                    SettingsItem.Draw(contentListing, "Setting A.1", ref ModSettings.Instance.settingA1, "Tooltip A.1");
+                    SettingsItem.Draw(contentListing, "Setting A.2", ref ModSettings.Instance.settingA2);
+
+                    // Example of using a feature-specific component
+                    SpecificControl.Draw(contentListing, ...);
+                }
+            );
+
+            listing.Gap(SectionGap);
+
+            FeatureSection.Draw(
+                 listing,
+                 ref ModSettings.Instance.featureBEnabled,
+                 // ... params ...
+                 (contentListing) => { /* Content for feature B */ }
+            );
+
+            // ... Reset button, etc. ...
+
+            listing.End();
+        }
+    }
+}
+```
+
+By following these conventions, mod UIs can become more structured, easier to understand, and significantly more maintainable, leveraging the benefits of component-based design within the RimWorld environment.

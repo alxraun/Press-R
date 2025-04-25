@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+  <!-- Settings Reset Button -->
+  <PressR.Settings.ResetButton.Label>Reset to Defaults</PressR.Settings.ResetButton.Label>
+  <PressR.Settings.ResetButton.Tooltip>Reset all Press-R settings to their default values.</PressR.Settings.ResetButton.Tooltip>
+  <PressR.Settings.ResetButton.Message>Press-R settings reset to defaults.</PressR.Settings.ResetButton.Message>
+
+  <!-- Mod Settings Container -->
+  <!-- Tab Lens Feature Section -->
+  <PressR.Settings.TabLens.Feature.Label>Tab Lens Feature</PressR.Settings.TabLens.Feature.Label>
+  <PressR.Settings.TabLens.Feature.Description>Manage thing settings via map interaction when relevant tabs are open.</PressR.Settings.TabLens.Feature.Description>
+  <PressR.Settings.TabLens.StorageLens.Enable.Label>Enable Storage Lens</PressR.Settings.TabLens.StorageLens.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.Enable.Description>Use Tab Lens with the 'Storage' tab to toggle item allowance by clicking on the map.</PressR.Settings.TabLens.StorageLens.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.Overlays.Enable.Label>Show Item Overlays</PressR.Settings.TabLens.StorageLens.Overlays.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.Overlays.Enable.Description>Show colored overlays on items indicating their allowed/disallowed status in storage.</PressR.Settings.TabLens.StorageLens.Overlays.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>Restore UI State on Exit</PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>Restore previous User Interface state (tab, search, scroll) when Storage Lens deactivates.</PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>Auto-Open 'Storage' Tab</PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>Automatically open the 'Storage' tab when focusing on an item.</PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>Focus Item in Tab on Click</PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>Filter the tab list to the clicked item/category.</PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>Focus Item in Tab on Hover</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>Filter the tab list to the hovered item/category.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>
+  <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>Requires 'Focus Item in Tab on Click' to be enabled.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>
+
+  <!-- Direct Haul Feature Section -->
+  <PressR.Settings.DirectHaul.Feature.Label>Direct Haul Feature</PressR.Settings.DirectHaul.Feature.Label>
+  <PressR.Settings.DirectHaul.Feature.Description>Directly command colonists to haul selected items to a specific location.</PressR.Settings.DirectHaul.Feature.Description>
+  <PressR.Settings.DirectHaul.PlacementGhosts.Enable.Label>Show Placement Ghosts</PressR.Settings.DirectHaul.PlacementGhosts.Enable.Label>
+  <PressR.Settings.DirectHaul.PlacementGhosts.Enable.Description>Display ghosts showing where items will be placed.</PressR.Settings.DirectHaul.PlacementGhosts.Enable.Description>
+  <PressR.Settings.DirectHaul.StatusOverlays.Enable.Label>Show Status Overlays</PressR.Settings.DirectHaul.StatusOverlays.Enable.Label>
+  <PressR.Settings.DirectHaul.StatusOverlays.Enable.Description>Show overlays on items indicating their 'Pending' or 'Held' status for Direct Haul.</PressR.Settings.DirectHaul.StatusOverlays.Enable.Description>
+  <PressR.Settings.DirectHaul.RadiusIndicator.Enable.Label>Show Radius Indicator</PressR.Settings.DirectHaul.RadiusIndicator.Enable.Label>
+  <PressR.Settings.DirectHaul.RadiusIndicator.Enable.Description>Show a circle encompassing all placement locations.</PressR.Settings.DirectHaul.RadiusIndicator.Enable.Description>
+  <PressR.Settings.DirectHaul.StorageCreationPreview.Enable.Label>Show Storage Creation Preview</PressR.Settings.DirectHaul.StorageCreationPreview.Enable.Label>
+  <PressR.Settings.DirectHaul.StorageCreationPreview.Enable.Description>Show a rectangle preview when creating/expanding storage zones via drag.</PressR.Settings.DirectHaul.StorageCreationPreview.Enable.Description>
+  <PressR.Settings.DirectHaul.StorageHighlight.Enable.Label>Highlight Storage on Hover</PressR.Settings.DirectHaul.StorageHighlight.Enable.Label>
+  <PressR.Settings.DirectHaul.StorageHighlight.Enable.Description>Highlight existing storage zones/buildings when hovering in Storage mode.</PressR.Settings.DirectHaul.StorageHighlight.Enable.Description>
+  <PressR.Settings.DirectHaul.InvertKeys.Enable.Label>Invert Standard/Storage Keys</PressR.Settings.DirectHaul.InvertKeys.Enable.Label>
+  <PressR.Settings.DirectHaul.InvertKeys.Enable.Description>Swap the modifier keys used for Standard haul and Storage mode.</PressR.Settings.DirectHaul.InvertKeys.Enable.Description>
+
+  <!-- Direct Haul Gizmos -->
+  <PressR.DirectHaul.CancelHeldStatusGizmo.Label>Cancel Held Status</PressR.DirectHaul.CancelHeldStatusGizmo.Label>
+  <PressR.DirectHaul.CancelHeldStatusGizmo.Desc>Cancel the held status for this item in Direct Haul.</PressR.DirectHaul.CancelHeldStatusGizmo.Desc>
+  <PressR.DirectHaul.CancelPendingStatusGizmo.Label>Cancel Pending Status</PressR.DirectHaul.CancelPendingStatusGizmo.Label>
+  <PressR.DirectHaul.CancelPendingStatusGizmo.Desc>Cancel the pending status for this item in Direct Haul.</PressR.DirectHaul.CancelPendingStatusGizmo.Desc>
+  
+</LanguageData> 

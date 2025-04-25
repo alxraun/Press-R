@@ -1,0 +1,27 @@
+---
+description: Notes Rules
+globs: .cursor/docs/notes/**/*.md
+alwaysApply: false
+---
+### `notes`
+
+`notes` (`.cursor/docs/notes/*.md`) are technical documents containing the formalization of any information, including ideas, specifications, architecture, etc. They are used as a reference and are constantly updated.
+
+### notes Rules:
+
+**Information Formalization:**
+    - Documents should be in the style of technical documentation.
+    - Documents should have a hierarchical structure with sections and subsections.
+    - Each subsection should describe one thing and have clear boundaries of responsibility according to the `SRP` principle.
+
+**Conciseness and Accuracy:**
+    - Documents should have a high concentration of information, using space economically.
+    - Documents should be descriptive and informative, containing facts (specifications, descriptions, characteristics, etc.), and should not contain opinions (advantages, disadvantages, recommendations, etc.).
+
+**Mutability:**
+    - With each document change (`Adding new information`, `Updating existing information`), refactoring the document structure is allowed to update and improve the clarity of information organization, considering the `SRP` principle.
+
+### Possible actions with notes:
+
+- `Adding new information` - adding and integrating new details, respecting the document structure and conciseness, without adding unnecessary text.
+- `Updating existing information` - clarifying, correcting, changing existing information and details, respecting conciseness.

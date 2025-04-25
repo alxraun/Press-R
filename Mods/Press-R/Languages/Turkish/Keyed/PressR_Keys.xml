@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+  <!-- Settings Reset Button -->
+  <PressR.Settings.ResetButton.Label>Varsayılana Sıfırla</PressR.Settings.ResetButton.Label>
+  <PressR.Settings.ResetButton.Tooltip>Tüm Press-R ayarlarını varsayılan değerlerine sıfırla.</PressR.Settings.ResetButton.Tooltip>
+  <PressR.Settings.ResetButton.Message>Press-R ayarları varsayılana sıfırlandı.</PressR.Settings.ResetButton.Message>
+
+  <!-- Mod Settings Container -->
+  <!-- Tab Lens Feature Section -->
+  <PressR.Settings.TabLens.Feature.Label>Sekme Lensi Özelliği</PressR.Settings.TabLens.Feature.Label>
+  <PressR.Settings.TabLens.Feature.Description>İlgili sekmeler açıkken harita etkileşimi yoluyla eşya ayarlarını yönetin.</PressR.Settings.TabLens.Feature.Description>
+  <PressR.Settings.TabLens.StorageLens.Enable.Label>Depolama Lensi'ni Etkinleştir</PressR.Settings.TabLens.StorageLens.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.Enable.Description>Haritaya tıklayarak eşya iznini değiştirmek için 'Depolama' sekmesiyle Sekme Lensi'ni kullanın.</PressR.Settings.TabLens.StorageLens.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.Overlays.Enable.Label>Eşya Kaplamalarını Göster</PressR.Settings.TabLens.StorageLens.Overlays.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.Overlays.Enable.Description>Depolamada izin verilen/izin verilmeyen durumlarını gösteren renkli kaplamaları eşyalarda gösterin.</PressR.Settings.TabLens.StorageLens.Overlays.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>Çıkışta Kullanıcı Arayüzü Durumunu Geri Yükle</PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>Depolama Lensi devre dışı bırakıldığında önceki Kullanıcı Arayüzü durumunu (sekme, arama, kaydırma) geri yükleyin.</PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>'Depolama' Sekmesini Otomatik Aç</PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>Bir eşyaya odaklanıldığında 'Depolama' sekmesini otomatik olarak açın.</PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>Tıklayınca Sekmede Eşyaya Odaklan</PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>Sekme listesini tıklanan eşya/kategoriye filtreleyin.</PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>Üzerine Gelince Sekmede Eşyaya Odaklan</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>Sekme listesini üzerine gelinen eşya/kategoriye filtreleyin.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>
+  <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>'Tıklayınca Sekmede Eşyaya Odaklan' seçeneğinin etkinleştirilmesini gerektirir.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>
+
+  <!-- Direct Haul Feature Section -->
+  <PressR.Settings.DirectHaul.Feature.Label>Doğrudan Taşıma Özelliği</PressR.Settings.DirectHaul.Feature.Label>
+  <PressR.Settings.DirectHaul.Feature.Description>Seçili eşyaları belirli bir konuma taşımaları için kolonistlere doğrudan komut verin.</PressR.Settings.DirectHaul.Feature.Description>
+  <PressR.Settings.DirectHaul.PlacementGhosts.Enable.Label>Yerleştirme Hayaletlerini Göster</PressR.Settings.DirectHaul.PlacementGhosts.Enable.Label>
+  <PressR.Settings.DirectHaul.PlacementGhosts.Enable.Description>Eşyaların nereye yerleştirileceğini gösteren hayaletleri görüntüleyin.</PressR.Settings.DirectHaul.PlacementGhosts.Enable.Description>
+  <PressR.Settings.DirectHaul.StatusOverlays.Enable.Label>Durum Kaplamalarını Göster</PressR.Settings.DirectHaul.StatusOverlays.Enable.Label>
+  <PressR.Settings.DirectHaul.StatusOverlays.Enable.Description>Doğrudan Taşıma için 'Beklemede' veya 'Tutulan' durumlarını gösteren kaplamaları eşyalarda gösterin.</PressR.Settings.DirectHaul.StatusOverlays.Enable.Description>
+  <PressR.Settings.DirectHaul.RadiusIndicator.Enable.Label>Yarıçap Göstergesini Göster</PressR.Settings.DirectHaul.RadiusIndicator.Enable.Label>
+  <PressR.Settings.DirectHaul.RadiusIndicator.Enable.Description>Tüm yerleştirme konumlarını kapsayan bir daire gösterin.</PressR.Settings.DirectHaul.RadiusIndicator.Enable.Description>
+  <PressR.Settings.DirectHaul.StorageCreationPreview.Enable.Label>Depolama Oluşturma Önizlemesini Göster</PressR.Settings.DirectHaul.StorageCreationPreview.Enable.Label>
+  <PressR.Settings.DirectHaul.StorageCreationPreview.Enable.Description>Sürükleyerek depolama bölgeleri oluştururken/genişletirken bir dikdörtgen önizlemesi gösterin.</PressR.Settings.DirectHaul.StorageCreationPreview.Enable.Description>
+  <PressR.Settings.DirectHaul.StorageHighlight.Enable.Label>Üzerine Gelince Depolamayı Vurgula</PressR.Settings.DirectHaul.StorageHighlight.Enable.Label>
+  <PressR.Settings.DirectHaul.StorageHighlight.Enable.Description>Depolama modunda üzerine gelindiğinde mevcut depolama bölgelerini/binalarını vurgulayın.</PressR.Settings.DirectHaul.StorageHighlight.Enable.Description>
+  <PressR.Settings.DirectHaul.InvertKeys.Enable.Label>Standart/Depolama Tuşlarını Ters Çevir</PressR.Settings.DirectHaul.InvertKeys.Enable.Label>
+  <PressR.Settings.DirectHaul.InvertKeys.Enable.Description>Standart taşıma ve Depolama modu için kullanılan değiştirici tuşları değiştirin.</PressR.Settings.DirectHaul.InvertKeys.Enable.Description>
+
+  <!-- Direct Haul Gizmos -->
+  <PressR.DirectHaul.CancelHeldStatusGizmo.Label>Tutulan Durumu İptal Et</PressR.DirectHaul.CancelHeldStatusGizmo.Label>
+  <PressR.DirectHaul.CancelHeldStatusGizmo.Desc>Doğrudan Taşımada bu eşya için tutulan durumu iptal et.</PressR.DirectHaul.CancelHeldStatusGizmo.Desc>
+  <PressR.DirectHaul.CancelPendingStatusGizmo.Label>Beklemede Durumu İptal Et</PressR.DirectHaul.CancelPendingStatusGizmo.Label>
+  <PressR.DirectHaul.CancelPendingStatusGizmo.Desc>Doğrudan Taşımada bu eşya için beklemede durumunu iptal et.</PressR.DirectHaul.CancelPendingStatusGizmo.Desc>
+
+</LanguageData>

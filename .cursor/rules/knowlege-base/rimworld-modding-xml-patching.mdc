@@ -1,0 +1,210 @@
+---
+description: Rimworld Modding XML Patching - Knowledge Base
+globs: 
+alwaysApply: false
+---
+## XML Patching
+
+**Purpose:** 
+- Modify existing game values (Defs) via XML without overwriting
+- Non-destructive modding for compatibility
+- Avoid breaking other mods or the base game
+
+**Location:** 
+- XML files in `Patches` folder within mod
+
+**Useful Tools:**
+- RimWorld Dev Mode: Debug Inspector for XPath discovery
+- XML Code Editor: VSCode, Notepad++ with XML support
+- RimWorld Dotnet Template (optional): For mod setup
+- Code Snippets (optional): For faster XML creation
+
+**Basic Structure:**
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+  <!-- PatchOperations go here -->
+</Patch>
+```
+
+### XPath Basics
+
+- Target XML nodes for PatchOperations
+- Syntax: `Defs/DefType[predicate]/nodeToTarget`
+- `Defs/`: Root for all Def XML
+- `DefType`: Type of Def (e.g., `ThingDef`, `RecipeDef`)
+- `[predicate]`: Conditional matching (e.g., `[defName="Wall"]`)
+- `nodeToTarget`: XML tag to modify (e.g., `statBases`)
+- Attribute Targeting: `Defs/ThingDef[@Name="ShelfBase"]/stuffCategories`
+- Parent Targeting: `Defs/ThingDef[@ParentName="ApparelBase"]`
+- Multiple Targets: `[defName="A" or defName="B"]`
+- Text Content: `/text()` in XPath to target tag text content
+
+### PatchOperation Types
+
+#### XML Node Operations:
+
+- **PatchOperationAdd**: 
+  - Adds child node (`<value>`) to XPath target
+  - `<order>`: `Prepend` or `Append` (default)
+  - Example:
+  ```xml
+  <Operation Class="PatchOperationAdd">
+    <xpath>Defs/ThingDef[defName="Wall"]/statBases</xpath>
+    <value>
+      <MaxHitPoints>400</MaxHitPoints>
+    </value>
+  </Operation>
+  ```
+- **PatchOperationInsert**: 
+  - Inserts sibling node (`<value>`) relative to XPath target
+  - `<order>`: `Prepend` (default) or `Append`
+  - Example:
+  ```xml
+  <Operation Class="PatchOperationInsert">
+    <xpath>Defs/ThingDef[defName="Wall"]/statBases/MaxHitPoints</xpath>
+    <value>
+      <Beauty>-5</Beauty>
+    </value>
+  </Operation>
+  ```
+- **PatchOperationRemove**: 
+  - Deletes XPath target node
+  - Example:
+  ```xml
+  <Operation Class="PatchOperationRemove">
+    <xpath>Defs/ThingDef[defName="Wall"]/statBases/MaxHitPoints</xpath>
+  </Operation>
+  ```
+- **PatchOperationReplace**: 
+  - Replaces XPath target node with `<value>`
+  - Example:
+  ```xml
+  <Operation Class="PatchOperationReplace">
+    <xpath>Defs/ThingDef[defName="Bullet_Revolver"]/projectile/damageAmountBase</xpath>
+    <value>
+      <damageAmountBase>100</damageAmountBase>
+    </value>
+  </Operation>
+  ```
+
+#### XML Attribute Operations:
+
+- **PatchOperationAttributeAdd**: Adds attribute (`<attribute>`, `<value>`) if not present
+- **PatchOperationAttributeSet**: Sets/overwrites attribute (`<attribute>`, `<value>`)
+- **PatchOperationAttributeRemove**: Removes attribute (`<attribute>`)
+
+#### Special Operations:
+
+- **PatchOperationSequence**: 
+  - Executes list of operations; aborts on failure
+  - Example:
+  ```xml
+  <Operation Class="PatchOperationSequence">
+    <operations>
+      <li Class="PatchOperationReplace">
+        <!-- First operation -->
+      </li>
+      <li Class="PatchOperationAdd">
+        <!-- Second operation -->
+      </li>
+    </operations>
+  </Operation>
+  ```
+- **PatchOperationAddModExtension**: Adds `DefModExtension` to Def
+- **PatchOperationSetName**: Renames XML node (`<name>`)
+
+#### Conditional Operations:
+
+- **PatchOperationFindMod**: 
+  - Conditional operations based on mod/DLC presence
+  - Uses mod `name`, not `packageId`
+  - Include DLC names for DLC-specific patches
+  - Example:
+  ```xml
+  <Operation Class="PatchOperationFindMod">
+    <mods>
+      <li>Royalty</li>
+      <li>Ideology</li>
+      <li>Biotech</li>
+      <li>Anomaly</li>
+    </mods>
+    <match>
+      <!-- Operations if mod is present -->
+    </match>
+    <nomatch>
+      <!-- Operations if mod is not present -->
+    </nomatch>
+  </Operation>
+  ```
+- **PatchOperationConditional**: 
+  - Conditional operations based on XPath test
+  - Example:
+  ```xml
+  <Operation Class="PatchOperationConditional">
+    <xpath>Defs/ThingDef[defName="Wall"]/statBases/MaxHitPoints</xpath>
+    <match>
+      <!-- Operations if XPath exists -->
+    </match>
+    <nomatch>
+      <!-- Operations if XPath doesn't exist -->
+    </nomatch>
+  </Operation>
+  ```
+- **PatchOperationTest**: Test XPath validity within `PatchOperationSequence` (Obsolete - use `PatchOperationConditional`)
+
+### Complete Example (Explosive Assault Rifle):
+
+```xml
+<Patch>
+  <Operation Class="PatchOperationSequence">
+    <operations>
+      <li Class="PatchOperationReplace">
+        <xpath>Defs/ThingDef[defName="Gun_AssaultRifle"]/verbs/li/defaultProjectile</xpath>
+        <value>
+          <defaultProjectile>Bullet_Explosive</defaultProjectile>
+        </value>
+      </li>
+      <li Class="PatchOperationAdd">
+        <xpath>Defs/ThingDef[defName="Gun_AssaultRifle"]/verbs/li</xpath>
+        <value>
+          <forcedMissRadius>2</forcedMissRadius>
+          <targetParams>
+            <canTargetLocations>true</canTargetLocations>
+          </targetParams>
+        </value>
+      </li>
+    </operations>
+  </Operation>
+</Patch>
+```
+
+### Tips and Tricks:
+
+- **Patch Order:** Run after Def load, in mod load order
+- **Patching Scope:** Before Def inheritance
+- **`Inherit="False"`:** Prevent child from inheriting parent tag value
+- **Deep Inspection Mode:** Find XPath easily in Debug Mode
+- **Reference Vanilla XML:** Locate values for patching in game files (`Data` folder)
+- **Test Patches Incrementally:** Start with simple patches and build complexity
+- **Check Player.log:** For patch errors and debugging
+- **Class Name Changes:** Some classes have been renamed in recent versions:
+  - `ManhunterPackIncidentUtility` → `AggressiveAnimalIncidentUtility`
+  - `IncidentWorker_ManhunterPack` → `IncidentWorker_AggressiveAnimals`
+  - If patching incident workers, use the new class names.
+
+### Common Issues / Troubleshooting:
+
+- **Case Sensitivity:** XPath, XML tags are case-sensitive
+- **XML Syntax:** Ensure valid XML structure; use validators
+- **`Insert` vs `Add`:** `Insert` for siblings, `Add` for children
+- **XPath Targets:** XML data structure, not file paths
+- **Unique Nodes:** Non-`li` XML nodes must be unique at each level
+- **Cascading Errors:** Fix the first error first, others may resolve automatically
+
+### Obsolete Notes:
+
+- PatchOperationTest & `<success>` tag in `PatchOperationSequence` are obsolete; use `PatchOperationConditional`
+- `<success>` options: `Always` (suppress errors - generally avoid), `Normal`, `Invert`, `Never`
+- `MayRequire` in `PatchOperationSequence` child operations for conditional loading
+- PatchOperationFindMod uses mod `name`, not `packageId`

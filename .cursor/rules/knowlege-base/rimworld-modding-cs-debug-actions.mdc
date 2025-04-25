@@ -1,0 +1,52 @@
+---
+description: Rimworld Modding C# Debug Actions - Knowledge Base
+globs: 
+alwaysApply: false
+---
+## DebugActions
+
+**Purpose:**
+- Easily call static methods from debug menu in Development Mode.
+- Available via cog button in debug row.
+
+**Usage:**
+- Add `[DebugAction]` attribute to static methods.
+- Accessible in Debug Actions Menu (Dev Mode).
+
+**`[DebugAction]` Attribute Parameters:**
+- **Category (string):**
+    - Organizes actions in debug menu.
+    - Used for grouping related actions.
+- **Button Label (string):**
+    - Text displayed on the debug button.
+- **`actionType` (DebugActionType enum):**
+    - Determines action execution behavior.
+    - Possible Values:
+        - `Action`: Direct method call, any game state.
+        - `ToolMap`: Mouse targeter, calls method on each map click, map only.
+        - `ToolMapForPawns`: Mouse targeter, calls method on pawn click, passes `Pawn p`, map only.
+        - `ToolWorld`: Mouse targeter, calls method on world tile click, world map only.
+- **`allowedGameStates` (AllowedGameStates enum):**
+    - Game states where DebugAction is visible.
+    - Combinable enum values:
+        - `Invalid`: Never.
+        - `Entry`: Main menu.
+        - `Playing`: After game launch.
+        - `WorldRenderedNow`: After world load.
+        - `IsCurrentlyOnMap`: Map entered.
+        - `HasGameCondition`: Map entered, game condition active.
+        - `PlayingOnMap`: `Playing` AND `IsCurrentlyOnMap`.
+        - `PlayingOnWorld`: `Playing` AND `WorldRenderedNow`.
+
+**`AllowedGameStates` Enum Values:**
+- `Invalid`: Never.
+- `Entry`: Main menu.
+- `Playing`: In game.
+- `WorldRenderedNow`: World loaded.
+- `IsCurrentlyOnMap`: On a map.
+- `HasGameCondition`: Game condition active on map.
+- `PlayingOnMap`: In game and on map.
+- `PlayingOnWorld`: In game and on world map.
+
+**Note:**
+- Decompile RimWorld to find more `DebugAction` examples.

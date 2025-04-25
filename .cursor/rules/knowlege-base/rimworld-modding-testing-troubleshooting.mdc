@@ -1,0 +1,97 @@
+---
+description: Rimworld Modding Testing Troubleshooting - Knowledge Base
+globs: 
+alwaysApply: false
+---
+## Modding Troubleshooting
+
+**Common XML Errors:**
+- **Syntax Errors:**
+    - Formatting, unclosed tags, wrong case, whitespace.
+    - Use XML editor with validation.
+    - Example: `compClass` vs `CompClass`, missing closing tag `</tag>`.
+- **Cross-reference Errors:**
+    - Def B not found when Def A references it by `defName`.
+    - Type and `defName` must match.
+    - Error message: "Could not resolve cross-reference: No DefType named DefName".
+    - List errors: "Could not resolve cross-reference to DefType named DefName (wanter=tagName)".
+- **Duplicate Field/Tag Definitions:**
+    - Same field defined twice in a Def (mod conflict).
+    - First mod's definition takes precedence.
+    - Error message: "XML Def defines the same field twice: fieldName".
+- **Missing Type:**
+    - XML refers to a C# type not loaded (missing DLL, load error, outdated mod).
+    - Error message: "Could not find type named Namespace.ClassName".
+- **Referencing Non-Existing Field:**
+    - XML tag doesn't exist in the Def's C# class (typo, wrong node, outdated mod).
+    - Error message: "XML error: <tagName> doesn't correspond to any field in type DefType".
+
+**Solving XML Errors:**
+- Errors Cascade: Fix errors sequentially, starting with the first.
+- XML Validation: Use a validating XML editor.
+- Check Player.log: For detailed error messages.
+
+**Analyzing Stack Traces and Exceptions:**
+
+**Reading Stacktraces:**
+- Read Top-Down: Error at the top, call sequence below.
+- "Exception in BreadthFirstTraverse": Error catch point.
+- "System.NullReferenceException: Object reference...": Type of error - uninitialized object.
+- "*wrapper dynamic-method* Verse.Pawn.CheckForDisturbedSleep_Patch1": Harmony patch involved.
+- "Gloomylynx.TantrumPatch.CheckForDisturbedSleepPrefix": Namespace.Class.Method causing error.
+
+**Finding Exceptions (NRE Example):**
+
+**Purpose:** Track down the root cause of exceptions, especially NullReferenceExceptions (NREs).
+
+**Requirements:**
+- An Exception (error message/stack trace).
+- Decompiler (ILSpy, dnSpy, Rider/dotPeek).
+
+**Example Scenario:**
+- Debug Action "Spawn Potatoes" added for demonstration.
+- Code spawns potatoes at a pawn's location.
+- Goal: Understand how to use decompilers to investigate exceptions.
+
+**Troubleshooting Steps (General Approach):**
+1. **Get the Exception:**
+   - Obtain the full error message and stack trace from RimWorld's debug log.
+2. **Use a Decompiler:**
+   - Open `Assembly-CSharp.dll` in a decompiler (ILSpy, dnSpy, Rider/dotPeek).
+3. **Analyze the Stack Trace (Example):**
+   - Read stack trace from top to bottom.
+   - Start analysis ~3 calls before the top for relevant mod code.
+   - Identify Exception Type: `System.NullReferenceException` (common for modding).
+   - Look for Harmony Patches: `(wrapper dynamic-method) ... _Patch#` indicates Harmony involvement.
+   - Locate Error Source: `Namespace.Class.MethodName` (e.g., `Gloomylynx.TantrumPatch.CheckForDisturbedSleepPrefix`).
+4. **Understand NullReferenceException (NRE):**
+   - "Object reference not set to an instance of an object" - code tries to use a variable that is `null` (not initialized).
+5. **Decompile Error Source Code:**
+   - Use decompiler to examine the code in the identified `Namespace.Class.MethodName`.
+   - Look for lines of code where a variable might be `null` before being used (dereferenced).
+6. **Debugging Example (Conceptual):**
+   - Imagine `SpawnPotatoesOnPawn(Pawn pawn)` throws NRE.
+   - Decompile `SpawnPotatoesOnPawn` method.
+   - Check for potential `null` variables: `pawn`, `pawn.Position`, `pawn.Map`, etc.
+   - Add null checks (`if (pawn != null)`) to your code to prevent NRE.
+
+**Key Takeaways:**
+- Stack traces are read top-down, error at the top.
+- NullReferenceExceptions (NREs) are common due to uninitialized variables.
+- Decompilers are essential for examining game code and pinpointing error sources.
+- Focus on the relevant part of the stack trace (your mod's namespace).
+- Use null checks defensively in your code.
+
+**Bug Reporting:**
+- Provide detailed bug reports to mod authors.
+- Include logs (especially HugsLib logs).
+- Describe steps to reproduce the error.
+- Be polite; modders are volunteers.
+- "x breaks" is not helpful; provide specific details.
+
+**Finding Error Cause in Stacktrace (Summary):**
+- Start reading from the top of the stacktrace.
+- Identify the Exception Type (e.g., NullReferenceException).
+- Look for mod namespace, class, and method names in the stacktrace.
+- Trace back the method calls to understand the error context.
+- Use decompilers to examine the code at fault.

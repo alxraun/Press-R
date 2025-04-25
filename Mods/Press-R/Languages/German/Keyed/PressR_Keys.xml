@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+  <!-- Settings Reset Button -->
+  <PressR.Settings.ResetButton.Label>Auf Standard zurücksetzen</PressR.Settings.ResetButton.Label>
+  <PressR.Settings.ResetButton.Tooltip>Alle Press-R-Einstellungen auf ihre Standardwerte zurücksetzen.</PressR.Settings.ResetButton.Tooltip>
+  <PressR.Settings.ResetButton.Message>Press-R-Einstellungen auf Standard zurückgesetzt.</PressR.Settings.ResetButton.Message>
+
+  <!-- Mod Settings Container -->
+  <!-- Tab Lens Feature Section -->
+  <PressR.Settings.TabLens.Feature.Label>Tab Lens Funktion</PressR.Settings.TabLens.Feature.Label>
+  <PressR.Settings.TabLens.Feature.Description>Objekteinstellungen über Karteninteraktion verwalten, wenn relevante Tabs geöffnet sind.</PressR.Settings.TabLens.Feature.Description>
+  <PressR.Settings.TabLens.StorageLens.Enable.Label>Storage Lens aktivieren</PressR.Settings.TabLens.StorageLens.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.Enable.Description>Tab Lens mit dem 'Lager'-Tab verwenden, um die Gegenstandserlaubnis durch Klicken auf der Karte umzuschalten.</PressR.Settings.TabLens.StorageLens.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.Overlays.Enable.Label>Gegenstands-Overlays anzeigen</PressR.Settings.TabLens.StorageLens.Overlays.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.Overlays.Enable.Description>Farbige Overlays auf Gegenständen anzeigen, die ihren erlaubten/verbotenen Status im Lager anzeigen.</PressR.Settings.TabLens.StorageLens.Overlays.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>UI-Status beim Beenden wiederherstellen</PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>Vorherigen Benutzeroberflächenstatus (Tab, Suche, Scrollen) wiederherstellen, wenn Storage Lens deaktiviert wird.</PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>'Lager'-Tab automatisch öffnen</PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>Den 'Lager'-Tab automatisch öffnen, wenn ein Gegenstand fokussiert wird.</PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>Gegenstand im Tab bei Klick fokussieren</PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>Die Tab-Liste nach dem angeklickten Gegenstand/Kategorie filtern.</PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>Gegenstand im Tab bei Hover fokussieren</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>Die Tab-Liste nach dem Gegenstand/Kategorie unter dem Mauszeiger filtern.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>
+  <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>Erfordert, dass 'Gegenstand im Tab bei Klick fokussieren' aktiviert ist.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>
+
+  <!-- Direct Haul Feature Section -->
+  <PressR.Settings.DirectHaul.Feature.Label>Direct Haul Funktion</PressR.Settings.DirectHaul.Feature.Label>
+  <PressR.Settings.DirectHaul.Feature.Description>Kolonisten direkt befehlen, ausgewählte Gegenstände an einen bestimmten Ort zu transportieren.</PressR.Settings.DirectHaul.Feature.Description>
+  <PressR.Settings.DirectHaul.RadiusIndicator.Enable.Label>Radiusindikator anzeigen</PressR.Settings.DirectHaul.RadiusIndicator.Enable.Label>
+  <PressR.Settings.DirectHaul.RadiusIndicator.Enable.Description>Einen Kreis anzeigen, der alle Platzierungsorte umfasst.</PressR.Settings.DirectHaul.RadiusIndicator.Enable.Description>
+  <PressR.Settings.DirectHaul.InvertKeys.Enable.Label>Standard/Lager-Tasten invertieren</PressR.Settings.DirectHaul.InvertKeys.Enable.Label>
+  <PressR.Settings.DirectHaul.InvertKeys.Enable.Description>Die Modifikatortasten für Standard-Transport und Lager-Modus in Direct Haul vertauschen.</PressR.Settings.DirectHaul.InvertKeys.Enable.Description>
+
+  <!-- Direct Haul Gizmos -->
+  <PressR.DirectHaul.CancelHeldStatusGizmo.Label>Status 'Gehalten' abbrechen</PressR.DirectHaul.CancelHeldStatusGizmo.Label>
+  <PressR.DirectHaul.CancelHeldStatusGizmo.Desc>Den Status 'Gehalten' für diesen Gegenstand in Direct Haul abbrechen.</PressR.DirectHaul.CancelHeldStatusGizmo.Desc>
+  <PressR.DirectHaul.CancelPendingStatusGizmo.Label>Status 'Ausstehend' abbrechen</PressR.DirectHaul.CancelPendingStatusGizmo.Label>
+  <PressR.DirectHaul.CancelPendingStatusGizmo.Desc>Den Status 'Ausstehend' für diesen Gegenstand in Direct Haul abbrechen.</PressR.DirectHaul.CancelPendingStatusGizmo.Desc>
+
+</LanguageData>

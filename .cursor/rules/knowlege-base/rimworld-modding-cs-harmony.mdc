@@ -1,0 +1,140 @@
+---
+description: Rimworld Modding C# Harmony - Knowledge Base
+globs: 
+alwaysApply: false
+---
+## Harmony
+
+### What is Harmony?
+- Runtime patching library for .NET/Mono methods.
+- Best practice for modifying RimWorld code.
+- Ensures mod compatibility.
+
+### Integrating Harmony into your mod
+1. **Add as a reference to your C# project.**
+2. **NuGet package:** `Lib.Harmony`.
+3. **Steam Workshop:** Add Harmony as a Steam dependency in `About.xml`.
+4. **Avoid including `0Harmony.dll` in your mod's `Assemblies`!**
+5. **Do not use HugsLib for basic Harmony integration.**
+
+### Harmony Patch Types
+- **Prefix:**
+    - Runs **before** the original method.
+    - `ReturnType`: `void` or `bool`.
+    - `bool return false`: skips the original method (use with caution!).
+    - May block other Prefix patches.
+- **Postfix:**
+    - Runs **after** the original method.
+    - Guaranteed execution.
+    - Can modify `__result` (passed by `ref`).
+    - Recommended for compatibility.
+- **Transpiler:**
+    - Modifies the **internal implementation** of a method (IL-code).
+    - Difficult to debug and maintain.
+    - Use only when complex logic is needed.
+
+### Modifying the method result
+- Through a `Postfix` patch.
+- Patch method parameter: `ref __result`.
+- Example:
+```csharp
+static void Postfix(ref ReturnType __result)
+{
+    __result = modifiedValue;
+}
+```
+
+### Common Pitfalls
+- **Overuse of Harmony:** Consider `subclassing`, `ThingComp`, `MapComponent`.
+- **Forgetting `ref __result`:** Result will not be changed.
+- **Incorrect patch `ReturnType`:** `void` or `bool` for `Prefix`.
+- **Wrong method to patch:** Use `AccessTools.Method` or `MethodInfo`.
+- **Patch not applying:**
+    - `HarmonyInstance.DEBUG = true;` and check the log.
+    - `[StaticConstructorOnStartup]` for early patches.
+    - Method might be inlined.
+
+### Bootstrapping (Initialization)
+- In a class with the `[StaticConstructorOnStartup]` attribute.
+- Create a `Harmony` instance: `var harmony = new Harmony("your.mod.id");`.
+- Apply patches:
+    - `harmony.PatchAll();` - automatically patches all classes with `[HarmonyPatch]` attributes.
+    - Manual patching: `harmony.Patch(...)`.
+
+### Code Compatibility Example
+
+**Objective:** Create compatibility between your mod and another mod's DLL using Harmony (manual patching).
+
+**Manual Patching Snippet:**
+```csharp
+try
+{
+    ((Action)(() =>
+    {
+        if (LoadedModManager.RunningModsListForReading.Any(x=> x.Name == "OtherMod"))
+        {
+            harmony.Patch(AccessTools.Method(typeof(FullNameSpaceOfSomeOtherMod.SomeClass), nameof(FullNameSpaceOfSomeOtherMod.SomeClass.SomeOtherMethod)),
+                postfix: new HarmonyMethod(typeof(HarmonyPatches), nameof(PatchOnSomeMethodFromSomeOtherMod_PostFix)));
+        }
+    }))();
+}
+catch (TypeLoadException ex) { }
+```
+
+**Constraints Addressed by Snippet:**
+- **Optional Mod:** Handles cases where "OtherMod" may or may not be active/present.
+- **No Direct Dependency:** Avoids compile-time dependency on "OtherMod" DLL.
+- **Compiler Optimizations:** Circumvents compiler inlining and JIT behavior issues that can break conditional patching.
+
+**Gotchas:**
+- **AssemblyVersion vs. FileVersion (AssemblyFileVersion):**
+    - Avoid referencing specific `AssemblyVersion` of "OtherMod.dll".
+    - Patch against `FileVersion` (AssemblyFileVersion) if possible, or ideally no specific version.
+    - `AssemblyVersion` changes indicate API breaking changes and may break patches.
+- **Reference Updates:**  If "OtherMod" updates `AssemblyVersion`, your patch may break.
+
+**Best Practice:**
+- Use this manual patching approach for optional compatibility with other DLL mods.
+- Prefer patching against `FileVersion` if versioning is needed.
+- Consider not referencing specific versions at all for more robust compatibility.
+
+### Links and Resources
+- **Harmony 2 Docs:** [https://harmony.pardeike.net](mdc:https:/harmony.pardeike.net)
+
+## Transpiler Hints
+
+**Debugging Transpilers:**
+- Transpiler debugging is complex due to IL code manipulation.
+- Counting instructions accurately is crucial to avoid exceptions.
+
+**Debugging Tools:**
+- **IL Code Printing:**  Use code snippet to output modified IL code for inspection.
+
+**Debugging Code Snippet:**
+```csharp
+public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+{
+    var l = XTranspiler(instructions, generator).ToList(); // Actual transpiler: XTranspiler
+    string s = "Code:";
+    int i = 0;
+    foreach (var c in l)
+    {
+        if (c.opcode == OpCodes.Call || c.opcode == OpCodes.Callvirt)
+        {
+            Log.Warning("" + i + ": " + c); // Highlight Call/Callvirt operations
+        }
+        else
+        {
+            Log.Message("" + i + ": " + c);
+        }
+        s += "\n" + i + ": " + c;
+        i++;
+        yield return c;
+    }
+    Log.Error(s); // Full code output for text editor analysis
+}
+```
+
+**Usage Tip:**
+- Utilize the provided code snippet to output and analyze generated IL code.
+- Inspect the output for correctness, especially instruction counting and opcode sequences.

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+    <KeyBindingCategoryDef>
+        <defName>PressR_Category</defName>
+        <label>Press-R</label>
+        <checkForConflicts />
+    </KeyBindingCategoryDef>
+
+    <KeyBindingDef>
+        <defName>PressR_ModifierKey</defName>
+        <category>PressR_Category</category>
+        <label>Press-R Key</label>
+        <defaultKeyCodeA>R</defaultKeyCodeA>
+        <description>Modifier key to activate Press-R features</description>
+    </KeyBindingDef>
+</Defs>

@@ -1,0 +1,196 @@
+---
+description: Rimworld Modding Core - Knowledge Base
+globs: 
+alwaysApply: false
+---
+## Modding Fundamentals
+
+**Types of Mods:**
+- **Cosmetic:** Visual changes only (textures). No gameplay impact.
+- **UI (Interface):** Quality of life improvements (inventory, lists).
+- **Gameplay:** Mechanics changes, new content (weapons, animals). May affect balance.
+
+**How to Install Mods:**
+- **Steam Workshop:** "Subscribe" - Steam will install.
+- **Manual Installation:**
+    1. Download ZIP.
+    2. Extract to `RimWorld/Mods/`.
+        - Windows: `C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods`
+        - Mac: `~/Library/Application Support/Steam/steamapps/common/RimWorld/RimWorldMac.app/Mods`
+        - Linux (standalone): `~/.steam/steam/steamapps/common/RimWorld/Mods`
+        - Linux (GoG): `/home/<user>/GOG/Games/RimWorld/game/Mods/`
+    3. Activate in-game: Main Menu -> Mods.
+    4. Restart RimWorld.
+
+**Modding Goals & Approaches:**
+- **Add a new "Thing":**
+    - XML `ThingDef`.
+    - Start by copying Core XML.
+    - `ParentName` for inheritance.
+    - `category` for buildings/plants.
+- **Create new functionality:**
+    - C# code.
+    - Apply C# via XML.
+    - New function: C# class.
+    - Thing with new function:
+        - C# class (inherit `Thing`).
+        - `ThingDef` XML: `<thingClass>YourNamespace.YourNewClass</thingClass>`.
+    - Thing with XML properties:
+        - C# class (inherit `ThingDef`).
+        - XML `ThingDef`: `<Class="YourNamespace.YourThingDef">`.
+        - OR: `ThingComp` for `ThingWithComps`, `CompProperties`, XML: `<Class="YourNameSpace.MyCompProperties">`.
+- **Modify RimWorld code:**
+    - XML (Defs): `PatchOperations` for XML Defs.
+    - C# (Methods): `Harmony` for code injection.
+
+**Key Points:**
+- Mod Sources: Steam Workshop, Forums, Third-Party.
+- Manual Install: `RimWorld/Mods/`.
+- Activation: In-game "Mods" menu, restart.
+- Compatibility: Conflicts possible.
+
+## RimWorld Application Startup Sequence
+
+**Root Method:** `Verse.PlayDataLoader.LoadAllPlayData(bool)` (called by `Verse.Root.Start()`)
+
+**Load Order Steps:**
+1. `Verse.GlobalTextureAtlasManager.ClearStaticAtlasBuildQueue()`
+2. `Verse.GraphicDatabase.Clear()`
+3. `Verse.LoadedModManager.LoadAllActiveMods()`
+4. `Verse.LanguageDatabase.InitAllMetadata()`
+5. `Verse.GenGeneric.InvokeStaticMethodOnGenericType() -> DefDatabase<>.AddAllInMods`
+6. `Verse.DirectXmlCrossRefLoader.ResolveAllWantedCrossReferences(FailMode.Silent)`
+7. `RimWorld.DefOfHelper.RebindAllDefOfs(earlyTryMode: true)`
+8. `Verse.TKeySystem.BuildMappings()`
+9. `Verse.BackstoryTranslationUtility.LoadAndInjectBackstoryData()`
+10. `Verse.LanguageDatabase.activeLanguage.InjectIntoData_BeforeImpliedDefs()`
+11. `Verse.ColoredText.ResetStaticData()`
+12. `Verse.DefGenerator.GenerateImpliedDefs_PreResolve()`
+13. `Verse.DirectXmlCrossRefLoader.ResolveAllWantedCrossReferences(FailMode.LogErrors)`
+14. `Verse.DirectXmlCrossRefLoader.Clear()`
+15. `RimWorld.DefOfHelper.RebindAllDefOfs(earlyTryMode: false)`
+16. `Verse.PlayDataLoader.ResetStaticDataPre()`
+17. **Resolve Def References:**
+    - `DefDatabase<ThingCategoryDef>.ResolveAllReferences()`
+    - `DefDatabase<RecipeDef>.ResolveAllReferences()`
+    - `Verse.GenGeneric.InvokeStaticMethodOnGenericType() -> DefDatabase<>.ResolveAllReferences`
+    - `DefDatabase<ThingDef>.ResolveAllReferences()`
+18. `Verse.DefGenerator.GenerateImpliedDefs_PostResolve()`
+19. `Verse.PlayDataLoader.ResetStaticDataPost()`
+20. `Verse.GenGeneric.InvokeStaticMethodOnGenericType() -> DefDatabase<>.ErrorCheckAllDefs`
+21. `Verse.KeyPrefs.Init()`
+22. `Verse.ShortHashGiver.GiveAllShortHashes()`
+23. `RimWorld.SolidBioDatabase.LoadAllBios()`
+24. `Verse.LanguageDatabase.activeLanguage.InjectIntoData_AfterImpliedDefs()`
+25. `Verse.StaticConstructorOnStartupUtility.CallAll()`
+26. `Verse.GlobalTextureAtlasManager.BakeStaticAtlases()`
+27. `RimWorld.IO.AbstractFilesystem.ClearAllCache()`, `System.GC.Collect(...)`
+28. `Verse.Log.ResetMessageCount`
+
+**Warning:** Do not Harmony patch these methods for custom loading. Use appropriate methods instead.
+
+## Mod Folder Structure
+
+**Purpose**: Organize mod files for correct RimWorld loading and compatibility with other mods.
+
+**Mods Folder Location**:
+- Windows: `C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods`
+- Mac: `~/Library/Application Support/Steam/steamapps/common/RimWorld/RimWorldMac.app/Mods`
+- Linux (standalone): `~/.steam/steam/steamapps/common/RimWorld/Mods`
+- Linux (GoG): `/home/<user>/GOG/Games/RimWorld/game/Mods/`
+
+**Basic Mod Folder Structure** (`YourModName` - your mod's folder name):
+```
+Mods/
+  YourModName/
+    About/         (Required)
+      About.xml    (Required)
+      Preview.png  (Recommended)
+      ModIcon.png  (Optional, since 1.5)
+    Assemblies/    (Optional, for C# code)
+    Defs/          (Optional, XML definitions)
+      ThingDefs/
+      RecipeDefs/
+      ...          (Subfolders for Def types)
+    Languages/     (Optional, localization)
+      English/
+      French/
+      ...          (Language folders)
+    Patches/       (Optional, XML patches)
+      ModCompatibilityPatches/
+      ...          (Subfolders for patch organization)
+    Sounds/        (Optional, sounds)
+      MyModNamespace/ (Recommended namespace subfolder)
+        SoundFile1.ogg
+        SoundFile2.ogg
+    Textures/      (Optional, textures)
+      MyModNamespace/ (Recommended namespace subfolder)
+        Texture1.png
+        Texture2.png
+    1.4/           (Optional, versioned content)
+      Defs/
+      Textures/
+    1.3/           (Optional, versioned content)
+      Defs/
+    Common/        (Optional, shared version content)
+      Textures/
+    LoadFolders.xml (Optional, custom load rules)
+```
+
+**Folder Descriptions:**
+- **`About/` (Required):**
+    - **`About.xml` (Required):** Main file identifying the mod. Contains name, author, ID, versions, description, dependencies, and load order.
+    - **`Preview.png` (Recommended):** Mod preview image for the mod manager and Steam Workshop (recommended size 640x360, PNG, <1MB).
+    - **`ModIcon.png` (Optional, since 1.5):** Mod icon, shown during loading and in mod settings (32x32 or 64x64 PNG).
+- **`Assemblies/` (Optional):** Contains compiled C# DLL files (`.dll`).
+- **`Defs/` (Optional):** XML files with Defs (content definitions). Recommended to use subfolders for Def types (e.g., `ThingDefs`, `RecipeDefs`).
+- **`Languages/` (Optional):** Localization files for different languages. Use language-specific subfolders (e.g., `English`, `French`).
+- **`Patches/` (Optional):** XML patch files to modify existing Defs. Subfolders can be used to organize patches, especially for compatibility patches with other mods.
+- **`Sounds/` (Optional):** Sound files (`.ogg`, `.wav`, `.mp3`). Recommended to create a namespace subfolder inside `Sounds/` to avoid file name conflicts with other mods.
+- **`Textures/` (Optional):** Texture files (`.png`). Recommended to create a namespace subfolder inside `Textures/` to prevent file name conflicts.
+- **`LoadFolders.xml` (Optional):** File to specify custom folder loading rules, versioning, and DLC/mod dependencies.
+- **Versioned Folders (Optional):**
+    - Folders named after RimWorld versions (`1.1`, `1.2`, `1.3`, `1.4`, `Common`).
+    - Contain version-specific content.
+    - RimWorld loads the most suitable versioned folder + `Common` + root folders.
+    - `Common/` - shared resources for all versions.
+    - For v1.0, `Common/` is not recognized, and `1.0/` disables loading from the root folder.
+
+**File Naming:**
+- Filenames for `.xml`, `.dll` are not critical, but avoid spaces and special characters.
+- For `.png` textures, naming is important for apparel, items, bodies, and heads.
+
+**Important Notes:**
+- Folder and filenames are **case-sensitive**.
+- `About/` folder with `About.xml` is **required** for mod recognition.
+- Use namespace subfolders or prefixes in `Sounds/` and `Textures/` to **avoid file name conflicts**.
+- `LoadFolders.xml` is for advanced version and dependency management.
+- `packageId` from `About.xml` is used to identify the mod in `LoadFolders.xml`.
+- `Preview.png` max size 1MB for Steam Workshop.
+- `Data/Core` and DLC folders have a similar structure to mod folders.
+
+**Recommendations:**
+- Use subfolders inside `Defs/`, `Sounds/`, `Textures/`, `Languages/`, `Patches/` for file organization.
+- Utilize versioned folders and `LoadFolders.xml` for compatibility with different RimWorld versions and other mods.
+- Always include `About/` with `About.xml` and `Preview.png`.
+
+## Modding Mechanisms
+
+**Core RimWorld Modding Mechanisms:**
+1. **XML Defs:**
+    - **Purpose:** Declaratively define game content (things, recipes, etc.) in XML files.
+    - **Essence:** XML files in `Defs/` folder define game object properties.
+2. **C# Components:**
+    - **Purpose:** Add modular functionality to game objects (Things, Maps, etc.).
+    - **Essence:** C# classes (ThingComp, MapComponent, etc.) add behavior and data.
+3. **Harmony Patching:**
+    - **Purpose:** Modify existing game code without overwriting for mod compatibility.
+    - **Essence:** C# code "patches" (Prefix, Postfix, Transpiler) alter method behavior.
+4. **Subclassing Defs:**
+    - **Purpose:** Create specialized Def types with extended functionality.
+    - **Essence:** C# classes inheriting from Def classes create new Def types.
+5. **XML Patching:**
+    - **Purpose:** Modify existing XML Defs without overwriting for mod compatibility.
+    - **Essence:** XML files in `Patches/` modify Def XML structure and values via XPath.
+
+**Key Idea:** Combine XML (data) and C# (logic) to create and modify game content and mechanics.

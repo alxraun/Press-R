@@ -1,0 +1,844 @@
+---
+description: Rimworld Modding C# Harmony Complete - Knowledge Base
+globs: 
+alwaysApply: false
+---
+## Harmony Complete
+
+### 1. Basics
+
+**Create Harmony Instance:**
+```csharp
+using HarmonyLib;
+var harmony = new Harmony("com.example.mod");
+```
+
+**Patch All in Assembly:**
+```csharp
+harmony.PatchAll(); // Current assembly (use with caution in inlined methods)
+// or
+Assembly assembly = Assembly.GetExecutingAssembly();
+harmony.PatchAll(assembly); // Explicit assembly
+// or
+harmony.PatchCategory(assembly, "categoryName");
+harmony.PatchAllUncategorized(assembly);
+```
+
+**Manual Patch:**
+```csharp
+MethodInfo originalMethod = typeof(OriginalClass).GetMethod("OriginalMethod");
+MethodInfo prefixMethod = typeof(PatchClass).GetMethod("PrefixMethod");
+MethodInfo postfixMethod = typeof(PatchClass).GetMethod("PostfixMethod");
+MethodInfo transpilerMethod = typeof(PatchClass).GetMethod("TranspilerMethod");
+MethodInfo finalizerMethod = typeof(PatchClass).GetMethod("FinalizerMethod");
+
+harmony.Patch(
+    original: originalMethod,
+    prefix: new HarmonyMethod(prefixMethod) { priority = Priority.Normal, before = new[] { "mod.id" }, after = new[] { "other.mod.id" } },
+    postfix: new HarmonyMethod(postfixMethod),
+    transpiler: new HarmonyMethod(transpilerMethod),
+    finalizer: new HarmonyMethod(finalizerMethod)
+);
+```
+
+**Unpatch All:**
+```csharp
+harmony.UnpatchAll("com.example.mod"); // specific ID
+harmony.UnpatchAll(); // all patches from this instance
+```
+
+**Unpatch Specific Patch:**
+```csharp
+harmony.Unpatch(originalMethod, HarmonyPatchType.Prefix, "com.example.mod"); // Unpatch prefixes by ID
+harmony.Unpatch(originalMethod, HarmonyPatchType.All, "com.example.mod"); // Unpatch all types by ID
+harmony.Unpatch(originalMethod, HarmonyPatchType.Prefix); // Unpatch all prefixes
+harmony.Unpatch(originalMethod, HarmonyPatchType.All); // Unpatch all types
+harmony.Unpatch(originalMethod, prefixMethod); // Unpatch specific prefix method
+```
+
+**Patch Info:**
+```csharp
+Harmony.GetAllPatchedMethods(); // IEnumerable<MethodBase>
+harmony.GetPatchedMethods(); // IEnumerable<MethodBase>
+Harmony.GetPatchInfo(MethodBase method); // Patches
+Harmony.HasAnyPatches(string harmonyID); // bool
+Harmony.VersionInfo(out Version currentVersion); // Dictionary<string, Version>
+```
+
+### 2. Annotations
+
+#### Basic Annotations:
+
+```csharp
+[HarmonyPatch] // Empty, mark class as patch
+[HarmonyPatch(typeof(TargetType))] // Target class
+[HarmonyPatch("TargetMethod")] // Target method name
+[HarmonyPatch(nameof(TargetClass.TargetMethod))] // Target Method Name (nameof)
+[HarmonyPatch("TargetMethod", MethodType.Getter)] // Target method type
+[HarmonyPatch("TargetMethod", new Type[] { typeof(int) })] // Target method args
+[HarmonyPatch(new Type[] { typeof(int) })] // Target constructor args
+[HarmonyPatchCategory("MyCategory")] // Patch category
+```
+
+#### Combined Annotations:
+
+```csharp
+[HarmonyPatch(typeof(TargetType), "TargetMethod")]
+[HarmonyPatch(typeof(TargetType), "TargetMethod", new Type[] { typeof(int) })]
+[HarmonyPatch(typeof(TargetType), MethodType.Getter)]
+[HarmonyPatch(typeof(TargetType), "TargetMethod", MethodType.Getter, new Type[] { typeof(int) })]
+[HarmonyPatch(typeof(TargetType), "TargetMethod", new Type[] { typeof(int) }, new ArgumentType[] { ArgumentType.Normal })]
+[HarmonyPatch("TargetMethod", MethodType.Setter)]
+```
+
+#### Patching Constructors:
+
+```csharp
+[HarmonyPatch(typeof(TargetClass), MethodType.Constructor)] // default ctor
+[HarmonyPatch(typeof(TargetClass), MethodType.Constructor, new Type[] { typeof(int) })] // ctor overload
+[HarmonyPatch(typeof(TargetClass), MethodType.StaticConstructor)] // static ctor
+```
+
+#### Patching Getters/Setters:
+
+```csharp
+[HarmonyPatch(typeof(TargetClass), "PropertyName", MethodType.Getter)]
+[HarmonyPatch(typeof(TargetClass), "PropertyName", MethodType.Setter)]
+```
+
+#### Patching Generic Methods:
+
+```csharp
+[HarmonyPatch(typeof(GenericClass<string>), "GenericMethod")]
+```
+
+#### Patching Multiple Methods:
+
+```csharp
+[HarmonyPatch]
+class PatchClass
+{
+    static IEnumerable<MethodBase> TargetMethods()
+    {
+        return AccessTools.GetTypesFromAssembly(someAssembly)
+            .SelectMany(type => type.GetMethods())
+            .Where(method => method.Name.StartsWith("Get"))
+            .Cast<MethodBase>();
+    }
+    static void Prefix() { /* ... */ }
+}
+```
+
+#### Auxiliary Patch Methods:
+
+```csharp
+[HarmonyPatch]
+class PatchClass
+{
+    static bool Prepare() { /* ... */ return true; } // Prepare patching, return false to skip
+    static MethodBase TargetMethod() { /* ... */ return originalMethod; } // Define target method
+    static IEnumerable<MethodBase> TargetMethods() { /* ... */ yield return method; } // Define multiple target methods
+    static Exception Cleanup(Exception exception) { /* ... */ return null; } // Cleanup after patching, handle exceptions
+}
+```
+
+#### Ordering and Priority Annotations:
+
+```csharp
+[HarmonyPriority(Priority.High)] // Priority enum
+[HarmonyPriority(600)] // Raw priority value
+[HarmonyBefore("mod.id")] // Run before patches from this mod
+[HarmonyBefore(new string[] {"mod.id1", "mod.id2"})] // Run before multiple mods
+[HarmonyAfter("mod.id")] // Run after patches from this mod
+[HarmonyAfter(new string[] {"mod.id1", "mod.id2"})] // Run after multiple mods
+[HarmonyDebug] // Debug annotation for patches
+```
+
+#### Patch Class Example:
+
+```csharp
+using HarmonyLib;
+
+[HarmonyPatch(typeof(TargetClass), "TargetMethod")]
+class PatchClass
+{
+    static void Prefix() { /* ... */ }
+    static void Postfix() { /* ... */ }
+    static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions) { /* ... */ }
+    static Exception Finalizer(Exception __exception) { /* ... */ }
+}
+```
+
+### 3. Patch Methods
+
+#### Prefix:
+
+```csharp
+// Basic prefix
+static void Prefix(params object[] args) { /* ... */ }
+
+// Skip original method
+static bool Prefix() { return false; } // Skip original
+static bool Prefix(ref object __result) { 
+    __result = newValue; // Set result directly
+    return false; // Skip original
+}
+
+// Change arguments 
+static void Prefix(ref string name) { name = "newName"; }
+
+// Set state for postfix
+static void Prefix(out object __state) { __state = stateValue; }
+
+// Full example with injections
+static bool Prefix(
+    [HarmonyInstance] object __instance,
+    [HarmonyArgument(0)] int arg1,
+    ref string __result,
+    out object __state,
+    ref int ___privateField
+) {
+    // Access instance, arguments, result, state, private fields
+    __state = "state data";
+    if (arg1 > 10) return false; // Skip original
+    __result = "newResult"; // Change result
+    ___privateField = 20; // Change private field
+    return true; // Continue original
+}
+```
+
+#### Postfix:
+
+```csharp
+// Basic postfix
+static void Postfix(params object[] args) { /* ... */ }
+
+// Change result
+static void Postfix(ref string __result) { __result = modifiedResult; }
+
+// Pass-through postfix
+static IEnumerable<int> Postfix(IEnumerable<int> result) { 
+    foreach(var item in result) {
+        yield return item * 2;
+    }
+}
+
+// Access state from prefix
+static void Postfix(object __state) { /* use __state */ }
+
+// Full example with injections
+static void Postfix(
+    [HarmonyInstance] object __instance,
+    [HarmonyArgument(0)] int arg1,
+    string __result,
+    object __state,
+    int ___privateField
+) {
+    // Access instance, arguments, result, state, private fields
+    FileLog.Log($"Result: {__result}, State: {__state}");
+}
+```
+
+#### Transpiler:
+
+```csharp
+static IEnumerable<CodeInstruction> Transpiler(
+    IEnumerable<CodeInstruction> instructions,
+    ILGenerator generator,
+    MethodBase original
+) {
+    var codes = new List<CodeInstruction>(instructions);
+    // Modify codes using generator and original method info
+    return codes.AsEnumerable();
+}
+```
+
+#### Finalizer:
+
+```csharp
+// Basic finalizer
+static Exception Finalizer(Exception __exception) { 
+    /* ... */ 
+    return null; // Suppress exception
+}
+
+// Observe exception only
+static void Finalizer(Exception __exception) {
+    /* observe exception */
+}
+
+// Modify result and handle exception
+static Exception Finalizer(Exception __exception, ref string __result) {
+    if (__exception != null) {
+        FileLog.Log($"Exception caught: {__exception.Message}");
+        return null; // Suppress exception
+    }
+    __result += " (finalized)"; // Modify result
+    return newException; // Change exception
+}
+```
+
+#### Injections:
+
+- `__instance`: target object instance (for non-static methods)
+- `__result`: return value of original method (can be `ref`)
+- `__resultRef`: ref return of original method (use `ref RefResult<T> __resultRef`)
+- `__state`: state object between prefix and postfix (use `out` in prefix, normal in postfix)
+- `___fieldName`: access private field `fieldName` (use `ref` to write)
+- `__args`: `object[]` array of all arguments
+- Method arguments by name or `__n` index
+
+### 4. Utilities
+
+#### AccessTools:
+
+```csharp
+using HarmonyLib;
+
+// Type access
+Type type = AccessTools.TypeByName("Namespace.ClassName");
+Type[] types = AccessTools.GetTypesFromAssembly(someAssembly);
+IEnumerable<Type> allTypes = AccessTools.AllTypes();
+
+// Member access
+FieldInfo field = AccessTools.Field(typeof(ClassName), "fieldName");
+PropertyInfo property = AccessTools.Property(typeof(ClassName), "PropertyName");
+MethodInfo method = AccessTools.Method(typeof(ClassName), "MethodName", new Type[] { typeof(int) });
+ConstructorInfo ctor = AccessTools.Constructor(typeof(ClassName), new Type[] { typeof(string) });
+
+// Declared member access (ignore inherited)
+FieldInfo declaredField = AccessTools.DeclaredField(typeof(ClassName), "fieldName");
+PropertyInfo declaredProperty = AccessTools.DeclaredProperty(typeof(ClassName), "PropertyName");
+MethodInfo declaredMethod = AccessTools.DeclaredMethod(typeof(ClassName), "MethodName");
+ConstructorInfo declaredCtor = AccessTools.DeclaredConstructor(typeof(ClassName));
+
+// Special property access
+PropertyInfo indexer = AccessTools.Indexer(typeof(ClassName), new Type[] { typeof(int) });
+MethodInfo propGetter = AccessTools.DeclaredPropertyGetter(typeof(ClassName), "PropertyName");
+MethodInfo propSetter = AccessTools.DeclaredPropertySetter(typeof(ClassName), "PropertyName");
+
+// String-based access
+FieldInfo stringField = AccessTools.Field("Namespace.ClassName:fieldName");
+PropertyInfo stringProperty = AccessTools.Property("Namespace.ClassName:PropertyName");
+MethodInfo stringMethod = AccessTools.Method("Namespace.ClassName:MethodName");
+
+// Inner types
+Type innerType = AccessTools.Inner(typeof(OuterClass), "InnerClass");
+Type firstInner = AccessTools.FirstInner(typeof(OuterClass), t => t.Name.Contains("Inner"));
+
+// Search methods
+MethodInfo firstMethod = AccessTools.FirstMethod(typeof(ClassName), m => m.Name.StartsWith("Get"));
+PropertyInfo firstProp = AccessTools.FirstProperty(typeof(ClassName), p => p.CanRead);
+ConstructorInfo firstCtor = AccessTools.FirstConstructor(typeof(ClassName), c => c.GetParameters().Length == 0);
+
+// Field references
+AccessTools.FieldRef<F> staticFieldRef = AccessTools.StaticFieldRefAccess<F>(typeof(ClassName), "fieldName");
+AccessTools.FieldRef<T, F> instanceFieldRef = AccessTools.FieldRefAccess<T, F>(fieldInfo);
+ref F fieldValue = ref instanceFieldRef(instance);
+
+// Direct field value access
+ref F directFieldRef = ref AccessTools.FieldRefAccess<T, F>(instance, "fieldName");
+ref F directFieldRef2 = ref AccessTools.FieldRefAccess<T, F>(instance, fieldInfo);
+
+// Struct field references
+ref F structFieldRef = ref AccessTools.StructFieldRefAccess<T, F>(ref structInstance, "fieldName");
+ref F structFieldRef2 = ref AccessTools.StructFieldRefAccess<T, F>(ref structInstance, fieldInfo);
+
+// Reflection helpers
+object[] actualParams = AccessTools.ActualParameters(method, inputParams);
+Type returnType = AccessTools.GetReturnedType(methodOrConstructor);
+Type[] paramTypes = AccessTools.GetTypes(parameters);
+
+// Member name lists
+List<string> fieldNames = AccessTools.GetFieldNames(type);
+List<string> propertyNames = AccessTools.GetPropertyNames(type);
+List<string> methodNames = AccessTools.GetMethodNames(type);
+List<string> instanceFieldNames = AccessTools.GetFieldNames(instance);
+
+// Member lists
+List<MethodInfo> methods = AccessTools.GetDeclaredMethods(type);
+List<PropertyInfo> properties = AccessTools.GetDeclaredProperties(type);
+List<ConstructorInfo> constructors = AccessTools.GetDeclaredConstructors(type);
+
+// Instance creation
+object instance = AccessTools.CreateInstance(type);
+T typedInstance = AccessTools.CreateInstance<T>();
+
+// Method delegation
+DelegateType methodDelegate = AccessTools.MethodDelegate<DelegateType>(method, instance);
+DelegateType stringMethodDelegate = AccessTools.MethodDelegate<DelegateType>("Namespace.ClassName:MethodName", instance);
+
+// Type checking
+bool isClass = AccessTools.IsClass(type);
+bool isStruct = AccessTools.IsStruct(type);
+bool isValue = AccessTools.IsValue(type);
+bool isVoid = AccessTools.IsVoid(type);
+bool isInteger = AccessTools.IsInteger(type);
+bool isFloatingPoint = AccessTools.IsFloatingPoint(type);
+bool isNumber = AccessTools.IsNumber(type);
+bool isNullable = AccessTools.IsOfNullableType(instance);
+bool isStatic = AccessTools.IsStatic(memberInfo);
+
+// Deep copying
+T copy = AccessTools.MakeDeepCopy<T>(source);
+AccessTools.MakeDeepCopy<T>(source, out T result, processor);
+object copy2 = AccessTools.MakeDeepCopy(source, resultType);
+```
+
+#### Traverse:
+
+```csharp
+using HarmonyLib;
+
+// Create traversal objects
+var traverseInstance = Traverse.Create(instance);
+var traverseType = Traverse.Create(typeof(ClassName));
+var traverseGeneric = Traverse.Create<T>();
+var traverseTypeName = Traverse.CreateWithType("Namespace.ClassName");
+
+// Navigate object graph
+Traverse fieldTraverse = traverseInstance.Field("fieldName");
+Traverse propTraverse = traverseInstance.Property("PropertyName");
+Traverse indexerTraverse = traverseInstance.Property("Item", new object[] { 0 });
+Traverse methodTraverse = traverseInstance.Method("MethodName", param1, param2);
+Traverse methodTraverse2 = traverseInstance.Method("MethodName", new Type[] { typeof(int) }, new object[] { 5 });
+
+// Get/Set values
+object fieldValue = fieldTraverse.GetValue();
+T typedValue = fieldTraverse.GetValue<T>();
+object methodResult = methodTraverse.GetValue();
+T typedMethodResult = methodTraverse.GetValue<T>();
+traverseInstance.Field("fieldName").SetValue(newValue);
+
+// Generic traversal
+T genericValue = Traverse<T>.GetValue();
+Traverse<T>.Value = newValue;
+
+// Check existence
+bool fieldExists = traverseInstance.Field("fieldName").FieldExists();
+bool propExists = traverseInstance.Property("PropertyName").PropertyExists();
+bool methodExists = traverseInstance.Method("MethodName").MethodExists();
+bool typeExists = traverseTypeName.TypeExists();
+
+// List members
+List<string> fields = traverseInstance.Fields();
+List<string> properties = traverseInstance.Properties();
+List<string> methods = traverseInstance.Methods();
+
+// Traverse properties
+bool isField = traverseInstance.Field("fieldName").IsField;
+bool isProperty = traverseInstance.Property("PropertyName").IsProperty;
+bool isWriteable = traverseInstance.Field("fieldName").IsWriteable;
+Type valueType = traverseInstance.Field("fieldName").GetValueType();
+
+// Iterate fields/properties
+Traverse.IterateFields(source, field => field.SetValue(newValue));
+Traverse.IterateFields(source, target, (sField, tField) => tField.SetValue(sField.GetValue()));
+Traverse.IterateFields(source, target, (name, sField, tField) => FileLog.Log($"Copying {name}"));
+Traverse.IterateProperties(source, prop => FileLog.Log(prop.GetValue().ToString()));
+```
+
+#### FileLog:
+
+```csharp
+using HarmonyLib;
+
+// Basic logging
+FileLog.Log("Log message");
+FileLog.LogBuffered("Buffered log message");
+FileLog.LogBuffered(new List<string> { "Message 1", "Message 2" });
+FileLog.FlushBuffer();
+FileLog.Reset();
+
+// Advanced logging
+FileLog.LogBytes(ptr, length);
+FileLog.ChangeIndent(1); // Increase indent
+FileLog.ChangeIndent(-1); // Decrease indent
+FileLog.Debug("Debug message");
+
+// Properties and methods
+string logPath = FileLog.LogPath;
+StreamWriter writer = FileLog.LogWriter;
+char indentChar = FileLog.indentChar;
+int indentLevel = FileLog.indentLevel;
+List<string> buffer = FileLog.GetBuffer(clear: true);
+```
+
+#### SymbolExtensions:
+
+```csharp
+using HarmonyLib;
+using System.Linq.Expressions;
+
+// Lambda expression to method info
+MethodInfo methodInfo1 = SymbolExtensions.GetMethodInfo(() => Console.WriteLine("Test"));
+MethodInfo methodInfo2 = SymbolExtensions.GetMethodInfo<string>(s => s.Contains("x"));
+MethodInfo methodInfo3 = SymbolExtensions.GetMethodInfo<string, bool>(s => s.Contains("x"));
+MethodInfo methodInfo4 = SymbolExtensions.GetMethodInfo((LambdaExpression)Expression.Lambda(body, parameters));
+```
+
+### 5. Code Instructions and CodeMatcher (Transpilers)
+
+#### CodeInstruction:
+
+```csharp
+using HarmonyLib;
+using System.Reflection.Emit;
+
+// Create instructions
+var instruction = new CodeInstruction(OpCodes.Ldstr, "hello");
+var cloneInstruction = new CodeInstruction(instruction);
+var opcodeClone = instruction.Clone(OpCodes.Ldc_I4);
+var operandClone = instruction.Clone(operand: "world");
+
+// Add metadata
+instruction.labels.Add(new Label());
+instruction.blocks.Add(new ExceptionBlock(ExceptionBlockType.BeginExceptionBlock));
+
+// Create specialized instructions
+CodeInstruction callInstruction = CodeInstruction.Call(() => Console.WriteLine("Test"));
+CodeInstruction callGenericInstruction = CodeInstruction.Call<string>(s => s.ToUpper());
+CodeInstruction callGenericReturnInstruction = CodeInstruction.Call<string, bool>(s => s.Contains("x"));
+CodeInstruction callExpressionInstruction = CodeInstruction.Call((LambdaExpression)expr);
+CodeInstruction callMethodInstruction = CodeInstruction.Call(typeof(String), "Concat", new Type[] { typeof(string), typeof(string) });
+CodeInstruction callStringInstruction = CodeInstruction.Call("System.String:Concat");
+CodeInstruction callClosureInstruction = CodeInstruction.CallClosure<Func<int>>(myDelegate);
+
+// Field access instructions
+CodeInstruction loadFieldInstruction = CodeInstruction.LoadField(typeof(MyClass), "myField");
+CodeInstruction loadFieldAddrInstruction = CodeInstruction.LoadField(typeof(MyClass), "myField", useAddress: true);
+CodeInstruction storeFieldInstruction = CodeInstruction.StoreField(typeof(MyClass), "myField");
+
+// Local var instructions
+CodeInstruction loadLocalInstruction = CodeInstruction.LoadLocal(0);
+CodeInstruction loadLocalAddrInstruction = CodeInstruction.LoadLocal(0, useAddress: true);
+CodeInstruction storeLocalInstruction = CodeInstruction.StoreLocal(0);
+
+// Argument instructions
+CodeInstruction loadArgInstruction = CodeInstruction.LoadArgument(0);
+CodeInstruction loadArgAddrInstruction = CodeInstruction.LoadArgument(0, useAddress: true);
+CodeInstruction storeArgInstruction = CodeInstruction.StoreArgument(0);
+```
+
+#### CodeMatcher:
+
+```csharp
+using HarmonyLib;
+
+// Create matcher
+var matcher = new CodeMatcher(instructions);
+var matcher2 = new CodeMatcher(instructions, generator);
+var clonedMatcher = matcher.Clone();
+
+// Navigation
+matcher.Start(); // Move to start
+matcher.End(); // Move to end
+matcher.Advance(3); // Move forward 3 instructions
+matcher.Pos // Current position (int)
+matcher.Length // Total instructions (int)
+matcher.Remaining // Remaining instructions (int)
+matcher.IsValid // Position is valid (bool)
+matcher.IsInvalid // Position is invalid (bool)
+
+// Instruction access
+CodeInstruction currentInstruction = matcher.Instruction;
+OpCode opcode = matcher.Opcode;
+object operand = matcher.Operand;
+List<Label> labels = matcher.Labels;
+List<ExceptionBlock> blocks = matcher.Blocks;
+CodeInstruction namedMatch = matcher.NamedMatch("matchName");
+
+// Instruction modification
+matcher.SetInstruction(newInstruction);
+matcher.SetInstructionAndAdvance(newInstruction);
+matcher.SetOperandAndAdvance(newOperand);
+matcher.Set(OpCodes.Ldstr, "hello");
+matcher.SetOpcodeAndAdvance(OpCodes.Ldc_I4);
+
+// Insertion
+matcher.Insert(instruction1, instruction2);
+matcher.Insert(instructionList);
+matcher.InsertAndAdvance(instruction1, instruction2);
+matcher.InsertAndAdvance(instructionList);
+matcher.InsertBranch(OpCodes.Br, targetPosition);
+matcher.InsertBranchAfter(OpCodes.Br, targetPosition);
+matcher.InsertBranchAndAdvance(OpCodes.Br, targetPosition);
+
+// Removal
+matcher.RemoveInstruction();
+matcher.RemoveInstructions(count: 3);
+matcher.RemoveInstructionsInRange(start: 5, end: 10);
+matcher.RemoveInstructionsWithOffsets(startOffset: 0, endOffset: 3);
+
+// Labels and branches
+matcher.SetJumpTo(OpCodes.Br, targetPosition, out Label label);
+matcher.AddLabels(labelList);
+matcher.AddLabelsAt(position: 5, labelList);
+matcher.CreateLabel(out Label newLabel);
+matcher.CreateLabelAt(position: 5, out Label posLabel);
+matcher.CreateLabelWithOffsets(offset: 3, out Label offsetLabel);
+matcher.DefineLabel(out Label definedLabel);
+
+// Local variables
+matcher.DeclareLocal(typeof(int), out LocalBuilder localVar);
+
+// Instruction extraction
+IEnumerable<CodeInstruction> enumeration = matcher.InstructionEnumeration();
+List<CodeInstruction> allInstructions = matcher.Instructions();
+List<CodeInstruction> nextInstructions = matcher.Instructions(count: 3);
+List<CodeInstruction> rangeInstructions = matcher.InstructionsInRange(start: 0, end: 5);
+List<CodeInstruction> offsetInstructions = matcher.InstructionsWithOffsets(startOffset: 0, endOffset: 5);
+
+// Matching
+matcher.MatchForward(false, new CodeMatch(OpCodes.Ldstr, "find this"));
+matcher.MatchStartForward(false, new CodeMatch(OpCodes.Ldstr, "find at start"));
+matcher.MatchEndForward(false, new CodeMatch(OpCodes.Ret, null, "return"));
+matcher.MatchBackwards(false, new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(Console), "WriteLine")));
+matcher.MatchStartBackwards(false, new CodeMatch(OpCodes.Nop));
+matcher.MatchEndBackwards(false, new CodeMatch(OpCodes.Ret));
+
+// Error handling
+matcher.ThrowIfInvalid("Position is invalid");
+matcher.ThrowIfNotMatchForward("Expected string load", new CodeMatch(OpCodes.Ldstr));
+matcher.ThrowIfNotMatchBack("Expected return", new CodeMatch(OpCodes.Ret));
+matcher.ThrowIfFalse("Position should be at start", m => m.Pos == 0);
+matcher.ReportFailure(method, message => Console.WriteLine(message));
+
+// Advanced patterns
+matcher.Repeat(m => m.MatchForward(false, new CodeMatch(OpCodes.Ldstr)).InsertAndAdvance(new CodeInstruction(OpCodes.Nop)));
+```
+
+#### Code Matchers (Examples):
+
+```csharp
+// Creating code matchers
+CodeMatch matchAnyOpcode = new CodeMatch();
+CodeMatch matchLdstr = new CodeMatch(OpCodes.Ldstr);
+CodeMatch matchLdstrHello = new CodeMatch(OpCodes.Ldstr, "hello");
+CodeMatch matchInstruction = new CodeMatch(instruction, "named match");
+CodeMatch matchPredicate = new CodeMatch(inst => inst.opcode == OpCodes.Ldstr, "predicate match");
+CodeMatch matchExpression = new CodeMatch(() => Console.WriteLine(), "expression match");
+
+// Standard matchers
+CodeMatch.Branches("branch");
+CodeMatch.Calls(AccessTools.Method(typeof(string), "IsNullOrEmpty"));
+CodeMatch.LoadsConstant();
+CodeMatch.LoadsConstant(42);
+CodeMatch.LoadsConstant(3.14);
+CodeMatch.LoadsConstant(MyEnum.Value);
+CodeMatch.LoadsConstant("string value");
+CodeMatch.LoadsLocal(useAddress: false, "local var");
+CodeMatch.LoadsField(fieldInfo, byAddress: false);
+CodeMatch.StoresLocal("store local");
+CodeMatch.StoresArgument("store arg");
+CodeMatch.StoresField(fieldInfo);
+```
+
+#### Transpilers:
+
+```csharp
+using HarmonyLib;
+
+// Utility methods
+IEnumerable<CodeInstruction> manipulated = Transpilers.Manipulator(
+    instructions,
+    instruction => instruction.opcode == OpCodes.Ldstr,
+    instruction => instruction.operand = "replaced"
+);
+
+IEnumerable<CodeInstruction> replaced = Transpilers.MethodReplacer(
+    instructions,
+    AccessTools.Method(typeof(Console), "Write"),
+    AccessTools.Method(typeof(Console), "WriteLine")
+);
+
+IEnumerable<CodeInstruction> logged = Transpilers.DebugLogger(instructions, "Instruction dump:");
+```
+
+### 6. Core Classes
+
+#### HarmonyLib.PatchClassProcessor:
+
+```csharp
+var processor = new PatchClassProcessor(harmonyInstance, typeof(PatchClass));
+List<MethodInfo> patchedMethods = processor.Patch();
+processor.Unpatch();
+string category = processor.Category;
+```
+
+#### HarmonyLib.PatchProcessor:
+
+```csharp
+var processor = new PatchProcessor(harmonyInstance, originalMethod);
+processor.AddPrefix(new HarmonyMethod(prefixMethod));
+processor.AddPostfix(new HarmonyMethod(postfixMethod));
+processor.AddTranspiler(new HarmonyMethod(transpilerMethod));
+processor.AddFinalizer(new HarmonyMethod(finalizerMethod));
+MethodInfo replacement = processor.Patch();
+processor.Unpatch(HarmonyPatchType.Prefix, "com.example.mod");
+processor.Unpatch(prefixMethod);
+```
+
+#### HarmonyLib.ReversePatcher:
+
+```csharp
+var reversePatcher = harmony.CreateReversePatcher(originalMethod, standinMethod);
+MethodInfo replacementMethod = reversePatcher.Patch(HarmonyReversePatchType.Original);
+// or
+MethodInfo snapshotMethod = reversePatcher.Patch(HarmonyReversePatchType.Snapshot);
+```
+
+#### HarmonyLib.Patches:
+
+```csharp
+var patches = Harmony.GetPatchInfo(originalMethod);
+ReadOnlyCollection<Patch> prefixes = patches.Prefixes;
+ReadOnlyCollection<Patch> postfixes = patches.Postfixes;
+ReadOnlyCollection<Patch> transpilers = patches.Transpilers;
+ReadOnlyCollection<Patch> finalizers = patches.Finalizers;
+ReadOnlyCollection<string> owners = patches.Owners;
+bool debugging = patches.Debugging;
+patches.RemovePrefix("com.example.mod");
+patches.RemovePostfix("com.example.mod");
+patches.RemoveTranspiler("com.example.mod");
+patches.RemoveFinalizer("com.example.mod");
+patches.RemovePatch(patchMethod);
+```
+
+#### HarmonyLib.PatchInfo:
+
+```csharp
+var patchInfo = Harmony.GetPatchInfo(originalMethod);
+Patch[] prefixes = patchInfo.prefixes;
+Patch[] postfixes = patchInfo.postfixes;
+Patch[] transpilers = patchInfo.transpilers;
+Patch[] finalizers = patchInfo.finalizers;
+bool debugging = patchInfo.Debugging;
+List<CodeInstruction> instructions = patchInfo.GetInstructions();
+List<KeyValuePair<int, CodeInstruction>> instructionsWithOffsets = patchInfo.GetInstructionsWithOffsets();
+int errorOffset = patchInfo.GetErrorOffset();
+int errorIndex = patchInfo.GetErrorIndex();
+```
+
+#### HarmonyLib.Patch:
+
+```csharp
+var patch = new Patch(new HarmonyMethod(patchMethod), index: 0, owner: "com.example.mod");
+MethodInfo patchMethod = patch.PatchMethod;
+int index = patch.index;
+string owner = patch.owner;
+int priority = patch.priority;
+string[] before = patch.before;
+string[] after = patch.after;
+bool debug = patch.debug;
+int compareResult = patch.CompareTo(otherPatch);
+bool equals = patch.Equals(otherPatch);
+int hashCode = patch.GetHashCode();
+MethodInfo method = patch.GetMethod(originalMethod);
+```
+
+### 7. Enums
+
+#### HarmonyLib.HarmonyPatchType:
+
+```csharp
+HarmonyPatchType.Prefix        // Prefix patch
+HarmonyPatchType.Postfix       // Postfix patch
+HarmonyPatchType.Transpiler    // Transpiler patch
+HarmonyPatchType.Finalizer     // Finalizer patch
+HarmonyPatchType.All           // All patch types
+```
+
+#### HarmonyLib.MethodType:
+
+```csharp
+MethodType.Normal             // Normal method
+MethodType.Getter             // Property getter
+MethodType.Setter             // Property setter
+MethodType.Constructor        // Constructor
+MethodType.StaticConstructor  // Static constructor
+MethodType.Enumerator         // Enumerator method
+```
+
+#### HarmonyLib.Priority:
+
+```csharp
+Priority.VeryLow           // 100
+Priority.Low               // 200
+Priority.LowerThanNormal   // 300
+Priority.Normal            // 400 (default)
+Priority.HigherThanNormal  // 500
+Priority.High              // 600
+Priority.VeryHigh          // 700
+Priority.First             // 800
+Priority.Last              // 0
+```
+
+#### HarmonyLib.ArgumentType:
+
+```csharp
+ArgumentType.Normal    // Normal argument
+ArgumentType.Ref       // Ref argument (passed by reference)
+ArgumentType.Out       // Out argument
+ArgumentType.Pointer   // Pointer argument
+```
+
+#### HarmonyLib.ExceptionBlockType:
+
+```csharp
+ExceptionBlockType.BeginExceptionBlock    // Begin exception block
+ExceptionBlockType.BeginCatchBlock        // Begin catch block
+ExceptionBlockType.BeginFinallyBlock      // Begin finally block 
+ExceptionBlockType.BeginFaultBlock        // Begin fault block
+ExceptionBlockType.EndExceptionBlock      // End exception block
+ExceptionBlockType.BeginExceptFilterBlock // Begin exception filter block (not usable for patches)
+```
+
+#### HarmonyLib.MethodDispatchType:
+
+```csharp
+MethodDispatchType.VirtualCall  // Virtual method call
+MethodDispatchType.Call         // Normal method call
+```
+
+#### HarmonyLib.HarmonyReversePatchType:
+
+```csharp
+HarmonyReversePatchType.Original   // Original implementation
+HarmonyReversePatchType.Snapshot   // Snapshot of the original
+```
+
+### 8. Delegates
+
+```csharp
+// Fast method invocation delegate
+public delegate object FastInvokeHandler(object target, params object[] parameters);
+
+// Static field ref delegate
+public delegate ref F FieldRef<F>();
+
+// Instance field ref delegate
+public delegate ref F FieldRef<in T, F>(T instance = null);
+
+// Struct instance field ref delegate
+public delegate ref F StructFieldRef<T, F>(ref T instance) where T : struct;
+
+// Instantiation delegate
+public delegate T InstantiationHandler<out T>();
+
+// Ref return delegate
+public delegate ref T RefResult<T>();
+```
+
+### 9. Edge Cases and Limitations
+
+* **Inlining**: Patches might not work if original is inlined. Try patching call sites or disabling inlining (runtime-dependent).
+* **Base Method Calls**: `base.Method()` from patches requires Reverse Patching.
+* **Generics**: Patching generics can be tricky due to code sharing. Consider specific type patches.
+* **Constructor Return Type Change**: Not possible to change constructor return type directly.
+* **Static Constructors**: Patching static constructors is problematic due to early initialization.
+* **Native Methods**: Patching requires transpilers to replace the entire method body, original is lost.
+* **MarshalByRefObject**: Patching MarshalByRefObject methods can be difficult or impossible.
+* **Special Classes**: Some classes (.NET internals) may require identity patches to make other patches work.
+* **Methods With Dead Code**: Methods without `RET` might cause `InvalidProgramException`. Use transpilers to add valid IL.
+* **Early Patching (Unity)**: Patching too early in Unity can cause `MissingMethodException`. Patch after scene load. 

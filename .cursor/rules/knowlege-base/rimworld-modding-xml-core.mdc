@@ -1,0 +1,415 @@
+---
+description: Rimworld Modding XML Core - Knowledge Base
+globs: 
+alwaysApply: false
+---
+## Def Fundamentals
+
+**What are Defs?**
+- XML Definitions used to add content to RimWorld mods.
+- Define game elements: weapons, apparel, animals, plants, factions, etc.
+- Stored in XML files, human-readable, located in the `Defs` folder of a mod.
+- Act as blueprints: define properties and configurations without code compilation.
+- C# code provides behavior, Defs configure data.
+- Turn generic entities into specific game elements (e.g., generic plant → potato plant).
+
+**XML File Structure:**
+- **XML Declaration:** `<?xml version="1.0" encoding="utf-8"?>` - Start of every XML file.
+- **Root Node:** `<Defs>` - Encloses all Defs in the file.
+- **Def Tags:** `<DefType>` - Container for a specific Def (e.g., `<ThingDef>`, `<RecipeDef>`).
+- **Example Structure:**
+    ```xml
+    <?xml version="1.0" encoding="utf-8"?>
+    <Defs>
+        <ThingDef>
+            <defName>SomeName</defName>
+            <ingestible>
+                <ingestSound>Slurp</ingestSound>
+            </ingestible>
+        </ThingDef>
+    </Defs>
+    ```
+
+**Folder Location:**
+- Placed in `Defs` folder of mod's structure.
+- XML files within `Defs` can be organized into subfolders (e.g., `ThingDefs_Items`, `RecipeDefs`).
+- Filenames within `Defs` are for organization, except when using versioned LoadFolders.xml.
+- Vanilla Defs location: `[RimWorld Install Folder]\Data\Core\Defs`.
+- Use vanilla Defs as templates and examples.
+
+**C# & XML Connection:**
+- **Structure:** C# class (`Def` inheritance) defines XML structure.
+- **Tags:** Public C# fields (e.g., `public SomeType someTagName;`) become XML tags (`<someTagName>`).
+- **Subtags:** Nested classes (e.g., `StuffProperties`) create subtags within XML.
+- **Lists:** `List<T>` in C# creates XML lists with `<li>` items.
+    - `StatModifier` in lists: Special case, uses tag name as `StatDef`, tag value as `float`.
+- **C# Correspondence:** Each Def Type matches a C# class inheriting from `Def`.
+- **XML Tags:** Represent fields of the corresponding C# Def class.
+    - Simple Values: `<defName>value</defName>`, `<label>value</label>` (strings, integers).
+    - Complex Values: Nested tags for classes like `IngestibleProperties` (`<ingestible>`).
+    - Hierarchy: `<Defs> > <Def Type> > <fieldTag> > <childNode>`.
+
+**XML Inheritance:**
+- **Abstract="True"**: Used in `<Def Name="DefName" Abstract="True">`.
+    - Prevents Def from being loaded into the game.
+    - Serves as a template for inheritance.
+- **Name="DefName"**: Defines a template/parent Def.
+    - Used by other Defs for inheritance via `ParentName`.
+- **ParentName="ParentDefName"**: Used in `<Def ParentName="ParentDefName">`.
+    - Inherits content from `<Def Name="ParentDefName">`.
+- **Inheritance Mechanism:**
+    1. **Parent Def:** `<Def Name="ParentDefName" Abstract="True">` - Defines base properties.
+    2. **Child Def:** `<Def ParentName="ParentDefName">` - Inherits properties from ParentDefName.
+    3. **Game Load:**
+       - Parent Defs (`Name` & `Abstract="True"`) are templates, not loaded directly.
+       - Child Defs (`ParentName`) copy & apply parent's content.
+       - Child Def content overwrites parent content if conflicts.
+- **Stopping Inheritance - `Inherit="False"`:**
+    - Use `Inherit="False"` in a child tag to prevent inheriting a specific tag's content from the parent.
+    - Useful for overriding specific tags, especially list tags (`<li>`).
+    - Example:
+        ```xml
+        <ThingDef Name="ThingOne" Abstract="True">
+        <comps>
+            <li Class="CompOne">
+            <valueA>1</valueA>
+            </li>
+        </comps>
+        </ThingDef>
+
+        <ThingDef ParentName="ThingOne">
+        <comps Inherit="False">
+            <li Class="CompOne">
+            <valueA>2</valueA>
+            </li>
+        </comps>
+        </ThingDef>
+        ```
+
+**Custom Def Classes:**
+- **Purpose:** Create new Def types with custom fields and behavior.
+- **XML Requirement:**
+    - `<ThingDef Class="MyNamespace.MyCustomDefName">` in XML to link to custom C# class.
+- **Code Requirement:**
+    - `class MyCustomDefName : ThingDef` (or other Def type) in C#.
+- **Accessing Custom Fields (C#):**
+    - Casting: `var def = thing.def as MyCustomDefName;`
+- **Example (Custom Weapon Def):**
+  - **XML (`ThingDefs.xml`):**
+    ```xml
+    <ThingDef ParentName="BaseHumanGun" Class="MyNamespace.MyCustomDef_ThingDef">
+        <defName>MyCoolNewGun</defName>
+        <thingClass>MyNamespace.MyCoolNewGun</thingClass>
+        <myNewFloat>1.0</myNewFloat>
+        <myNewBool>true</myNewBool>
+        <myNewThingDefList>
+        <li>Steel</li>
+        </myNewThingDefList>
+    </ThingDef>
+    ```
+  - **C# (`MyCustomDef_ThingDef.cs`):**
+    ```csharp
+    namespace MyNamespace
+    {
+        public class MyCustomDef_ThingDef : ThingDef
+        {
+            public float myNewFloat;
+            public bool myNewBool;
+            public List<ThingDef> myNewThingDefList = new List<ThingDef>();
+        }
+    }
+    ```
+  - **Accessing Custom Def in Code:**
+    ```csharp
+    MyCustomDef_ThingDef def = weapon.def as MyNamespace.MyCustomDef_ThingDef;
+    float floatValue = def.myNewFloat;
+    ```
+
+**Working with ThingDefs:**
+- **Purpose:** Define properties of almost all in-game "things" (tangible & intangible).
+- **Learning Tag Meanings:**
+    - **Decompiler (Recommended):** Use a decompiler (ILSpy, dnSpy) to inspect `ThingDef` C# class.
+    - **Search Tag Names:** Search for XML tag names in decompiled code.
+    - **Analyze Code Usage:** Understand tag effects from how they're used in code.
+- **Finding Tag Meaning Example (`<intricate>`):**
+    1. **Identify Tag:** `<intricate>`.
+    2. **Decompile & Search:** Search decompiler for "intricate".
+    3. **Analyze Code Usage:**
+       - `PlayerItemAccessibilityUtility.CacheAccessibleThings`
+       - `Thing.SmeltProducts` → determines smelting products.
+    4. **Deduce Meaning:** `<intricate>true</intricate>` for `ThingDef` = item is lost upon smelting (e.g., Components).
+- **General Approach for Unknown Tags:**
+    1. **Identify XML Tag** (e.g., `<DeteriorationRate>`).
+    2. **Text Editor (Find in Files):** Search for tag name in RimWorld `Data` and mod folders.
+    3. **Decompiler (Analyze):** Search and analyze tag name in decompiled C# code.
+
+**Common XML Errors:**
+- **Syntax Errors:** Formatting, unclosed tags, case sensitivity.
+- **Cross-reference Errors:** Incorrect or missing `defName` references. "Could not resolve cross-reference: No DefType named DefName found".
+- **Cascading Errors:** One XML error can cause a chain of subsequent errors.
+- **Solving XML Errors:**
+    - Fix Errors Incrementally: Start with the first error reported in logs.
+    - Validate XML: Use XML editor features or online validators to check for syntax.
+    - Check Player.log: Consult the log file for detailed error messages and locations.
+
+**Key Considerations:**
+- `Class` attribute links XML to C# class.
+- `defName` must be unique.
+- XML is case-sensitive.
+- Root element is always `<Defs>`.
+- `Name` for parent Defs, `ParentName` for child Defs.
+- `Abstract="True"` for template Defs.
+- `Inherit="False"` for selective inheritance control.
+- Use namespaces to organize code and XML.
+- Be mindful of compatibility when modifying core Defs.
+- When NOT to use Custom Def Classes: Compatibility issues, limited scope, consider alternatives like `ThingComp` and `DefModExtension`. 
+
+## ThingDef
+
+**Purpose of ThingDef:**
+- Defines properties and behavior of in-game "things" (items, buildings, pawns, projectiles, etc.).
+- Backed by `ThingDef` C# class.
+- Configured via XML in Def files.
+
+**Learning Tag Meanings:**
+- **Challenge:** 200+ tags, limited official documentation.
+- **Method:** Decompilation + Code Analysis.
+    1. **Identify Tag:** Find tag in XML (e.g., `<intricate>`).
+    2. **Decompile:** Use a decompiler (ILSpy, dnSpy).
+    3. **Search:** Search decompiler for tag name (e.g., "intricate").
+    4. **Analyze Usage:** Analyze code using tag (e.g., `Thing.SmeltProducts`).
+    5. **Infer Meaning:** Deduce tag's function from code context (e.g., `intricate` affects smelting products).
+
+**Example: `intricate` Tag**
+- **XML Usage:**
+  ```xml
+  <ThingDef>
+      <defName>ComponentIndustrial</defName>
+      <intricate>true</intricate>
+  </ThingDef>
+  ```
+- **Analysis:**
+    - Used in `ComponentIndustrial` and `AdvancedComponent` ThingDefs.
+    - Read by `PlayerItemAccessibilityUtility.CacheAccessibleThings` and `Thing.SmeltProducts`.
+    - `SmeltProducts` checks `intricate` to determine smelting output.
+- **Meaning:** Indicates item is lost upon smelting (not recoverable).
+
+**Adding More Tags (Custom Fields):**
+- **Method:** Use `DefModExtension` (C#).
+- **Benefits:** Compatibility, modularity.
+- **Alternative to:** Directly modifying `ThingDef` class (complex, compatibility issues).
+
+**Key Takeaway:**
+- `ThingDef` defines core properties of in-game objects.
+- Decompilation and code analysis are essential for understanding tag behavior.
+- `DefModExtension` is recommended for adding custom data/functionality to ThingDefs.
+- No comprehensive tag documentation exists - rely on code analysis and community resources.
+
+## Def Extensions
+
+**Methods for Modifying Defs:**
+- **1. Overwriting Defs (XML)**: Easiest method but incompatible with other mods, so never use it except for personal use.
+- **2. XPath Changes (XML Patches)**: Highly specific, very compatible, and non-destructive, but limited to XML-defined Defs and tricky for complex operations, use for most XML value changes and general compatibility.
+- **3. Adding a (Self-Made) Comp (C#)**: Flexible, well-supported, and highly compatible, adding functionality, but not applicable to all Def types, use when adding new behaviors, non-static data, or functionality to ThingWithComps.
+- **4. DefModExtensions (C#)**: Simple, lightweight, and highly compatible, adding data fields, but for static data only, use when adding custom data fields to existing Defs.
+- **5. Subclassing Defs (C#)**: Powerful and extends Def functionality, but has compatibility issues, is less flexible than Comps, and requires casting, use for complex Def modifications where Comps/DefModExtensions are insufficient.
+- **6. Custom Defs (C#)**: Offers full control and no compatibility issues within your mod, but requires implementation from scratch and more work, use when creating entirely new Def types unique to your mod.
+- **7. Checking for Tags (XML/C#)**: Lightweight and easy for simple features and compatibility, but hacky with risk of side effects and less robust, use for simple, lightweight feature checks or cross-mod compatibility flags.
+- **8. Changing Def Class (XML Patches)**: Easy and retains most original Def values, but has compatibility issues with Harmony patches targeting original class, use for specific class behavior replacement, considering compatibility impacts.
+- **9. Harmony Patching (C#)**: Highly flexible for code-level changes, but overuse can be complex and alternatives are often better suited, use when modifying game code execution, considering alternatives first.
+
+### DefModExtension in Detail
+
+**Concept:**
+- Add fields to existing Defs without modifying base classes.
+- Implemented as `public List<DefModExtension>` in `Def` class.
+- Extends Def functionality via XML and C#.
+
+**Benefits:**
+- Simple and lightweight.
+- Works with any Def.
+- Functionality exposed to XML.
+- Savegame compatible.
+- Mod compatible.
+- Avoids issues of custom Def classes.
+- Lighter overhead than ThingComps.
+- Broader application than ThingComps (works on all Defs).
+
+**Downsides:**
+- Static, global data.
+- Cannot save data directly within DefModExtension.
+- Limited to Defs.
+- DefModExtension is unaware of its associated Def (can be worked around).
+
+**C# Code Example:**
+```csharp
+using Verse;
+
+namespace YourNamespace
+{
+    public class YourModExtension : DefModExtension
+    {
+        public bool yourBoolField = true; // Example field
+        // Add other fields as needed (C# Types, ThingFilters, Lists, etc.)
+    }
+}
+```
+
+**Using DefModExtension in C#:**
+```csharp
+// Accessing field from a Def instance:
+bool value = def.GetModExtension<YourModExtension>().yourBoolField;
+```
+
+**Adding DefModExtension to Def in XML:**
+```xml
+<Defs>
+  <YourDefType>
+    <defName>YourDefName</defName>
+    <modExtensions>
+      <li Class="YourNamespace.YourModExtension">
+        <yourBoolField>false</yourBoolField>
+        <!-- Set other fields here, matching C# field names -->
+      </li>
+    </modExtensions>
+  </YourDefType>
+</Defs>
+```
+
+**Patching Def to Add DefModExtension (XPath):**
+```xml
+<Patch>
+  <Operation Class="PatchOperationAddModExtension">
+    <xpath>Defs/YourDefType[defName="YourDefName"]</xpath>
+    <value>
+      <li Class="YourNamespace.YourModExtension">
+        <yourBoolField>false</yourBoolField>
+        <!-- Set other fields here, matching C# field names -->
+      </li>
+    </value>
+  </Operation>
+</Patch>
+```
+
+### ThingComp vs DefModExtension
+
+**When to Use ThingComp:**
+- Need instance-specific data (varies per Thing instance)
+- Need to hook into tick/update events
+- Need to add functionality to Things (items, pawns, buildings)
+- Need to add UI elements (gizmos, inspectors)
+- Need to save/load data with individual Things
+
+**When to Use DefModExtension:**
+- Need global settings for all Things of a Def type
+- Need to add data to non-Thing Defs (RecipeDef, ResearchDef, etc.)
+- Need lightweight data storage without behavior
+- Need to avoid overhead of Comp system
+
+**Key Considerations:**
+- **Compatibility:** Prioritize XPath, Comps, and DefModExtensions for best mod compatibility.
+- **Functionality:** Comps for behavior, DefModExtensions for data.
+- **Complexity:** Subclassing and Custom Defs for advanced, unique modifications.
+- **Performance:** DefOf for optimized Def access in C#.
+- **Error Handling:** XML errors cascade; fix the first error first.
+- **Key Syntax:**
+  - C# Class: Inherit from `DefModExtension`.
+  - XML: Use `<modExtensions><li>` with `Class` attribute to specify your extension class.
+  - Access in Code: `def.GetModExtension<YourModExtension>().fieldName`.
+  - Patching: `PatchOperationAddModExtension` for adding via patches.
+
+## Def Compatibility
+
+**Overwriting Defs:**
+- **Core Defs:**
+    - **DON'T OVERWRITE.** Use XPath patches instead.
+- **Mod Defs:**
+    - **DON'T OVERWRITE.** Use XPath patches instead.
+    - Use `PatchOperationFindMod` or `PatchOperationConditional` for targeted changes.
+
+**Referencing Defs:**
+- **RecipeDef:**
+    - Link recipes to buildings via `<recipeUsers>` in `RecipeDef`.
+    - Link buildings to recipes via `<recipes>` in `ThingDef`.
+    - Link recipes to buildings via `<recipeMaker><recipeUsers>` in `ThingDef`.
+    - XPath patching: `<PatchOperationAdd>` to `Defs/ThingDef[defName="BuildingDef"]/recipes`.
+- **Facilities:**
+    - Buildings to Facilities (Facility Links):
+        - Building `ThingDef` with `CompAffectedByFacilities`:
+            - `<linkableFacilities>` for facilities attaching to building.
+    - Facilities to Buildings (Building Links to Facilities):
+        - Facility `ThingDef` with `CompFacility`:
+            - `<linkableBuildings>` for buildings facility attaches to.
+
+- **Animals:**
+    - Add animals to biomes in animal `ThingDef`:
+        - `<wildBiomes>` tag with biome defNames and weights.
+
+**Conditional Loading (DLC/Mods):**
+- `MayRequire="packageId1,packageId2"`: Node loads only if *all* listed DLCs/mods are active.
+- `MayRequireAnyOf="packageId1,packageId2"`: Node loads if *any* listed DLCs/mods are active.
+
+**DLC Package IDs:**
+- Royalty: `Ludeon.RimWorld.Royalty`
+- Ideology: `Ludeon.RimWorld.Ideology`
+- Biotech: `Ludeon.RimWorld.Biotech`
+- Anomaly: `Ludeon.RimWorld.Anomaly`
+- Mod Package IDs: Found in `About.xml` of the mod.
+
+**Core Game Content:**
+- Some content that was previously DLC-exclusive is now available in the base game:
+  - **Skulls**: Skull objects are in Core, although extraction still requires Ideology precepts or Anomaly research.
+  - **Robes**: Apparel is available and craftable without DLCs.
+  - **Combat Stats**: Stats like `MeleeDamageFactor`, `RangedCooldownFactor`, and `StaggerDurationFactor` are available without DLCs.
+  - **Mech Stats**: Some stats like `MechStatBase` (Abstract) and `EMPResistance` can work with either Biotech or Anomaly DLC.
+
+**Usage Contexts:**
+- **List Entries (`<li>`):**
+    - Conditional loading of list items based on dependencies.
+    - Example: `<li MayRequire="Ludeon.RimWorld.Biotech">...</li>`
+- **Def References:**
+    - Suppress cross-reference errors if dependency not loaded.
+    - Does NOT prevent loading if Def is found, even if dependency is missing.
+    - Example: `<thinkTreeMainOverride MayRequire="Ludeon.RimWorld.Biotech">...</thinkTreeMainOverride>`
+- **Optional Defs:**
+    - Conditionally load entire Defs.
+    - Example: `<ThingDef MayRequire="Ludeon.RimWorld.Ideology" ParentName="Brazier">`
+
+**Exceptions & Limitations:**
+- Top-Level Non-Def Nodes: `MayRequire` does NOT work on top-level XML nodes that are not Defs (e.g., `<Operation>`).
+- `PatchOperationSequence`: `MayRequire` can be used on `<li>` within `<operations>` of `PatchOperationSequence`.
+- Mod Name vs PackageId: `PatchOperationFindMod` uses Mod Names, `MayRequire` uses `packageId`
+- Steam Mod Suffix Bug: `MayRequire` may not recognize Steam mods if local version exists. Use `MayRequireAnyOf="MyName.MyMod,MyName.MyMod_steam"` as workaround.
+
+**Example - MayRequire:**
+```xml
+<Tribal_Child MayRequire="Ludeon.RimWorld.Biotech">10</Tribal_Child>
+```
+
+**Example - MayRequireAnyOf:**
+```xml
+<li MayRequireAnyOf="Ludeon.RimWorld.Royalty,Ludeon.RimWorld.Biotech">
+```
+
+**Defensive Patching Techniques:**
+Using `PatchOperationFindMod` for mod compatibility:
+```xml
+<Operation Class="PatchOperationFindMod">
+  <mods>
+    <li>Royalty</li>
+  </mods>
+  <match>
+    <!-- Operations if mod is present -->
+  </match>
+  <nomatch>
+    <!-- Operations if mod is not present -->
+  </nomatch>
+</Operation>
+```
+
+**Key Recommendations:**
+- **Prioritize XPath Patches:** For modifying existing Defs.
+- **Avoid Overwriting:** Prevents mod conflicts.
+- **Use `recipeUsers`/`recipes`/`recipeMaker`:** For linking recipes and buildings.
+- **Use `wildBiomes`:** For adding animals to biomes.
+- **Use `MayRequire`/`MayRequireAnyOf`:** For conditional content loading based on DLCs/mods.

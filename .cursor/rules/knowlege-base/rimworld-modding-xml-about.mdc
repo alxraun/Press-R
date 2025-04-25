@@ -1,0 +1,91 @@
+---
+description: Rimworld Modding XML About.xml - Knowledge Base
+globs: 
+alwaysApply: false
+---
+## About.xml
+
+**Purpose:**
+- Identifies mod to RimWorld.
+- Defines mod names (internal & viewer-facing).
+- Provides mod description for in-game mod manager.
+- Specifies mod dependencies and load order.
+
+**Location:**
+- `Mods/YourModFolder/About/About.xml`
+- Folder and filename are case-sensitive.
+
+**Root Tag:**
+- `<ModMetaData>`
+
+**Required Tags:**
+- `<packageId>YourName.ModName</packageId>`
+    - Internal mod identifier.
+    - Alphanumeric, period-separated (e.g., `Author.Mod`).
+    - **Globally unique** across all mods.
+    - Case-insensitive.
+    - Used for dependencies, load order, MayRequire.
+- `<name>My Mod Name</name>`
+    - Mod title (viewer-facing).
+    - Not globally unique, but avoid changing.
+    - Used by `PatchOperationFindMod`.
+- `<author>Author Name</author>` / `<authors><li>Author Name</li></authors>`
+    - Mod author(s).
+    - Comma-separated names or list nodes.
+- `<description>Mod description.</description>`
+    - Plain-text mod description.
+    - Shown in mod managers and Steam Workshop.
+    - Keep relatively short for `About.xml`.
+- `<supportedVersions><li>1.4</li></supportedVersions>`
+    - RimWorld versions mod supports.
+    - List tested versions.
+    - Warnings for unsupported versions, but mod can still load.
+
+**Optional Tags:**
+- `<modVersion>1.0</modVersion>` / `<modVersion IgnoreIfNoMatchingField="True">1.0</modVersion>`
+    - Mod version string for personal tracking.
+    - `IgnoreIfNoMatchingField="True"` for older versions compatibility.
+- `<modIconPath IgnoreIfNoMatchingField="True">Path/To/Icon</modIconPath>`
+    - Mod icon path (loading screens).
+    - 32x32 PNG, limited colors.
+- **ModIcon.png:**
+    - Simply place a file named `ModIcon.png` in your `About` folder.
+    - Will be automatically loaded during game startup.
+    - Should be small (32x32 or 64x64 pixels).
+    - Avoid too much detail - use flat colors or subtle gradients to prevent compression artifacts.
+    - No XML configuration needed.
+- `<url>https://mod-url</url>`
+    - Web link for mod info (Steam Workshop, GitHub, etc.).
+- `<descriptionsByVersion><v1.4>...</v1.4></descriptionsByVersion>`
+    - Version-specific descriptions (not for Steam Workshop).
+- `<modDependencies><li>...</li></modDependencies>`
+    - Mod dependencies.
+    - Warns players if dependencies missing.
+    - Not automatically used by Steam Workshop "Required Items".
+    - `packageId`, `displayName`, `steamWorkshopUrl` in `<li>`.
+- `<modDependenciesByVersion><v1.4><li>...</li></v1.4></modDependenciesByVersion>`
+    - Version-specific dependencies.
+- `<loadBefore><li>packageId</li></loadBefore>`
+    - Mods to load before this mod.
+    - Warns player if load order incorrect.
+    - Use `packageId`s.
+- `<loadBeforeByVersion><v1.4><li>packageId</li></v1.4></loadBeforeByVersion>`
+    - Version-specific `loadBefore`.
+- `<forceLoadBefore><li>packageId</li></forceLoadBefore>`
+    - Forces load order; RimWorld prevents loading after specified mods.
+    - External mod managers may ignore.
+- `<loadAfter><li>packageId</li></loadAfter>`
+    - Mods to load after this mod.
+    - Warns player if load order incorrect.
+    - Use `packageId`s.
+- `<loadAfterByVersion><v1.4><li>packageId</li></v1.4></loadAfterByVersion>`
+    - Version-specific `loadAfter`.
+- `<forceLoadAfter><li>packageId</li></forceLoadAfter>`
+    - Forces load order; RimWorld prevents loading before specified mods.
+    - External mod managers may ignore.
+- `<incompatibleWith><li>packageId</li></incompatibleWith>`
+    - Incompatible mods.
+    - Warns player if incompatible mods loaded together.
+    - For fundamental incompatibilities, not just bugs.
+- `<incompatibleWithByVersion><v1.4><li>packageId</li></v1.4></incompatibleWithByVersion>`
+    - Version-specific `incompatibleWith`.

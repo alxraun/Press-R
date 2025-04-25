@@ -1,0 +1,21 @@
+---
+description: Rimworld Modding Assets Tools - Knowledge Base
+globs: 
+alwaysApply: false
+---
+## Assets
+
+**Purpose:** Extract base assets from RimWorld for modding.
+
+**Tools:**
+- AssetStudio (RimWorld 1.5 Archives)
+    1. Download AssetStudio (net472 recommended if unsure).
+    2. Unzip.
+    3. Run `AssetStudioGUI.exe`.
+    4. File -> Load file (for `.assets`) or File -> Load folder (for DLC Asset Bundles).
+       - `.assets` example: `RimWorld\RimWorldWin64_Data\resources.assets`
+       - DLC Asset Bundles example: `RimWorld\Data\Anomaly\AssetBundles`
+    5. Asset List tab.
+    6. Select files.
+    7. Right click -> "Export selected assets" (audio/textures).
+    8. Choose storage folder.

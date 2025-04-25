@@ -1,0 +1,92 @@
+---
+description: Rimworld Modding C# Mod Settings - Knowledge Base
+globs: 
+alwaysApply: false
+---
+## ModSettings
+
+**Purpose:**
+- Provide customizable options for your mod users in-game.
+
+**Setup:**
+- Two classes required:
+    - `ModSettings` class: Stores setting data.
+    - `Mod` class: Handles settings GUI and loading/saving.
+
+**Code Structure:**
+- **ExampleSettings (Subclass of `ModSettings`):**
+    ```csharp
+    public class ExampleSettings : ModSettings
+    {
+        public bool exampleBool;
+        public float exampleFloat = 200f;
+        public List<Pawn> exampleListOfPawns = new List<Pawn>();
+
+        public override void ExposeData() // For saving settings
+        {
+            Scribe_Values.Look(ref exampleBool, "exampleBool");
+            Scribe_Values.Look(ref exampleFloat, "exampleFloat", 200f);
+            Scribe_Collections.Look(ref exampleListOfPawns, "exampleListOfPawns", LookMode.Reference);
+            base.ExposeData();
+        }
+    }
+    ```
+    - `ExposeData()`:  Saves/loads settings to disk using `Scribe_Values`, `Scribe_Collections`, etc.
+
+- **ExampleMod (Subclass of `Mod`):**
+    ```csharp
+    public class ExampleMod : Mod
+    {
+        ExampleSettings settings; // Reference to settings
+
+        public ExampleMod(ModContentPack content) : base(content) // Mandatory constructor
+        {
+            this.settings = GetSettings<ExampleSettings>();
+        }
+
+        public override void DoSettingsWindowContents(Rect inRect) // GUI for settings (optional)
+        {
+            Listing_Standard listingStandard = new Listing_Standard();
+            listingStandard.Begin(inRect);
+            listingStandard.CheckboxLabeled("Bool Setting", ref settings.exampleBool, "Tooltip");
+            listingStandard.Label("Float Setting");
+            settings.exampleFloat = listingStandard.Slider(settings.exampleFloat, 100f, 300f);
+            listingStandard.End();
+            base.DoSettingsWindowContents(inRect);
+        }
+
+        public override string SettingsCategory() // Makes settings visible in menu (required)
+        {
+            return "Mod Name"; // Use .Translate() for localization
+        }
+    }
+    ```
+    - Constructor (`ExampleMod(ModContentPack content)`): Resolves settings reference: `settings = GetSettings<ExampleSettings>();`
+    - `DoSettingsWindowContents(Rect inRect)`:  Creates settings GUI using `Listing_Standard` or `Widgets`.
+        - `Listing_Standard`: Basic GUI layout, uses `Begin()` and `End()`.
+        - `Widgets`: More control, manual Rect positioning.
+    - `SettingsCategory()`:  Returns mod name to display in settings menu (non-empty string required).
+
+**Saving Settings:**
+- Automatic: On window close.
+- Optional: Override `WriteSettings()` for custom save behavior.
+
+**Accessing Settings:**
+- Non-static (instance-based):
+    ```csharp
+    LoadedModManager.GetMod<ExampleMod>().GetSettings<ExampleSettings>().settingName
+    ```
+- Recommended: Store settings reference in `Mod` class for easier access.
+
+**HugsLib vs Vanilla ModSettings:**
+- Vanilla ModSettings: Sufficient for most cases, no external dependency.
+- HugsLib: Offers alternative settings implementation (not necessary for basic settings).
+
+**Key Classes:**
+
+- `ModSettings`: Base class for settings data.
+- `Mod`: Base class for mod, handles settings GUI and loading.
+- `Listing_Standard`: Basic GUI layout class.
+- `Widgets`: Alternative GUI class with more control.
+- `Rect`: Unity struct for GUI element positioning.
+- `Translator`: For localization (`"StringKey".Translate()`).

@@ -1,0 +1,194 @@
+---
+description: Rimworld Modding C# Components - Knowledge Base
+globs: 
+alwaysApply: false
+---
+## Component Pattern
+
+**Comp Design Pattern:** Modular functionality for RimWorld objects.
+
+### Types of Components (Most Specific to Most Generic):
+
+- **HediffComp:**
+    - Behavior specific to Hediffs (health).
+    - Simple to use.
+    - **When to use:** Pawn's health functionality, Hediff-specific behavior.
+- **ThingComp:**
+    - Behavior for specific Things.
+    - Powerful; data storage, special functionality.
+    - Building block of RimWorld modding.
+    - Fewer compatibility issues than custom classes.
+    - **When to use:** Thing-level functionality, item behavior, data storage for Things.
+- **WorldObjectComp:**
+    - Behavior for WorldObjects.
+    - Like ThingComp, but for WorldObjects.
+    - **When to use:** WorldObject-level functionality.
+- **MapComponent:**
+    - Behavior at the Map level.
+    - Tracks multiple things, data storage, managing entity.
+    - Map-specific functionality.
+    - **When to use:** Map-level tracking, managing multiple entities on a map.
+- **WorldComponent:**
+    - Behavior at the World level.
+    - World-wide scope.
+    - **When to use:** World-level tracking, game-world behavior.
+- **GameComponent:**
+    - Behavior at the Game level.
+    - Instantiated when a new game starts (tutorial, scenario config, load from main menu).
+    - Game-level scope.
+    - **When to use:** Game-level tracking, game-session behavior.
+- **StorytellerComp:**
+    - Behavior for Storytellers.
+    - Storyteller logic.
+    - **When to use:** Storyteller behavior customization.
+
+### Adding Components
+
+**Adding Behavior to Thing Class:**
+- For `ThingWithComps`, use `ThingComp`.
+- `ThingComp`: Modular approach for data storage and functionality.
+- **XML integration:**
+  ```xml
+  <comps>
+    <li Class="YourNamespace.YourCompProperties"/>
+  </comps>
+  ```
+
+**Adding Behavior to Hediff Class:**
+- For `HediffWithComps`, use `HediffComp`.
+- Similar to `ThingComp` but for Hediffs.
+- **XML integration:**
+  ```xml
+  <comps>
+    <li Class="YourNamespace.YourHediffCompProperties"/>
+  </comps>
+  ```
+
+### Component Structure (ThingComp as example)
+
+**C# classes:**
+1. **CompProperties class** - defines static data and XML structure
+   ```csharp
+   public class YourCompProperties : CompProperties
+   {
+       public bool yourProperty = true;
+       
+       public YourCompProperties()
+       {
+           compClass = typeof(YourComp);
+       }
+   }
+   ```
+2. **Comp class** - contains logic and instance data
+   ```csharp
+   public class YourComp : ThingComp
+   {
+       public YourCompProperties Props => (YourCompProperties)props;
+       
+       // Override methods
+       public override void CompTick() { /* your code */ }
+       public override void PostSpawnSetup(bool respawningAfterLoad) { /* your code */ }
+       public override void PostExposeData() { /* save data */ }
+       public override IEnumerable<Gizmo> CompGetGizmosExtra() { /* UI elements */ }
+   }
+   ```
+
+**Important methods available for override:**
+- `PostSpawnSetup(bool)`: Called when created or loaded.
+- `CompTick()`: Called every tick (1/60 sec) for active components.
+- `CompTickRare()`: Called every 250 ticks for less frequent updates.
+- `PostExposeData()`: For saving/loading data.
+- `PostDrawExtraSelectionOverlays()`: For drawing overlays.
+- `PostDestroy(DestroyMode, Map)`: Called when Thing is destroyed.
+- `CompGetGizmosExtra()`: Adds buttons/icons to selected object.
+- `CompInspectStringExtra()`: Adds information to object inspector.
+
+**CompUseEffect Implementation Notes:**
+- The `CanBeUsedBy` method uses `AcceptanceReport` for its return type
+- Example implementation:
+  ```csharp
+  public override AcceptanceReport CanBeUsedBy(Pawn p)
+  {
+      if (p.Downed)
+      {
+          return "Cannot use: pawn is downed";
+      }
+      return true;
+  }
+  ```
+- Return `true` for success, or a string message for failure
+- This approach combines success/failure status with reason message
+
+### Best Practices
+
+- **Performance:** Use `CompTickRare()` instead of `CompTick()` when possible.
+- **Code Clarity:** Follow Single Responsibility Principle, each Comp should do one specific thing.
+- **Compatibility:** Check for other Comps when interacting, don't rely on specific load order.
+- **SaveData:** Always override PostExposeData() to save instance variables.
+- **Cleanup:** Release resources in PostDestroy() if necessary. 
+
+## GameComponent, WorldComponent, MapComponent
+
+**General Component Info:**
+- **Purpose:** Add custom code and functionality at different levels (Game, World, Map).
+- **Implementation:** Inherit from `GameComponent`, `WorldComponent`, or `MapComponent`.
+    - Implement constructor: `public MyComponent(TYPE type) : base(type) { }` (TYPE = Game, World, or Map).
+- **Access:** Use `GetComponent<MyComponent>()` from:
+    - `Current.Game` (GameComponent)
+    - `Find.World` (WorldComponent)
+    - `Find.CurrentMap` or `thing.Map` or `thing.MapHeld` (MapComponent)
+- **Benefits:**
+    - Well-supported by RimWorld.
+    - Save-game compatible (generally).
+    - Global level functionality.
+    - Data saving (`ExposeData`).
+    - RimWorld-driven method calls (e.g., `Update`, `Tick`).
+    - Versatile functionality.
+    - Always accessible.
+- **Downsides:**
+    - Removing mod: Harmless one-time error on load.
+    - No XML-exposed functionality.
+
+**Accessing Components:**
+- **MapComponent:**
+    ```csharp
+    thing.Map.GetComponent<MyMapComponent>();         // From a Thing on map
+    thing.MapHeld.GetComponent<MyMapComponent>();     // From ThingHolder
+    Find.CurrentMap.GetComponent<MyMapComponent>();  // From visible map
+
+    // Safe access method:
+    public static MyMapComponent GetMapComponentFor(Map map) { /* null checks & instantiation */ }
+    ```
+- **WorldComponent:**
+    ```csharp
+    Find.World.GetComponent<MyWorldComponent>();
+    ```
+- **GameComponent:**
+    ```csharp
+    Current.Game.GetComponent<MyGameComponent>();
+    ```
+    - **Gotcha:** Game component constructor needs `Game` parameter.
+
+**Working with Pawn Lists:**
+- Use standard `List<Pawn>` for saving pawn references in components
+  ```csharp
+  public List<Pawn> savedPawns = new List<Pawn>();
+  ```
+- Pawn lists are automatically serialized when saved in ExposeData
+
+**Overridable Methods:**
+- **TYPEComponentUpdate:** Frame update, even when paused. Use for frame-rate dependent updates (visuals), not game logic.
+- **TYPEComponentTick:** Game tick update. Game logic updates.
+- **TYPEComponentOnGUI:** Frame update, when TYPE is visible. GUI rendering (not WorldComponent).
+- **ExposeData:** Save/load component data.
+- **FinalizeInit:** Called after TYPE instantiation, after constructor. Good for initialization, safer than constructor for error handling.
+- **StartedNewGame:** GameComponent only. On new game start.
+- **LoadedGame:** GameComponent only. On game load.
+- **MapGenerated:** MapComponent only. On map generation.
+- **MapRemoved:** MapComponent only. On map removal.
+
+**Usage Notes:**
+- Null checks for `Map` are crucial, especially for MapComponents.
+- Choose component type based on scope (Game > World > Map > Thing).
+- Override methods as needed for desired behavior.
+- For data persistence, implement `ExposeData`.

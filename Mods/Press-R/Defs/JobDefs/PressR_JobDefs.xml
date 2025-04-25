@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <JobDef>
+    <defName>PressR_DirectHaul</defName>
+    <driverClass>PressR.Features.DirectHaul.JobDrivers.JobDriver_DirectHaul</driverClass>
+    <reportString>Directly hauling.</reportString>
+    <suspendable>false</suspendable>
+    <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
+  </JobDef>
+
+</Defs> 

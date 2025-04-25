@@ -1,0 +1,7 @@
+---
+description: C# Project Conventions Additional
+globs: **/*.cs
+alwaysApply: false
+---
+- Do not use Log.Warning, Log.Error, Log.Message. Even in debug purposes.
+- Do not use `//` and `///` comments, code should be self-documenting.

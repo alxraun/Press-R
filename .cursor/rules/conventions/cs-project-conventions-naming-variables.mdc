@@ -1,0 +1,15 @@
+---
+description: C# Project Conventions And Best Practices
+globs: **/*.cs
+alwaysApply: false
+---
+### Именование Variables
+
+**Semantic accuracy**:
+- Use noun names that accurately represent the stored data.
+
+**Consistency**:
+- Logically grouped variables should have consistent names.
+    - Example 1:
+        - Incorrect: `desiredKeys`, `keysToRemove`.
+        - Correct: `KeysToAdd`, `KeysToRemove`.

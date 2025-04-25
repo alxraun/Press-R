@@ -1,0 +1,41 @@
+---
+description: Rimworld Modding Assets Textures - Knowledge Base
+globs: 
+alwaysApply: false
+---
+## Textures
+
+**Creating Mod Textures:**
+- **File Formats:** PNG (recommended), JPG, PSD, DDS (with mods).
+- **Style:** Vanilla style is vector, but source is raster. Use preferred technique.
+- **Resolution:**
+    - Vanilla: 64 pixels per tile (PPT).
+    - Mods: 128 or 256 PPT common.
+    - Higher resolutions discouraged (VRAM usage, compression artifacts).
+- **Reference Vanilla:** Use RimWorld Art Source (Dropbox link provided in wiki page) as template.
+- **Location:** `/Textures` folder in mod structure.
+    - Use namespace folders or filename prefixes to avoid collisions.
+- **Texture Path:** Relative to `/Textures` folder, e.g., `MyMod/MyTexture`.
+
+**Building Textures:**
+- **Tile Grid:** Create textures on tile grid matching building size.
+- **Centering:** Center texture on canvas to simplify alignment.
+- **Example:** 2x2 building on 3x3 canvas.
+
+**Apparel Textures:**
+- **Overlay:** Headwear & body apparel textures overlay 1:1 on pawns.
+- **Templates:** Use vanilla body/apparel textures as templates (RimWorld Art Source).
+- **Headwear:**
+    - Minimum 3 textures: south, north, east facings.
+    - West facing: Optional (mirrored from east if omitted).
+    - Ground texture: Optional, but recommended (total 3+1 textures).
+    - Texture masks: Use if needed (total 6+2 with masks).
+- **Body Apparel:**
+    - Same texture usage as headwear.
+    - 5 body types: male, female, thin, hulk, fat.
+    - Total: 15+1 textures (or 30+2 with masks).
+- **Utility Packs:** (Tox gas canisters)
+    - Single texture with body-type based offsets.
+    - Utility-slot items only.
+    - Texture requirements same as headwear (3+1, or 6+2 with masks).
+
