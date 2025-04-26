@@ -20,7 +20,7 @@ namespace PressR
             harmony.PatchAll();
         }
 
-        public override string SettingsCategory() => "Press-R";
+        public override string SettingsCategory() => "Press-R Alpha";
 
         public override void DoSettingsWindowContents(Rect inRect)
         {
