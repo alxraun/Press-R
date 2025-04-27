@@ -2,9 +2,9 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="7256.6929"
-   height="4081.8896"
-   viewBox="0 0 1920 1080"
+   width="1920"
+   height="1080"
+   viewBox="0 0 508 285.75001"
    version="1.1"
    id="svg1"
    inkscape:version="1.4 (86a8ad7, 2024-10-11)"
@@ -23,10 +23,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:document-units="mm"
-     inkscape:zoom="0.089864794"
-     inkscape:cx="2692.9345"
-     inkscape:cy="5814.2903"
+     inkscape:document-units="px"
+     inkscape:zoom="0.35945918"
+     inkscape:cx="933.3466"
+     inkscape:cy="1525.9035"
      inkscape:window-width="1920"
      inkscape:window-height="1009"
      inkscape:window-x="-8"
@@ -37,24 +37,12 @@
      showguides="true" />
   <defs
      id="defs1">
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath143">
-      <rect
-         style="vector-effect:non-scaling-stroke;fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.264583;stroke-linecap:round;stroke-linejoin:round;-inkscape-stroke:hairline;paint-order:stroke fill markers"
-         id="rect143"
-         width="168.01039"
-         height="94.456238"
-         x="-275.46811"
-         y="119.49476"
-         transform="rotate(90)" />
-    </clipPath>
     <filter
        style="color-interpolation-filters:sRGB"
        inkscape:label="Blur"
        id="filter141"
-       x="-0.0051965198"
-       y="-0.0083144309"
+       x="-0.0051965197"
+       y="-0.0083144307"
        width="1.010393"
        height="1.0166289">
       <feGaussianBlur
@@ -123,8 +111,8 @@
        style="color-interpolation-filters:sRGB"
        inkscape:label="Blur"
        id="filter141-7"
-       x="-0.0051965198"
-       y="-0.0083144309"
+       x="-0.0051965197"
+       y="-0.0083144307"
        width="1.010393"
        height="1.0166289">
       <feGaussianBlur
@@ -153,10 +141,35 @@
        y1="-0.53564847"
        x2="-75.034172"
        y2="3.6690264" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath38">
+      <rect
+         style="vector-effect:non-scaling-stroke;fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.264583;stroke-linecap:round;stroke-linejoin:round;-inkscape-stroke:hairline;paint-order:stroke fill markers"
+         id="rect39"
+         width="168.01039"
+         height="94.456245"
+         x="-276.01163"
+         y="119.49476"
+         transform="rotate(90)" />
+    </clipPath>
+    <filter
+       style="color-interpolation-filters:sRGB"
+       inkscape:label="Blur"
+       id="filter141-4"
+       x="-0.0051965198"
+       y="-0.0083144309"
+       width="1.010393"
+       height="1.0166289">
+      <feGaussianBlur
+         stdDeviation="1 1"
+         result="blur"
+         id="feGaussianBlur141-8" />
+    </filter>
   </defs>
   <g
      id="g175"
-     transform="matrix(3.7795282,0,0,3.7795282,1908.902,-112.2782)"
+     transform="matrix(4.0000007,0,0,4.0000007,496.89463,-118.82778)"
      inkscape:label="logo_2">
     <g
        id="g168"
@@ -188,7 +201,7 @@
   </g>
   <g
      id="g177"
-     transform="matrix(3.7795282,0,0,3.7795282,1940.902,-112.2782)"
+     transform="matrix(4.0000007,0,0,4.0000007,530.7613,-118.82778)"
      inkscape:export-filename="..\..\Mods\Press-R\About\ModIcon.png"
      inkscape:export-xdpi="96.000015"
      inkscape:export-ydpi="96.000015"
@@ -226,10 +239,11 @@
      id="layer1"
      inkscape:label="preview_alpha">
     <g
-       id="g4"
+       id="g1"
+       transform="matrix(0.26458332,0,0,0.26472226,-1.0325763e-5,-1.0939654)"
        inkscape:export-filename="..\Mods\Press-R\About\Preview.png"
-       inkscape:export-xdpi="25.4"
-       inkscape:export-ydpi="25.4">
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96">
       <image
          width="461.84756"
          height="288.65475"
@@ -238,9 +252,9 @@
          id="image1"
          x="-470.41263"
          y="-346.7767"
-         clip-path="url(#clipPath143)"
-         transform="matrix(0,-11.433866,11.427864,0,3148.0122,-200.42821)"
-         style="filter:url(#filter141)" />
+         clip-path="url(#clipPath38)"
+         transform="matrix(0,-11.427865,11.427865,0,3154.2236,-199.42769)"
+         style="filter:url(#filter141-4)" />
       <g
          id="g3"
          transform="translate(0,101.8516)">
@@ -261,7 +275,7 @@
         <path
            d="m 870.1976,1803.3931 h -18.09188 v 14.7482 q 0.0597,0.5971 -0.35826,0.8359 -1.37331,0.7165 -4.00051,0.06 -2.62721,-0.6568 -4.71703,-2.4481 -0.95534,-0.8359 -1.49273,-2.5078 -0.47767,-1.6718 -0.53738,-2.9854 l -0.0597,-1.2539 v -22.2121 l 11.16562,-6.2695 v 11.0462 h 11.76271 l -7.22481,-12.3598 -15.70352,0.06 v -11.1656 l 17.61421,-0.06 q 1.13447,0 2.14953,0.2388 1.25389,0.2389 2.56749,1.433 1.31361,1.1942 1.97041,2.269 l 0.71651,1.0748 13.61369,23.2268 q 1.79128,3.2243 1.79128,6.0307 v 16.1214 h -11.16562 z m 29.73517,4.8364 h 23.88367 v 11.1657 h -25.85407 q -1.61215,0.1194 -3.58255,-0.5971 -1.9704,-0.6568 -3.58255,-2.0899 -0.95535,-0.8359 -1.49273,-2.5674 -0.47767,-1.6719 -0.53738,-2.9258 l -0.0597,-1.3136 v -41.0202 h 11.22532 z m 57.73878,-39.3483 q 0.35826,0 0.89564,0.1194 0.59709,0.06 2.26895,0.4777 1.67186,0.4179 3.22429,1.0747 1.55244,0.6569 3.40343,1.9705 1.85098,1.3136 3.16458,3.0451 1.37332,1.7316 2.26895,4.4185 0.95535,2.6869 0.95535,5.9709 0,2.6869 -0.59709,5.0156 -0.53738,2.2689 -1.49273,3.9408 -0.89564,1.6121 -2.14953,3.0452 -1.19419,1.3733 -2.50779,2.2689 -1.3136,0.8359 -2.68691,1.5525 -1.3136,0.6568 -2.5675,1.015 -1.19418,0.3583 -2.14953,0.5971 -0.89563,0.1791 -1.49273,0.2388 l -0.53738,0.06 h -15.10642 v 14.5691 q 0.0597,0.5971 -0.35826,0.7762 -1.37331,0.7762 -4.00051,0.1194 -2.6272,-0.6568 -4.71703,-2.4481 -0.95534,-0.8359 -1.49273,-2.5674 -0.47767,-1.6719 -0.53738,-2.9258 l -0.0597,-1.3136 v -40.9605 h 10.92678 v -0.06 z m -0.23883,23.1672 q 0.17912,0 0.53738,-0.06 0.35825,-0.06 1.19418,-0.3582 0.83593,-0.3583 1.49273,-0.8956 0.6568,-0.5971 1.19418,-1.7913 0.53739,-1.1942 0.53739,-2.7466 0,-1.6122 -0.53739,-2.8064 -0.47767,-1.1942 -1.19418,-1.7315 -0.71651,-0.5971 -1.49273,-0.9554 -0.71651,-0.3582 -1.19418,-0.418 l -0.53738,-0.06 h -14.86759 v 11.8225 z m 67.71018,-20.3609 q 0.9553,0.836 1.433,2.5675 0.5374,1.6719 0.5971,2.9258 l 0.06,1.2539 v 40.841 h -11.1059 v -19.704 h -20.36079 v 18.5099 q 0.0597,0.6568 -0.35825,0.8359 -1.37332,0.7165 -4.00052,0.06 -2.6272,-0.5971 -4.65732,-2.3884 -0.95534,-0.8359 -1.49273,-2.5675 -0.53738,-1.6718 -0.53738,-2.9257 l -0.0597,-1.2539 v -40.8411 h 11.10591 v 19.1069 h 20.30108 v -17.9724 q -0.06,-0.5971 0.4179,-0.7762 1.3733,-0.7165 4.0006,-0.06 2.6272,0.597 4.6573,2.3883 z m 42.7517,31.7056 h -18.0918 v 14.7482 q 0.06,0.5971 -0.3583,0.8359 -1.3733,0.7165 -4.0005,0.06 -2.6272,-0.6568 -4.717,-2.4481 -0.9554,-0.8359 -1.4928,-2.5078 -0.4776,-1.6718 -0.5374,-2.9854 l -0.06,-1.2539 v -22.2121 l 11.1657,-6.2695 v 11.0462 h 11.7627 l -7.2248,-12.3598 -15.7036,0.06 v -11.1656 l 17.6142,-0.06 q 1.1345,0 2.1496,0.2388 1.2539,0.2389 2.5675,1.433 1.3136,1.1942 1.9704,2.269 l 0.7165,1.0748 13.6137,23.2268 q 1.7913,3.2243 1.7913,6.0307 v 16.1214 h -11.1657 z"
            id="text3"
-           style="font-size:61.1422px;font-family:RimWordFont;-inkscape-font-specification:RimWordFont;fill:#e7e7e7;stroke-width:6.10403;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.52766;paint-order:stroke fill markers;fill-opacity:1"
+           style="font-size:61.1422px;font-family:RimWordFont;-inkscape-font-specification:RimWordFont;fill:#e7e7e7;fill-opacity:1;stroke-width:6.10403;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.52766;paint-order:stroke fill markers"
            aria-label="alpha" />
       </g>
     </g>
@@ -271,7 +285,8 @@
      id="layer2"
      inkscape:label="preview">
     <g
-       id="g6">
+       id="g4"
+       transform="matrix(0.26458332,0,0,0.26472226,-8.3867418e-5,5.1143319e-5)">
       <image
          width="461.84756"
          height="288.65475"
@@ -280,9 +295,9 @@
          id="image2"
          x="-470.41263"
          y="-346.7767"
-         clip-path="url(#clipPath143)"
-         transform="matrix(0,-11.433866,11.427865,0,3148.0122,-1366.287)"
-         style="filter:url(#filter141)" />
+         clip-path="url(#clipPath38)"
+         transform="matrix(0,-11.427865,11.427865,0,3154.2235,-1365.5699)"
+         style="filter:url(#filter141-4)" />
       <g
          id="g5"
          transform="matrix(60.517887,0,0,60.517887,4989.0572,-8377.9238)"
