@@ -17,6 +17,11 @@ namespace PressR
             Settings = GetSettings<PressRSettings>();
 
             var harmony = new Harmony("Alx.PressR");
+
+#if DEBUG
+            Harmony.DEBUG = true;
+#endif
+
             harmony.PatchAll();
         }
 
