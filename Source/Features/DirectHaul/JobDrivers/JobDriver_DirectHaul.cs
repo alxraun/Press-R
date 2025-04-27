@@ -229,11 +229,6 @@ namespace PressR.Features.DirectHaul.JobDrivers
                 return false;
             }
 
-            if (map.haulDestinationManager.SlotGroupAt(cell) != null)
-            {
-                return false;
-            }
-
             return true;
         }
 
@@ -250,7 +245,9 @@ namespace PressR.Features.DirectHaul.JobDrivers
         {
             pawn.jobs.EndCurrentJob(JobCondition.Incompletable);
             DirectHaulExposableData data = DirectHaulData;
-            if (data != null)
+            if (data == null)
+                return;
+            if (carriedThing != null && !carriedThing.Destroyed)
             {
                 data.RemoveThingFromTracking(carriedThing);
             }

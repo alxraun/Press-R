@@ -24,32 +24,22 @@ namespace PressR.Features.DirectHaul.Patches
             if (directHaulData == null)
                 return true;
 
-            bool isAbsorbingThingHeld =
-                directHaulData.GetStatusForThing(__instance) == DirectHaulStatus.Held;
+            DirectHaulStatus absorbingThingStatus = directHaulData.GetStatusForThing(__instance);
 
-            bool isAbsorptionAllowedByDirectHaul = false;
-
-            if (other.ParentHolder is Pawn_CarryTracker carryTracker && carryTracker.pawn != null)
+            if (absorbingThingStatus != DirectHaulStatus.Held)
             {
-                Pawn carrierPawn = carryTracker.pawn;
-                Job curJob = carrierPawn.CurJob;
-
-                if (curJob != null && curJob.def == PressRDefOf.PressR_DirectHaul)
-                {
-                    if (curJob.GetTarget(TargetIndex.B).Cell == __instance.Position)
-                    {
-                        isAbsorptionAllowedByDirectHaul = true;
-                    }
-                }
+                return true;
             }
 
-            if (isAbsorbingThingHeld && !isAbsorptionAllowedByDirectHaul)
+            bool isOtherCarriedByPawn = other.ParentHolder is Pawn_CarryTracker;
+
+            if (isOtherCarriedByPawn)
             {
-                __result = false;
-                return false;
+                return true;
             }
 
-            return true;
+            __result = false;
+            return false;
         }
     }
 }
