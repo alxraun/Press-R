@@ -62,46 +62,6 @@ namespace PressR.Features.DirectHaul
                 return null;
             }
 
-            bool canPlaceInTargetCell = true;
-            int currentStackCountInCell = 0;
-            List<Thing> thingsInCell = targetCellInfo.Cell.GetThingList(pawn.Map);
-
-            foreach (Thing th in thingsInCell)
-            {
-                if (th.def.category == ThingCategory.Item)
-                {
-                    if (th.def != t.def)
-                    {
-                        canPlaceInTargetCell = false;
-                        JobFailReason.Is("DirectHaulTargetCellOccupiedByIncompatible".Translate());
-                        break;
-                    }
-
-                    /*
-                    if (mapComponent.DirectHaulExposableData.GetStatusForThing(th) != DirectHaulStatus.Held)
-                    {
-                        canPlaceInTargetCell = false;
-                        JobFailReason.Is("DirectHaulTargetCellOccupiedByNonHeld".Translate());
-                        break;
-                    }
-                    */
-
-
-                    currentStackCountInCell += th.stackCount;
-                }
-            }
-
-            if (canPlaceInTargetCell && currentStackCountInCell + t.stackCount > t.def.stackLimit)
-            {
-                canPlaceInTargetCell = false;
-                JobFailReason.Is("DirectHaulTargetCellFull".Translate());
-            }
-
-            if (!canPlaceInTargetCell)
-            {
-                return null;
-            }
-
             if (!pawn.CanReserve(t, 1, -1, null, forced))
             {
                 JobFailReason.Is("Reserved".Translate(t.LabelCap, t));
