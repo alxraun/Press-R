@@ -1,0 +1,90 @@
+[center][img]URL_HEADER_INTRODUCTION[/img][/center]
+
+[b]Press-R[/b] is an amazing Quality-of-Life (QoL) mod that simplifies routine actions with a single smart key press (default [b]R[/b]).
+
+This mod was entirely made by AI.
+
+[center][img]URL_HEADER_MOD_DETAILS[/img][/center]
+
+[h1]Main Key: "Press-R Key"[/h1]
+Holding the "Press-R Key" activates the mod's various Features depending on the current context.
+
+[h1]Feature: Storage Lens[/h1]
+Tired of searching for the right checkbox in long storage setting lists? [b]Storage Lens[/b] lets you toggle allowances by clicking directly on items on the map!
+
+[b]How it works:[/b]
+[list]
+[*] STEP 1: Select any storage.
+[*] STEP 2: Press and hold [b]R[/b].
+[*] STEP 3: Click on any item on the map.
+[/list]
+Clicking an item will toggle its allowed status in the storage settings. You'll see red or green overlays on items, indicating their current status.
+
+[b]Interaction:[/b]
+[list]
+[*] [b]R + LMB[/b] on an item: Toggles allowance for that specific item.
+[*] [b]R + Ctrl + LMB[/b] on an item: Toggles allowance for the item's category.
+[*] [b]R + Shift + LMB[/b] on an item: Toggles allowance for the item's general category.
+[*] [b]R + Ctrl + Shift + LMB[/b] on an item: Toggles allowance for ALL items (equivalent to "Clear All" / "Allow All").
+[/list]
+
+[h1]Feature: Direct Haul[/h1]
+Tired of creating a stockpile just to move items where you need them? [b]Direct Haul[/b] lets you directly order colonists to haul selected items to a specific location. Inspired by "Haul Explicitly".
+
+[b]How it works:[/b]
+[list]
+[*] STEP 1: Select items to move.
+[*] STEP 2: Press and hold [b]R[/b].
+[*] STEP 3: Move the cursor to the target spot.
+[*] STEP 4: Click [b]LMB[/b].
+[/list]
+Selected items will be moved to the designated spot, and will remain available for use by colonists, as if they were in a stockpile.
+
+[b]Interaction:[/b]
+[list]
+[*] [b]R + LMB[/b] on a cell: Orders colonists to haul the selected items to the designated location, marking them as "Held".
+[*] [b]R + LMB (drag)[/b]: Allows drawing a line along which the items will be placed.
+[/list]
+
+[h1]Feature: Direct Haul (Storage Mode)[/h1]
+An additional mode for [b]Direct Haul[/b] that lets you quickly toggle the allowed status of selected items in an existing storage's settings.
+
+[b]How it works:[/b]
+[list]
+[*] STEP 1: Select items.
+[*] STEP 2: Press and hold [b]R[/b].
+[*] STEP 3: Move the cursor over any storage building or zone.
+[*] STEP 4: Hold [b]Ctrl[/b] and click [b]LMB[/b].
+[/list]
+The selected items will have their allowed status toggled in the targeted storage's settings. They will [i]not[/i] be marked as "Held".
+
+[b]Interaction:[/b]
+[list]
+[*] [b]R + Ctrl + LMB[/b] on storage: Toggles the "allowed" / "disallowed" status for all selected items within the target storage's filter settings.
+[*] [b]R + Ctrl + LMB (drag)[/b]: Creates a new stockpile zone with empty settings.
+[/list]
+
+[center][img]URL_HEADER_ATTENTION[/img][/center]
+
+[b]ALPHA VERSION - USE WITH CAUTION[/b]
+
+This mod is in an early alpha stage and has not been thoroughly tested. You may encounter performance issues or compatibility problems with other mods. Theoretically, this mod can be safely added to or removed from saves, and compatibility issues should primarily affect Press-R's stability. The author is not responsible for any problems that may arise from using this mod.
+
+[center][img]URL_HEADER_FAQ[/img][/center]
+
+[b]Q: Compatibility?[/b]
+A: Should be compatible with most mods, including CE. However, comprehensive testing has not been performed yet. Please report any incompatibilities!
+
+[b]Q: Performance?[/b]
+A: Currently, you might experience unstable performance while Features are active (holding the Press-R Key), and also with a large number of items marked as "Held" by Direct Haul (~200+ items). When Features are inactive (Press-R Key is not held), performance impact depends mainly on the number of "Held" items. Future optimizations could potentially reduce the current performance impact by up to 90%.
+
+[center][img]URL_HEADER_CREDIT[/img][/center]
+
+Idea and Project Lead: Alx ([url=https://discordapp.com/users/488263514935525376]Discord[/url])
+Code written by: Gemini 2.0 Flash, Gemini 2.5 Pro, Claude 3.7 Sonnet.
+Translated to all languages by: Gemini 2.5 Pro.
+
+[center][img]URL_HEADER_LINKS[/img][/center]
+
+[center][url=URL_YOUR_GITHUB][img]URL_BUTTON_GITHUB[/img][/url][/center]
+[center][url=URL_YOUR_BUYMEACOFFEE][img]URL_BUTTON_BUYMEACOFFEE[/img][/url][/center]
