@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using PressR.Features.DirectHaul.Core;
 using Verse;
 using Verse.AI;
@@ -158,9 +159,15 @@ namespace PressR.Features.DirectHaul.JobDrivers
                 return false;
             }
 
-            if (pawn.carryTracker.TryDropCarriedThing(cell, ThingPlaceMode.Direct, out Thing thing))
+            bool dropResult = pawn.carryTracker.TryDropCarriedThing(
+                cell,
+                ThingPlaceMode.Direct,
+                out Thing resultingThing
+            );
+
+            if (dropResult)
             {
-                HandleSuccessfulDrop(cell, thing);
+                HandleSuccessfulDrop(cell, resultingThing ?? carriedThing);
                 return true;
             }
             return false;
@@ -218,12 +225,6 @@ namespace PressR.Features.DirectHaul.JobDrivers
             }
 
             if (currentStackCountInCell + thingToPlace.stackCount > thingToPlace.def.stackLimit)
-            {
-                return false;
-            }
-
-            DirectHaulExposableData data = DirectHaulData;
-            if (data != null && data.IsCellPendingTarget(cell, thingToPlace))
             {
                 return false;
             }
