@@ -229,26 +229,6 @@ namespace PressR.Features.DirectHaul.JobDrivers
                 return false;
             }
 
-            DirectHaulExposableData data = DirectHaulData;
-            if (data != null)
-            {
-                Thing originalJobTarget = job.GetTarget(HaulableInd).Thing;
-                bool anotherJobTargetsCell = data.GetPendingThingsAndTargets()
-                    .Any(kvp =>
-                        kvp.Value.Cell == cell
-                        && !ReferenceEquals(kvp.Key, thingToPlace)
-                        && (
-                            originalJobTarget == null
-                            || !ReferenceEquals(kvp.Key, originalJobTarget)
-                        )
-                    );
-
-                if (anotherJobTargetsCell)
-                {
-                    return false;
-                }
-            }
-
             if (map.haulDestinationManager.SlotGroupAt(cell) != null)
             {
                 return false;
