@@ -19,7 +19,7 @@ namespace PressR.Features.DirectHaul.Gizmos
             defaultLabel = "PressR.DirectHaul.CancelHeldStatusGizmo.Label".Translate();
             defaultDesc = "PressR.DirectHaul.CancelHeldStatusGizmo.Desc".Translate();
 
-            icon = ContentFinder<Texture2D>.Get("cancel_held_status_gizmo", true);
+            icon = ContentFinder<Texture2D>.Get("DirectHaul/cancel_held_status_gizmo", true);
             Order = -100f;
 
             action = () =>

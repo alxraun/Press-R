@@ -19,7 +19,7 @@ namespace PressR.Features.DirectHaul.Gizmos
             defaultLabel = "PressR.DirectHaul.CancelPendingStatusGizmo.Label".Translate();
             defaultDesc = "PressR.DirectHaul.CancelPendingStatusGizmo.Desc".Translate();
 
-            icon = ContentFinder<Texture2D>.Get("cancel_pending_status_gizmo", true);
+            icon = ContentFinder<Texture2D>.Get("DirectHaul/cancel_pending_status_gizmo", true);
             Order = -99f;
 
             action = () =>
