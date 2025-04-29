@@ -2,47 +2,48 @@ using System.Collections.Generic;
 using System.Linq;
 using PressR.Graphics.GraphicObjects;
 using PressR.Utils;
-using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace PressR.Features.DirectHaul.Graphics.GraphicObjects
+namespace PressR.Features.DirectHaul.Graphics
 {
-    public class ZoneHighlightGraphicObject
+    public class DirectHaulBuildingHighlightGraphicObject
         : IGraphicObject,
             IEffectTarget,
             IHasPadding,
             IHasAlpha,
             IHasColor,
-            IHasTarget<Zone_Stockpile>
+            IHasTarget<Building>
     {
-        private Zone_Stockpile _targetZone;
+        private Building _target;
         private Material _lineMaterial;
         private List<IntVec3> _cachedCells = new List<IntVec3>();
-        private Map _map;
 
-        public Zone_Stockpile Target
+        public Building Target
         {
-            get => _targetZone;
+            get => _target;
             set
             {
-                if (_targetZone == value)
+                if (_target == value)
                     return;
-                _targetZone = value;
-                _map = _targetZone?.Map;
+                _target = value;
                 UpdateCells();
             }
         }
 
-        public object Key => typeof(ZoneHighlightGraphicObject);
+        public object Key => typeof(DirectHaulBuildingHighlightGraphicObject);
         public GraphicObjectState State { get; set; } = GraphicObjectState.Active;
-        public float Padding { get; set; } = 0.1f;
+        public float Padding { get; set; } = 0.0f;
         public float Alpha { get; set; } = 1f;
         public Color Color { get; set; } = Color.white;
 
-        public ZoneHighlightGraphicObject(Zone_Stockpile targetZone, Material lineMaterial = null)
+        public DirectHaulBuildingHighlightGraphicObject(
+            Building targetBuilding,
+            Material lineMaterial = null
+        )
         {
-            Target = targetZone ?? throw new System.ArgumentNullException(nameof(targetZone));
+            Target =
+                targetBuilding ?? throw new System.ArgumentNullException(nameof(targetBuilding));
 
             Material baseMat =
                 lineMaterial
@@ -57,23 +58,18 @@ namespace PressR.Features.DirectHaul.Graphics.GraphicObjects
 
         public void Update()
         {
-            if (Target == null || _map == null || !_map.zoneManager.AllZones.Contains(Target))
+            if (Target == null || !Target.Spawned || Target.Destroyed)
             {
                 _cachedCells.Clear();
                 return;
-            }
-
-            if (Target.Cells.Count != _cachedCells.Count)
-            {
-                UpdateCells();
             }
         }
 
         private void UpdateCells()
         {
-            if (Target != null && _map != null && _map.zoneManager.AllZones.Contains(Target))
+            if (Target != null && Target.Spawned)
             {
-                _cachedCells = Target.Cells.ToList();
+                _cachedCells = Target.OccupiedRect().Cells.ToList();
             }
             else
             {

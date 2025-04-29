@@ -4,7 +4,7 @@ using PressR.Utils;
 using UnityEngine;
 using Verse;
 
-namespace PressR.Features.DirectHaul.Graphics.GraphicObjects
+namespace PressR.Features.DirectHaul.Graphics
 {
     public class DirectHaulStorageRectGraphicObject : IGraphicObject, IHasAlpha, IHasColor
     {

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using PressR.Features.DirectHaul.Core;
-using PressR.Features.DirectHaul.Graphics.GraphicObjects;
+using PressR.Features.DirectHaul.Graphics;
 using PressR.Graphics;
 using PressR.Graphics.Effects;
 using PressR.Graphics.GraphicObjects;

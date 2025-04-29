@@ -1,10 +1,9 @@
 using System;
 using System.Linq;
-using PressR.Interfaces;
 using RimWorld;
 using Verse;
 
-namespace PressR.Features.TabLens.Lenses.StorageLens.Commands
+namespace PressR.Features.TabLens.StorageLens.Commands
 {
     public class OpenStorageTabCommand : ICommand
     {

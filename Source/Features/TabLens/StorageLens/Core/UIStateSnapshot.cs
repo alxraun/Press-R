@@ -2,7 +2,7 @@ using System;
 using RimWorld;
 using UnityEngine;
 
-namespace PressR.Features.TabLens.Lenses.StorageLens.Core
+namespace PressR.Features.TabLens.StorageLens.Core
 {
     public class UIStateSnapshot
     {

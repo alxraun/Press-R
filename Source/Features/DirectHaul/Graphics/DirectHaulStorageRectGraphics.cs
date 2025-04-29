@@ -1,4 +1,4 @@
-using PressR.Features.DirectHaul.Graphics.GraphicObjects;
+using PressR.Features.DirectHaul.Graphics;
 using PressR.Graphics;
 using PressR.Graphics.GraphicObjects;
 using UnityEngine;

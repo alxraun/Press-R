@@ -5,42 +5,38 @@ using PressR.Graphics.Utils.Replicator;
 using UnityEngine;
 using Verse;
 
-namespace PressR.Features.DirectHaul.Graphics.GraphicObjects
+namespace PressR.Features.TabLens.Graphics
 {
-    public class DirectHaulPreviewGhostGraphicObject(
-        Thing targetThing,
-        Vector3? targetPosition = null,
-        Shader shader = null
-    ) : IGraphicObject, IHasColor, IHasAlpha, IHasPosition
+    public class TabLensThingOverlayGraphicObject(Thing targetThing, Shader overlayShader = null)
+        : IGraphicObject,
+            IHasColor,
+            IHasAlpha
     {
         private readonly Thing _targetThing =
             targetThing ?? throw new ArgumentNullException(nameof(targetThing));
-        private readonly MaterialPropertyBlock _propertyBlock = new MaterialPropertyBlock();
-        private Mesh _currentMesh;
-        private Matrix4x4 _baseMatrix;
         private Material _overlayMaterial;
         private Texture _lastOriginalMainTexture = null;
+        private Color _originalMaterialColor = Color.white;
+        private Mesh _currentMesh;
+        private Matrix4x4 _baseMatrix;
+        private readonly MaterialPropertyBlock _propertyBlock = new MaterialPropertyBlock();
         private bool _disposed = false;
 
         public GraphicObjectState State { get; set; } = GraphicObjectState.Active;
 
         public Color Color { get; set; } = Color.white;
-        public Color OutlineColor { get; set; } = Color.white;
-        public float Cutoff { get; set; } = 0.5f;
         public float Alpha { get; set; } = 1f;
-        public float EdgeSensitivity { get; set; } = 1.0f;
-        public Vector3 Position { get; set; } = targetPosition ?? Vector3.zero;
 
         public object Key => (_targetThing, GetType());
 
-        public Shader Shader { get; set; } = shader;
+        public Shader OverlayShader { get; set; } = overlayShader;
 
         public void Update()
         {
             if (_disposed)
                 return;
 
-            if (!IsThingValidForUpdate())
+            if (!IsValid)
             {
                 State = GraphicObjectState.PendingRemoval;
                 return;
@@ -61,10 +57,19 @@ namespace PressR.Features.DirectHaul.Graphics.GraphicObjects
                 return;
             }
 
+            _originalMaterialColor = originalMaterial.color;
+
+            Shader shaderToUse = this.OverlayShader ?? ShaderManager.HSVColorizeCutoutShader;
+            if (shaderToUse == null)
+            {
+                State = GraphicObjectState.PendingRemoval;
+                return;
+            }
+
             bool needsRecreation =
                 _overlayMaterial == null
                 || originalMaterial.mainTexture != _lastOriginalMainTexture
-                || (Shader != null && _overlayMaterial.shader != Shader);
+                || (OverlayShader != null && _overlayMaterial.shader != OverlayShader);
 
             if (needsRecreation)
             {
@@ -73,33 +78,17 @@ namespace PressR.Features.DirectHaul.Graphics.GraphicObjects
                     UnityEngine.Object.Destroy(_overlayMaterial);
                 }
 
-                _overlayMaterial = new Material(originalMaterial);
+                _overlayMaterial = new Material(originalMaterial) { shader = shaderToUse };
                 _lastOriginalMainTexture = originalMaterial.mainTexture;
-
-                if (Shader != null)
-                {
-                    _overlayMaterial.shader = Shader;
-                }
             }
         }
 
         public void Render()
         {
-            if (_disposed || !IsRenderDataValid())
-            {
+            if (_disposed || !IsValid)
                 return;
-            }
 
-            Vector3 finalPosition = Position;
-            finalPosition += new Vector3(0f, Altitudes.AltInc, 0f);
-
-            Matrix4x4 finalMatrix = _baseMatrix;
-            finalMatrix.SetColumn(
-                3,
-                new Vector4(finalPosition.x, finalPosition.y, finalPosition.z, 1f)
-            );
-
-            if (_overlayMaterial == null || _overlayMaterial.shader == null)
+            if (_currentMesh == null || _overlayMaterial == null || _overlayMaterial.shader == null)
             {
                 return;
             }
@@ -111,20 +100,23 @@ namespace PressR.Features.DirectHaul.Graphics.GraphicObjects
             {
                 var payload = new MpbConfigurators.Payload
                 {
-                    FillColor = this.Color,
-                    OutlineColor = this.OutlineColor,
-                    Cutoff = this.Cutoff,
-                    Alpha = this.Alpha,
-                    EdgeSensitivity = this.EdgeSensitivity,
+                    TargetColor = this.Color,
+                    OriginalBaseColor = _originalMaterialColor,
+                    SaturationBlendFactor = 0.5f,
+                    BrightnessBlendFactor = 0.0f,
+                    Cutoff = 0.5f,
+                    EffectBlendFactor = this.Alpha,
                 };
                 configurator.Configure(_propertyBlock, payload);
             }
-            else
-            {
-                Color defaultColor = this.Color;
-                defaultColor.a *= this.Alpha;
-                _propertyBlock.SetColor(ShaderPropertyIDs.Color, defaultColor);
-            }
+
+            Vector3 finalPosition =
+                (Vector3)_baseMatrix.GetColumn(3) + new Vector3(0f, Altitudes.AltInc, 0f);
+            Matrix4x4 finalMatrix = Matrix4x4.TRS(
+                finalPosition,
+                _baseMatrix.rotation,
+                _baseMatrix.lossyScale
+            );
 
             UnityEngine.Graphics.DrawMesh(
                 _currentMesh,
@@ -137,13 +129,10 @@ namespace PressR.Features.DirectHaul.Graphics.GraphicObjects
             );
         }
 
-        private bool IsThingValidForUpdate() =>
+        private bool IsValid =>
             _targetThing != null
             && !_targetThing.Destroyed
             && _targetThing.SpawnedOrAnyParentSpawned;
-
-        private bool IsRenderDataValid() =>
-            IsThingValidForUpdate() && _currentMesh != null && _overlayMaterial != null;
 
         public void Dispose()
         {

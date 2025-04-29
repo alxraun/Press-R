@@ -5,7 +5,7 @@ using PressR.Graphics.Utils.Replicator;
 using UnityEngine;
 using Verse;
 
-namespace PressR.Features.DirectHaul.Graphics.GraphicObjects
+namespace PressR.Features.DirectHaul.Graphics
 {
     public class DirectHaulPendingGhostGraphicObject
         : IGraphicObject,

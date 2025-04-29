@@ -1,17 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using PressR.Features.TabLens.Graphics.GraphicObjects;
-using PressR.Features.TabLens.Lenses.StorageLens.Commands;
-using PressR.Features.TabLens.Lenses.StorageLens.Core;
+using PressR.Features.TabLens.Graphics;
+using PressR.Features.TabLens.StorageLens.Commands;
+using PressR.Features.TabLens.StorageLens.Core;
 using PressR.Graphics;
-using PressR.Interfaces;
 using PressR.Utils;
 using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace PressR.Features.TabLens.Lenses.StorageLens
+namespace PressR.Features.TabLens.StorageLens
 {
     public class StorageLens : ILens
     {

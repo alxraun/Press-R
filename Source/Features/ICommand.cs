@@ -1,4 +1,4 @@
-namespace PressR.Interfaces
+namespace PressR.Features
 {
     public interface ICommand
     {

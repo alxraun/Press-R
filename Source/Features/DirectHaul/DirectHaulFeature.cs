@@ -4,7 +4,6 @@ using System.Linq;
 using PressR.Features.DirectHaul.Core;
 using PressR.Features.DirectHaul.Graphics;
 using PressR.Graphics;
-using PressR.Interfaces;
 using PressR.Settings;
 using PressR.Utils;
 using RimWorld;

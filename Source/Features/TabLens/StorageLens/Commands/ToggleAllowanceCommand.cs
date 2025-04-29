@@ -1,10 +1,9 @@
-using PressR.Features.TabLens.Lenses.StorageLens.Core;
-using PressR.Interfaces;
+using PressR.Features.TabLens.StorageLens.Core;
 using RimWorld;
 using Verse;
 using Verse.Sound;
 
-namespace PressR.Features.TabLens.Lenses.StorageLens.Commands
+namespace PressR.Features.TabLens.StorageLens.Commands
 {
     public class ToggleAllowanceCommand : ICommand
     {

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Verse;
 
-namespace PressR.Gizmo
+namespace PressR.Gizmos
 {
     public static class GizmosDisablingManager
     {
