@@ -1,7 +1,7 @@
 using UnityEngine;
 using Verse;
 
-namespace PressR.Interfaces
+namespace PressR.Graphics.Utils.Replicator
 {
     public interface IRenderDataReplicatorStrategy
     {
