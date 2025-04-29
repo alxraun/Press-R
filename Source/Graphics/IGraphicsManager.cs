@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Verse;
+using PressR.Graphics.Effects;
+using PressR.Graphics.GraphicObjects;
 
-namespace PressR.Graphics.Interfaces
+namespace PressR.Graphics
 {
     public interface IGraphicsManager
     {

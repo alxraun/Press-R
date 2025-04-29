@@ -1,8 +1,8 @@
-using PressR.Graphics.Interfaces;
+using PressR.Graphics;
 using UnityEngine;
 using Verse;
 
-namespace PressR.Graphics.Shaders
+namespace PressR.Graphics
 {
     public static class MpbConfigurators
     {

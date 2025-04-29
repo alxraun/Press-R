@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
+using PressR.Graphics.GraphicObjects;
 
-namespace PressR.Graphics.Interfaces
+namespace PressR.Graphics.Effects
 {
     public enum EffectState
     {

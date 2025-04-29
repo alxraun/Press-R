@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using PressR;
 using PressR.Features.TabLens.Lenses.StorageLens;
-using PressR.Graphics.Interfaces;
+using PressR.Graphics;
 using PressR.Interfaces;
 
 namespace PressR.Features.TabLens

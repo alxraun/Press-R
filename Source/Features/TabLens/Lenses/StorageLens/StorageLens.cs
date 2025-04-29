@@ -4,7 +4,7 @@ using System.Linq;
 using PressR.Features.TabLens.Graphics.GraphicObjects;
 using PressR.Features.TabLens.Lenses.StorageLens.Commands;
 using PressR.Features.TabLens.Lenses.StorageLens.Core;
-using PressR.Graphics.Interfaces;
+using PressR.Graphics;
 using PressR.Interfaces;
 using PressR.Utils;
 using RimWorld;

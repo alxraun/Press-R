@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using PressR.Graphics.Interfaces;
+using PressR.Graphics;
 using Verse;
 
 namespace PressR.Interfaces

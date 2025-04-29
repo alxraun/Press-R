@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using PressR.Graphics.Interfaces;
 using UnityEngine;
 using Verse;
 
-namespace PressR.Graphics.Shaders
+namespace PressR.Graphics
 {
     [StaticConstructorOnStartup]
     public static class ShaderManager
