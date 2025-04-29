@@ -3,7 +3,7 @@ using UnityEngine;
 using Verse;
 using static Verse.UI;
 
-namespace PressR.Features.DirectHaul.Graphics.GraphicObjects
+namespace PressR.Features.DirectHaul.Graphics
 {
     public class DirectHaulRadiusIndicatorGraphicObject
         : IGraphicObject,

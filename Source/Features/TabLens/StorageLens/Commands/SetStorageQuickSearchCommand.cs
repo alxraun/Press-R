@@ -1,7 +1,6 @@
 using System.Reflection;
-using PressR.Interfaces;
 
-namespace PressR.Features.TabLens.Lenses.StorageLens.Commands
+namespace PressR.Features.TabLens.StorageLens.Commands
 {
     public class SetStorageQuickSearchCommand : ICommand
     {

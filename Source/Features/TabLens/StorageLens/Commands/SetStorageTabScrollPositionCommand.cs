@@ -1,10 +1,9 @@
 using System.Reflection;
-using PressR.Features.TabLens.Lenses.StorageLens.Core;
-using PressR.Interfaces;
+using PressR.Features.TabLens.StorageLens.Core;
 using RimWorld;
 using UnityEngine;
 
-namespace PressR.Features.TabLens.Lenses.StorageLens.Commands
+namespace PressR.Features.TabLens.StorageLens.Commands
 {
     public class SetStorageTabScrollPositionCommand(StorageTabUIData uiData, Vector2 scrollPosition)
         : ICommand

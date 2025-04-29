@@ -1,10 +1,9 @@
 using System.Reflection;
-using PressR.Features.TabLens.Lenses.StorageLens.Core;
-using PressR.Interfaces;
+using PressR.Features.TabLens.StorageLens.Core;
 using RimWorld;
 using Verse;
 
-namespace PressR.Features.TabLens.Lenses.StorageLens.Commands
+namespace PressR.Features.TabLens.StorageLens.Commands
 {
     public class ClearStorageTabSearchTextCommand : ICommand
     {

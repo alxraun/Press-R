@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using PressR.Graphics;
 using Verse;
 
-namespace PressR.Interfaces
+namespace PressR.Features.TabLens
 {
     public interface ILens
     {

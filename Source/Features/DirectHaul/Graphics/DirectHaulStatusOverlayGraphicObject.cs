@@ -2,7 +2,7 @@ using PressR.Graphics.GraphicObjects;
 using UnityEngine;
 using Verse;
 
-namespace PressR.Features.DirectHaul.Graphics.GraphicObjects
+namespace PressR.Features.DirectHaul.Graphics
 {
     public class DirectHaulStatusOverlayGraphicObject : IGraphicObject, IHasAlpha, IHasPosition
     {

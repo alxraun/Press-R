@@ -1,6 +1,4 @@
-using PressR.Graphics;
-
-namespace PressR.Interfaces
+namespace PressR.Features
 {
     public interface IPressRFeature
     {

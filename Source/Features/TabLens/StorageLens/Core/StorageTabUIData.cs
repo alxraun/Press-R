@@ -2,7 +2,7 @@ using System.Reflection;
 using RimWorld;
 using Verse;
 
-namespace PressR.Features.TabLens.Lenses.StorageLens.Core
+namespace PressR.Features.TabLens.StorageLens.Core
 {
     public class StorageTabUIData
     {

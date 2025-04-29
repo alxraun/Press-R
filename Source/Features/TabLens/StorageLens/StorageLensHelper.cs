@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using PressR.Features.TabLens.Graphics.GraphicObjects;
-using PressR.Features.TabLens.Lenses.StorageLens.Commands;
-using PressR.Features.TabLens.Lenses.StorageLens.Core;
+using PressR.Features.TabLens.Graphics;
+using PressR.Features.TabLens.StorageLens.Commands;
+using PressR.Features.TabLens.StorageLens.Core;
 using PressR.Graphics;
 using PressR.Graphics.Effects;
 using PressR.Graphics.GraphicObjects;
@@ -13,7 +13,7 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace PressR.Features.TabLens.Lenses.StorageLens
+namespace PressR.Features.TabLens.StorageLens
 {
     public static class StorageLensHelper
     {
