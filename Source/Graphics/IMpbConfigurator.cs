@@ -1,7 +1,6 @@
-using PressR.Graphics.Shaders;
 using UnityEngine;
 
-namespace PressR.Graphics.Interfaces
+namespace PressR.Graphics
 {
     public interface IMpbConfigurator
     {

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using PressR.Graphics.Interfaces;
+using PressR.Graphics.GraphicObjects;
 using PressR.Utils;
 using RimWorld;
 using UnityEngine;

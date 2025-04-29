@@ -1,7 +1,4 @@
-using System;
-using PressR.Graphics.Interfaces;
-using PressR.Graphics.Shaders;
-using RimWorld;
+using PressR.Graphics.GraphicObjects;
 using UnityEngine;
 using Verse;
 

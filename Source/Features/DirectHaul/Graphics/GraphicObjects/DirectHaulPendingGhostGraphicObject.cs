@@ -1,7 +1,6 @@
 using System;
-using System.Collections.Generic;
-using PressR.Graphics.Interfaces;
-using PressR.Graphics.Shaders;
+using PressR.Graphics;
+using PressR.Graphics.GraphicObjects;
 using PressR.Graphics.Utils.Replicator;
 using UnityEngine;
 using Verse;

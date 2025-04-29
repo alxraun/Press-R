@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using PressR.Features.DirectHaul;
 using PressR.Features.TabLens;
 using PressR.Graphics;
-using PressR.Graphics.Interfaces;
 using PressR.Interfaces;
 using UnityEngine;
 using Verse;

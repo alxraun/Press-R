@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 using Verse;
 
-namespace PressR.Graphics.Textures
+namespace PressR.Graphics
 {
     [StaticConstructorOnStartup]
     public static class TextureManager

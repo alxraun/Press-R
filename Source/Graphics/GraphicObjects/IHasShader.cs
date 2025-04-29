@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace PressR.Graphics.Interfaces
+namespace PressR.Graphics.GraphicObjects
 {
     public interface IHasShader
     {

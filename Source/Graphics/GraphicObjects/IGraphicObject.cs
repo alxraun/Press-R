@@ -1,7 +1,7 @@
 using System;
 using Verse;
 
-namespace PressR.Graphics.Interfaces
+namespace PressR.Graphics.GraphicObjects
 {
     public enum GraphicObjectState
     {

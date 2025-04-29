@@ -1,4 +1,4 @@
-using PressR.Graphics.Interfaces;
+using PressR.Graphics;
 
 namespace PressR.Interfaces
 {

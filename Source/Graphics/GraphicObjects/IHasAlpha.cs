@@ -1,4 +1,4 @@
-namespace PressR.Graphics.Interfaces
+namespace PressR.Graphics.GraphicObjects
 {
     public interface IHasAlpha
     {
