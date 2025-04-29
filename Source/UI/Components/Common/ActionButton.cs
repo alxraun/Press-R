@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using Verse;
 
-namespace PressR.UI.Components
+namespace PressR.UI.Components.Common
 {
     public static class ActionButton
     {

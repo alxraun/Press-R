@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using PressR.Features.DirectHaul.Core;
-using PressR.Features.DirectHaul.Graphics.GraphicObjects;
+using PressR.Features.DirectHaul.Graphics;
+using PressR.Graphics;
 using PressR.Graphics.Effects;
-using PressR.Graphics.Interfaces;
+using PressR.Graphics.GraphicObjects;
 using PressR.Utils;
 using RimWorld;
 using UnityEngine;
@@ -31,8 +32,9 @@ namespace PressR.Features.DirectHaul.Graphics
         private const float DefaultZonePadding = 0.1f;
 
         private static readonly object BuildingHighlightKey =
-            typeof(BuildingHighlightGraphicObject);
-        private static readonly object ZoneHighlightKey = typeof(ZoneHighlightGraphicObject);
+            typeof(DirectHaulBuildingHighlightGraphicObject);
+        private static readonly object ZoneHighlightKey =
+            typeof(DirectHaulZoneHighlightGraphicObject);
 
         public DirectHaulStorageHighlightGraphics(IGraphicsManager graphicsManager)
         {
@@ -72,20 +74,20 @@ namespace PressR.Features.DirectHaul.Graphics
             switch (_currentTarget)
             {
                 case Building building:
-                    EnsureHighlightObject<BuildingHighlightGraphicObject, Building>(
+                    EnsureHighlightObject<DirectHaulBuildingHighlightGraphicObject, Building>(
                         BuildingHighlightKey,
                         building,
-                        (b) => new BuildingHighlightGraphicObject(b),
+                        (b) => new DirectHaulBuildingHighlightGraphicObject(b),
                         highlightColor,
                         DefaultBuildingPadding,
                         TargetBuildingPadding
                     );
                     break;
                 case Zone_Stockpile zone:
-                    EnsureHighlightObject<ZoneHighlightGraphicObject, Zone_Stockpile>(
+                    EnsureHighlightObject<DirectHaulZoneHighlightGraphicObject, Zone_Stockpile>(
                         ZoneHighlightKey,
                         zone,
-                        (z) => new ZoneHighlightGraphicObject(z),
+                        (z) => new DirectHaulZoneHighlightGraphicObject(z),
                         highlightColor,
                         DefaultZonePadding,
                         TargetZonePadding
@@ -217,8 +219,8 @@ namespace PressR.Features.DirectHaul.Graphics
 
             float returnPadding = _currentHighlightObject switch
             {
-                BuildingHighlightGraphicObject => DefaultBuildingPadding,
-                ZoneHighlightGraphicObject => DefaultZonePadding,
+                DirectHaulBuildingHighlightGraphicObject => DefaultBuildingPadding,
+                DirectHaulZoneHighlightGraphicObject => DefaultZonePadding,
                 _ => 0f,
             };
 

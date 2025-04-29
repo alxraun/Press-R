@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using PressR.Graphics.Interfaces;
+using PressR.Graphics.Effects;
+using PressR.Graphics.GraphicObjects;
 using UnityEngine;
-using Verse;
 
 namespace PressR.Graphics
 {

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using PressR.Graphics.Interfaces;
+using PressR.Graphics.GraphicObjects;
 using UnityEngine;
 
 namespace PressR.Graphics.Effects
