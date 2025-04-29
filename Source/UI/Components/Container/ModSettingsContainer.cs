@@ -1,9 +1,10 @@
 using PressR.Settings;
+using PressR.UI.Components.Common;
 using UnityEngine;
 using Verse;
 using static PressR.UI.Components.Constants;
 
-namespace PressR.UI.Components
+namespace PressR.UI.Components.Container
 {
     public static class ModSettingsContainer
     {

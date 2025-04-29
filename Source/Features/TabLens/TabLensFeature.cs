@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using PressR;
-using PressR.Features.TabLens.Lenses.StorageLens;
-using PressR.Graphics.Interfaces;
-using PressR.Interfaces;
+using PressR.Features.TabLens.StorageLens;
+using PressR.Graphics;
 
 namespace PressR.Features.TabLens
 {
@@ -24,7 +22,7 @@ namespace PressR.Features.TabLens
         {
             _graphicsManager =
                 graphicsManager ?? throw new ArgumentNullException(nameof(graphicsManager));
-            RegisterLens(new StorageLens(_graphicsManager));
+            RegisterLens(new StorageLens.StorageLens(_graphicsManager));
         }
 
         public ILens ActiveLens => _activeLens;

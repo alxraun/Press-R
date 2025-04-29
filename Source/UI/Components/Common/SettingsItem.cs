@@ -5,7 +5,7 @@ using Verse;
 using Verse.Sound;
 using static PressR.UI.Components.Constants;
 
-namespace PressR.UI.Components
+namespace PressR.UI.Components.Common
 {
     public static class SettingsItem
     {
