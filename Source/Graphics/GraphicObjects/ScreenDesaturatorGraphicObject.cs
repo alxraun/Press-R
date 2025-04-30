@@ -1,9 +1,9 @@
 using System;
-using PressR.Graphics.Interfaces;
+using PressR.Graphics;
 using UnityEngine;
 using Verse;
 
-namespace PressR.Graphics.GraphicObjects
+namespace PressR.Graphics.GraphicObjects.GraphicObjects
 {
     public class ScreenDesaturatorGraphicObject
         : IGraphicObject,
