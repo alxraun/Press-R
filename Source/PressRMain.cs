@@ -6,6 +6,9 @@ using PressR.Graphics;
 using UnityEngine;
 using Verse;
 using static PressR.PressRInput;
+#if DEBUG
+using PressR.Debugger;
+#endif
 
 namespace PressR
 {
@@ -37,6 +40,14 @@ namespace PressR
 
         public static void MainUpdateLoop()
         {
+#if DEBUG
+
+            if (Current.ProgramState == ProgramState.Playing && DebuggerWindow.IsWindowOpen)
+            {
+                DebuggerCore.Tick(Time.deltaTime);
+            }
+#endif
+
             if (Current.ProgramState == ProgramState.Playing)
             {
                 foreach (var feature in Features)
