@@ -56,6 +56,8 @@ namespace PressR.Features.DirectHaul.Graphics
             Color = _lineMaterial.color;
         }
 
+        public void OnRegistered() { }
+
         public void Update()
         {
             if (Target == null || !Target.Spawned || Target.Destroyed)

@@ -28,6 +28,8 @@ namespace PressR.Features.DirectHaul.Graphics
                 targetThing ?? throw new System.ArgumentNullException(nameof(targetThing));
         }
 
+        public void OnRegistered() { }
+
         public void UpdateVisualState(string texturePath)
         {
             _currentTexturePath = texturePath;

@@ -33,6 +33,8 @@ namespace PressR.Features.DirectHaul.Graphics
 
         public object Key => (_targetThing, GetType());
 
+        public void OnRegistered() { }
+
         public Shader Shader { get; set; } = shader;
 
         public void Update()

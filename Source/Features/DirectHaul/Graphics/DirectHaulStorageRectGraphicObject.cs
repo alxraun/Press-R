@@ -16,6 +16,8 @@ namespace PressR.Features.DirectHaul.Graphics
         public IntVec3 StartCell { get; set; }
         public IntVec3 EndCell { get; set; }
 
+        public void OnRegistered() { }
+
         private const float DefaultFillAlpha = 0.09f;
         private const float DefaultEdgeAlpha = 1.0f;
         private const float EdgeColorToBaseFillLerpFactor = 0.05f;

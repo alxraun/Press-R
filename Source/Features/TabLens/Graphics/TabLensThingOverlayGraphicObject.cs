@@ -43,6 +43,8 @@ namespace PressR.Features.TabLens.Graphics
 
         public object Key => (_targetThing, GetType());
 
+        public void OnRegistered() { }
+
         public Shader OverlayShader { get; set; } = overlayShader;
 
         public void Update()
@@ -93,40 +95,35 @@ namespace PressR.Features.TabLens.Graphics
             IThingHolder currentParentHolder = _targetThing.ParentHolder;
             Pawn currentCarrierPawn = (currentParentHolder as Pawn_CarryTracker)?.pawn;
 
-            // --- Check for carrier changes first ---
-            if (currentCarrierPawn != _lastCarrierPawn) // Carrier appeared, disappeared, or changed
+            if (currentCarrierPawn != _lastCarrierPawn)
             {
                 return true;
             }
 
-            // --- Check position based on context ---
             bool positionChanged = false;
-            if (currentCarrierPawn != null) // If carried
+            if (currentCarrierPawn != null)
             {
-                // Check the most accurate position data for the carrier
                 if (currentCarrierPawn.DrawPos != _lastCarrierDrawPos)
                 {
                     positionChanged = true;
                 }
             }
-            else // If not carried (on ground, in container, etc.)
+            else
             {
-                // Check the thing's own positions
                 if (_targetThing.Position != _lastPosition || _targetThing.DrawPos != _lastDrawPos)
                 {
                     positionChanged = true;
                 }
             }
 
-            // --- Check other properties ---
             if (
                 _lastUpdateTick == -1
-                || positionChanged // Use the combined position check
+                || positionChanged
                 || _targetThing.Rotation != _lastRotation
                 || currentMapId != _lastMapId
                 || _targetThing.stackCount != _lastStackCount
                 || _targetThing.Stuff != _lastStuffDef
-                || currentParentHolder != _lastParentHolder // Keep this for container changes etc.
+                || currentParentHolder != _lastParentHolder
             )
             {
                 return true;
@@ -154,7 +151,6 @@ namespace PressR.Features.TabLens.Graphics
             }
             else
             {
-                // Reset carrier specific cache if not carried
                 _lastCarrierPosition = IntVec3.Invalid;
                 _lastCarrierRotation = Rot4.Invalid;
                 _lastCarrierDrawPos = Vector3.zero;
