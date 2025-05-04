@@ -1,0 +1,24 @@
+---
+description: C# Project Guidelines And Best Practices
+globs: **/*.cs
+alwaysApply: false
+---
+1. **Strive for the `Principle of Least Surprise (POLS)` and `Explicit is better than implicit`**.
+
+2. **API Design**
+
+- Any API should be flexible, providing full functionality.
+- Use `Func<T, R>`, `Action<T>`, `Predicate<T>` in method signatures, use `lambda-expressions` when calling.
+
+3. **Use modern C# features where appropriate**.
+
+- Use `LINQ` with `lambda-expressions`.
+- Use `lambda-expressions`.
+- Use Null Safety (`?.`, `??`, `??=`, `is null`, `!`, `default`, `as`).
+- Use Ternary Operator (`? :`).
+- Use Pattern Matching (`is`, `switch`).
+- Use Expression-Bodied Members (`=>`).
+
+4. **Use techniques where appropriate**
+
+- Use Guard Clause and Early Return.
