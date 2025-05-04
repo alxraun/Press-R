@@ -5,8 +5,10 @@ using LudeonTK;
 using PressR.Features.DirectHaul.Core;
 using PressR.Features.DirectHaul.Graphics;
 using PressR.Graphics;
+using PressR.Graphics.Controllers;
 using PressR.Graphics.Effects;
 using PressR.Graphics.GraphicObjects;
+using PressR.Graphics.Tween;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -14,10 +16,11 @@ using Verse;
 namespace PressR.Features.DirectHaul.Graphics
 {
     [StaticConstructorOnStartup]
-    public class DirectHaulGhostGraphics
+    public class DirectHaulGhostGraphicsController : IGraphicsController<DirectHaulUpdateContext>
     {
         private readonly IGraphicsManager _graphicsManager;
         private readonly DirectHaulFrameData _frameData;
+        private readonly DirectHaulPreview _preview = new();
 
         private const float FadeInDuration = 0.05f;
         private const float FadeOutDuration = 0.05f;
@@ -38,7 +41,9 @@ namespace PressR.Features.DirectHaul.Graphics
             GhostFillAlpha
         );
 
-        public DirectHaulGhostGraphics(
+        private Dictionary<Thing, IntVec3> _lastPreviewPositions = new();
+
+        public DirectHaulGhostGraphicsController(
             IGraphicsManager graphicsManager,
             DirectHaulFrameData frameData
         )
@@ -48,15 +53,45 @@ namespace PressR.Features.DirectHaul.Graphics
             _frameData = frameData ?? throw new ArgumentNullException(nameof(frameData));
         }
 
-        public void UpdatePreviewGhosts(Dictionary<Thing, IntVec3> desiredPreviewPositions, Map map)
+        public void Update(DirectHaulUpdateContext context)
         {
-            if (!TryGetContext(map, out var viewRect))
+            if (context.Mode == DirectHaulMode.Storage)
             {
-                ClearPreviewGhosts();
+                ClearInternal();
                 return;
             }
 
-            var visiblePreviewPositions = desiredPreviewPositions
+            if (!PressRMod.Settings.directHaulSettings.enablePlacementGhosts)
+            {
+                ClearInternal();
+                return;
+            }
+
+            if (!TryGetContext(context.Map, out var viewRect, out var directHaulData))
+            {
+                ClearInternal();
+                return;
+            }
+
+            _preview.TryGetPreviewPositions(
+                context.DragState.StartDragCell.IsValid
+                    ? context.DragState.StartDragCell
+                    : context.CurrentMouseCell,
+                context.DragState.IsDragging
+                    ? context.DragState.CurrentDragCell
+                    : (
+                        context.DragState.StartDragCell.IsValid
+                            ? context.DragState.StartDragCell
+                            : context.CurrentMouseCell
+                    ),
+                context.Map,
+                _frameData,
+                out var desiredPreviewPositions
+            );
+
+            _lastPreviewPositions = desiredPreviewPositions ?? new Dictionary<Thing, IntVec3>();
+
+            var visiblePreviewPositions = _lastPreviewPositions
                 .Where(kvp => kvp.Value.IsValid && viewRect.Contains(kvp.Value))
                 .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
@@ -66,20 +101,6 @@ namespace PressR.Features.DirectHaul.Graphics
                 (thing, cell) =>
                     CreatePreviewGhostObject(thing, cell.ToVector3Shifted(), GhostShader, 0f)
             );
-        }
-
-        public void ClearPreviewGhosts()
-        {
-            ClearGraphicObjectsOfType<DirectHaulPreviewGhostGraphicObject>();
-        }
-
-        public void UpdatePendingGhosts(Map map)
-        {
-            if (!TryGetContext(map, out var viewRect, out var directHaulData))
-            {
-                ClearPendingGhosts();
-                return;
-            }
 
             var visiblePendingTargets = GetVisiblePendingTargets(directHaulData, viewRect);
 
@@ -91,9 +112,16 @@ namespace PressR.Features.DirectHaul.Graphics
             );
         }
 
-        public void ClearPendingGhosts()
+        public void Clear()
         {
+            ClearInternal();
+        }
+
+        private void ClearInternal()
+        {
+            ClearGraphicObjectsOfType<DirectHaulPreviewGhostGraphicObject>();
             ClearGraphicObjectsOfType<DirectHaulPendingGhostGraphicObject>();
+            _lastPreviewPositions.Clear();
         }
 
         private bool TryGetContext(Map map, out CellRect viewRect)
@@ -173,23 +201,17 @@ namespace PressR.Features.DirectHaul.Graphics
 
             var desiredKeys = desiredPositions.Keys.Select(keyFactory).ToHashSet();
             var registeredKeys = _graphicsManager
-                .GetActiveGraphicObjects()
+                .GetAllGraphicObjects()
                 .Keys.Where(k => k is ValueTuple<Thing, Type> tuple && tuple.Item2 == typeof(T))
                 .ToHashSet();
 
             var keysToRemove = registeredKeys.Except(desiredKeys).ToList();
             var keysToAdd = desiredKeys.Except(registeredKeys).ToHashSet();
+            var keysToUpdate = desiredKeys.Intersect(registeredKeys).ToHashSet();
 
             foreach (var keyToRemove in keysToRemove)
             {
-                if (
-                    _graphicsManager.TryGetGraphicObject(keyToRemove, out var graphicObject)
-                    && graphicObject.State == GraphicObjectState.Active
-                )
-                {
-                    ApplyFadeOutEffect(graphicObject);
-                    _graphicsManager.UnregisterGraphicObject(keyToRemove);
-                }
+                RemoveGraphicObjectWithFadeOut(keyToRemove);
             }
 
             foreach (var kvp in desiredPositions)
@@ -198,24 +220,31 @@ namespace PressR.Features.DirectHaul.Graphics
                 IntVec3 targetCell = kvp.Value;
                 object key = keyFactory(thing);
 
-                if (
-                    _graphicsManager.TryGetGraphicObject(key, out var existingObject)
-                    && existingObject is IHasPosition hasPosition
-                )
+                if (keysToUpdate.Contains(key))
                 {
-                    if (existingObject.State == GraphicObjectState.PendingRemoval)
+                    if (
+                        _graphicsManager.TryGetGraphicObject(key, out var existingObject)
+                        && existingObject is T existingGhost
+                    )
                     {
-                        _graphicsManager.RegisterGraphicObject(existingObject);
-                        ApplyFadeInEffect(existingObject);
+                        if (existingObject.State == GraphicObjectState.PendingRemoval)
+                        {
+                            _graphicsManager.RegisterGraphicObject(existingObject);
+                            ApplyFadeInEffect(existingObject);
+                        }
+                        existingGhost.Position = targetCell.ToVector3Shifted();
                     }
-                    hasPosition.Position = targetCell.ToVector3Shifted();
                 }
                 else if (keysToAdd.Contains(key))
                 {
                     var newGhostObject = ghostFactory(thing, targetCell);
-                    if (_graphicsManager.RegisterGraphicObject(newGhostObject))
+                    if (
+                        _graphicsManager.RegisterGraphicObject(newGhostObject) is T registeredGhost
+                        && registeredGhost != null
+                    )
                     {
-                        ApplyFadeInEffect(newGhostObject);
+                        ApplyFadeInEffect(registeredGhost);
+                        registeredGhost.Position = targetCell.ToVector3Shifted();
                     }
                 }
             }
@@ -266,44 +295,74 @@ namespace PressR.Features.DirectHaul.Graphics
                 return;
 
             var keysToClear = _graphicsManager
-                .GetActiveGraphicObjects()
-                .Where(kvp => kvp.Value is T)
+                .GetAllGraphicObjects()
+                .Where(kvp => kvp.Value is T && kvp.Value.State == GraphicObjectState.Active)
                 .Select(kvp => kvp.Key)
                 .ToList();
 
             foreach (var key in keysToClear)
             {
-                if (
-                    _graphicsManager.TryGetGraphicObject(key, out var graphicObject)
-                    && graphicObject.State == GraphicObjectState.Active
-                )
-                {
-                    ApplyFadeOutEffect(graphicObject);
-                    _graphicsManager.UnregisterGraphicObject(key);
-                }
+                RemoveGraphicObjectWithFadeOut(key);
             }
         }
 
         private void ApplyFadeInEffect(IGraphicObject target)
         {
-            StopEffectsOfType<FadeOutEffect>(target.Key);
-            var effect = new FadeInEffect(FadeInDuration);
-            _graphicsManager.ApplyEffect(new[] { target.Key }, effect);
+            if (
+                !(target is IHasAlpha hasAlpha)
+                || target.Key == null
+                || target.State != GraphicObjectState.Active
+            )
+                return;
+
+            _graphicsManager.ApplyTween(
+                target.Key,
+                () => hasAlpha.Alpha,
+                a =>
+                {
+                    if (target is IHasAlpha ha && target.State == GraphicObjectState.Active)
+                        ha.Alpha = a;
+                },
+                1f,
+                FadeInDuration,
+                propertyId: nameof(IHasAlpha.Alpha)
+            );
         }
 
         private void ApplyFadeOutEffect(IGraphicObject target)
         {
-            StopEffectsOfType<FadeInEffect>(target.Key);
-            var effect = new FadeOutEffect(FadeOutDuration);
-            _graphicsManager.ApplyEffect(new[] { target.Key }, effect);
+            if (!(target is IHasAlpha hasAlpha) || target.Key == null)
+                return;
+
+            object key = target.Key;
+
+            if (target.State != GraphicObjectState.Active)
+            {
+                _graphicsManager.UnregisterGraphicObject(key);
+                return;
+            }
+
+            _graphicsManager.ApplyTween(
+                key,
+                () => hasAlpha.Alpha,
+                a =>
+                {
+                    if (target is IHasAlpha ha)
+                        ha.Alpha = a;
+                },
+                0f,
+                FadeOutDuration,
+                propertyId: nameof(IHasAlpha.Alpha)
+            );
         }
 
-        private void StopEffectsOfType<T>(object targetKey)
-            where T : IEffect =>
-            _graphicsManager
-                .GetEffectsForTarget(targetKey)
-                .OfType<T>()
-                .ToList()
-                .ForEach(effect => _graphicsManager.StopEffect(effect.Key));
+        private void RemoveGraphicObjectWithFadeOut(object key)
+        {
+            if (_graphicsManager.TryGetGraphicObject(key, out var graphicObject))
+            {
+                ApplyFadeOutEffect(graphicObject);
+                _graphicsManager.UnregisterGraphicObject(key);
+            }
+        }
     }
 }

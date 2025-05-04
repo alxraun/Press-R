@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using PressR.Features.DirectHaul.Core;
 using PressR.Features.DirectHaul.Graphics;
 using PressR.Graphics;
-using PressR.Graphics.Effects;
+using PressR.Graphics.Controllers;
 using PressR.Graphics.GraphicObjects;
+using PressR.Graphics.Tween;
 using PressR.Utils;
 using RimWorld;
 using UnityEngine;
@@ -14,18 +14,16 @@ using Verse;
 
 namespace PressR.Features.DirectHaul.Graphics
 {
-    public class DirectHaulStorageHighlightGraphics
+    public class DirectHaulStorageHighlightGraphicsController
+        : IGraphicsController<DirectHaulUpdateContext>
     {
         private readonly IGraphicsManager _graphicsManager;
         private IStoreSettingsParent _currentTarget;
         private IGraphicObject _currentHighlightObject;
-        private Guid _currentFadeInEffectId = Guid.Empty;
-        private Guid _currentFadeOutEffectId = Guid.Empty;
-        private Guid _currentSmoothPaddingEffectId = Guid.Empty;
 
         private const float FadeInDuration = 0.15f;
         private const float FadeOutDuration = 0.15f;
-        private const float SmoothPaddingSpeed = 10f;
+        private const float SmoothPaddingDuration = 0.2f;
         private const float TargetBuildingPadding = 0.1f;
         private const float TargetZonePadding = 0.0f;
         private const float DefaultBuildingPadding = 0.2f;
@@ -36,13 +34,31 @@ namespace PressR.Features.DirectHaul.Graphics
         private static readonly object ZoneHighlightKey =
             typeof(DirectHaulZoneHighlightGraphicObject);
 
-        public DirectHaulStorageHighlightGraphics(IGraphicsManager graphicsManager)
+        public DirectHaulStorageHighlightGraphicsController(IGraphicsManager graphicsManager)
         {
             _graphicsManager =
                 graphicsManager ?? throw new ArgumentNullException(nameof(graphicsManager));
         }
 
-        public void UpdateHighlight(
+        public void Update(DirectHaulUpdateContext context)
+        {
+            bool shouldShow =
+                context.Mode == DirectHaulMode.Storage
+                && !context.DragState.IsDragging
+                && PressRMod.Settings.directHaulSettings.enableStorageHighlightOnHover
+                && context.StorageUnderMouse != null;
+
+            if (shouldShow)
+            {
+                UpdateHighlightInternal(context.StorageUnderMouse, context.Map, context.FrameData);
+            }
+            else
+            {
+                ClearInternal();
+            }
+        }
+
+        private void UpdateHighlightInternal(
             IStoreSettingsParent storeSettingsParent,
             Map map,
             DirectHaulFrameData frameData
@@ -56,7 +72,7 @@ namespace PressR.Features.DirectHaul.Graphics
 
             if (_currentHighlightObject != null)
             {
-                ClearHighlight();
+                ClearInternal();
             }
 
             if (storeSettingsParent == null)
@@ -94,7 +110,6 @@ namespace PressR.Features.DirectHaul.Graphics
                     );
                     break;
                 default:
-
                     _currentTarget = null;
                     break;
             }
@@ -119,12 +134,7 @@ namespace PressR.Features.DirectHaul.Graphics
             float initialPadding,
             float targetPadding
         )
-            where TGraphic : IGraphicObject,
-                IEffectTarget,
-                IHasPadding,
-                IHasAlpha,
-                IHasColor,
-                IHasTarget<TTarget>
+            where TGraphic : IGraphicObject, IHasPadding, IHasAlpha, IHasColor, IHasTarget<TTarget>
             where TTarget : class
         {
             bool needsEffect = false;
@@ -160,18 +170,12 @@ namespace PressR.Features.DirectHaul.Graphics
                     else
                     {
                         highlightObject.Color = color;
-                        needsEffect =
-                            _currentFadeInEffectId == Guid.Empty
-                            || !_graphicsManager
-                                .GetEffectsForTarget(key)
-                                .Any(e =>
-                                    e.Key == _currentFadeInEffectId && e.State == EffectState.Active
-                                );
+                        needsEffect = true;
                     }
                 }
                 else
                 {
-                    _graphicsManager.UnregisterGraphicObject(key, force: true);
+                    _graphicsManager.UnregisterGraphicObject(key);
                     _currentHighlightObject = objectFactory(newTarget);
                     if (_currentHighlightObject is TGraphic newHighlightObject)
                     {
@@ -186,36 +190,66 @@ namespace PressR.Features.DirectHaul.Graphics
 
             if (needsEffect && _currentHighlightObject is TGraphic targetEffectTarget)
             {
-                ApplyEffects(targetEffectTarget, targetPadding);
+                ApplyHighlightTweens(targetEffectTarget, targetPadding);
             }
         }
 
-        private void ApplyEffects(IEffectTarget target, float targetPadding)
+        private void ApplyHighlightTweens(IGraphicObject target, float targetPadding)
         {
-            StopEffects();
+            if (target?.Key == null)
+                return;
 
-            _currentFadeInEffectId = _graphicsManager.ApplyEffect(
-                new[] { _currentHighlightObject.Key },
-                new FadeInEffect(FadeInDuration)
-            );
-            _currentSmoothPaddingEffectId = _graphicsManager.ApplyEffect(
-                new[] { _currentHighlightObject.Key },
-                new SmoothPaddingEffect(targetPadding, SmoothPaddingSpeed)
-            );
+            if (target is IHasAlpha alphaTarget)
+            {
+                _graphicsManager.ApplyTween(
+                    target.Key,
+                    () => alphaTarget.Alpha,
+                    a =>
+                    {
+                        if (target != null && target is IHasAlpha at)
+                            at.Alpha = a;
+                    },
+                    1f,
+                    FadeInDuration,
+                    propertyId: nameof(IHasAlpha.Alpha)
+                );
+            }
+
+            if (target is IHasPadding paddingTarget)
+            {
+                _graphicsManager.ApplyTween(
+                    target.Key,
+                    () => paddingTarget.Padding,
+                    p =>
+                    {
+                        if (target != null && target is IHasPadding pt)
+                            pt.Padding = p;
+                    },
+                    targetPadding,
+                    SmoothPaddingDuration,
+                    easing: Equations.CubicEaseOut,
+                    propertyId: nameof(IHasPadding.Padding)
+                );
+            }
         }
 
-        public void ClearHighlight()
+        public void Clear()
+        {
+            ClearInternal();
+        }
+
+        private void ClearInternal()
         {
             if (
                 _currentHighlightObject == null
-                || _currentHighlightObject.State == GraphicObjectState.PendingRemoval
+                || _currentHighlightObject.State != GraphicObjectState.Active
             )
             {
                 _currentTarget = null;
                 return;
             }
 
-            StopEffects();
+            object key = _currentHighlightObject.Key;
 
             float returnPadding = _currentHighlightObject switch
             {
@@ -224,38 +258,69 @@ namespace PressR.Features.DirectHaul.Graphics
                 _ => 0f,
             };
 
-            _currentFadeOutEffectId = _graphicsManager.ApplyEffect(
-                new[] { _currentHighlightObject.Key },
-                new FadeOutEffect(FadeOutDuration)
-            );
+            bool tweenStarted = false;
+            if (_currentHighlightObject is IHasAlpha alphaTarget && key != null)
+            {
+                ApplyHighlightAlphaTween(alphaTarget, 0f);
+                tweenStarted = true;
+            }
 
-            _currentSmoothPaddingEffectId = _graphicsManager.ApplyEffect(
-                new[] { _currentHighlightObject.Key },
-                new SmoothPaddingEffect(returnPadding, SmoothPaddingSpeed)
-            );
+            if (_currentHighlightObject is IHasPadding paddingTarget && key != null)
+            {
+                ApplyHighlightPaddingTween(paddingTarget, returnPadding);
+                tweenStarted = true;
+            }
 
-            _graphicsManager.UnregisterGraphicObject(_currentHighlightObject.Key);
+            if ((tweenStarted || _currentHighlightObject != null) && key != null)
+            {
+                _graphicsManager.UnregisterGraphicObject(key);
+            }
 
-            _currentHighlightObject = null;
+            if (_currentHighlightObject?.Key == key)
+                _currentHighlightObject = null;
             _currentTarget = null;
         }
 
-        private void StopEffects()
+        private void ApplyHighlightAlphaTween(IHasAlpha alphaTarget, float targetAlpha)
         {
-            TryStopEffect(_currentFadeInEffectId);
-            TryStopEffect(_currentFadeOutEffectId);
-            TryStopEffect(_currentSmoothPaddingEffectId);
-            _currentFadeInEffectId = Guid.Empty;
-            _currentFadeOutEffectId = Guid.Empty;
-            _currentSmoothPaddingEffectId = Guid.Empty;
+            var graphicObject = alphaTarget as IGraphicObject;
+            if (graphicObject?.Key == null)
+                return;
+
+            _graphicsManager.ApplyTween(
+                graphicObject.Key,
+                () => alphaTarget.Alpha,
+                a =>
+                {
+                    if (alphaTarget != null)
+                        alphaTarget.Alpha = a;
+                },
+                targetAlpha,
+                targetAlpha == 1f ? FadeInDuration : FadeOutDuration,
+                easing: Equations.Linear,
+                propertyId: nameof(IHasAlpha.Alpha)
+            );
         }
 
-        private void TryStopEffect(Guid effectId)
+        private void ApplyHighlightPaddingTween(IHasPadding paddingTarget, float targetPadding)
         {
-            if (effectId != Guid.Empty)
-            {
-                _graphicsManager.StopEffect(effectId);
-            }
+            var graphicObject = paddingTarget as IGraphicObject;
+            if (graphicObject?.Key == null)
+                return;
+
+            _graphicsManager.ApplyTween(
+                graphicObject.Key,
+                () => paddingTarget.Padding,
+                p =>
+                {
+                    if (paddingTarget != null)
+                        paddingTarget.Padding = p;
+                },
+                targetPadding,
+                SmoothPaddingDuration,
+                easing: Equations.ExpoEaseOut,
+                propertyId: nameof(IHasPadding.Padding)
+            );
         }
 
         private Color GetHighlightColorForStorage(
