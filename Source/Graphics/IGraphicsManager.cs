@@ -7,7 +7,7 @@ namespace PressR.Graphics
 {
     public interface IGraphicsManager
     {
-        bool RegisterGraphicObject(IGraphicObject graphicObject);
+        IGraphicObject RegisterGraphicObject(IGraphicObject graphicObject);
 
         bool UnregisterGraphicObject(object key);
 
@@ -21,6 +21,7 @@ namespace PressR.Graphics
             Action<TValue> setter,
             TValue endValue,
             float duration,
+            string propertyId,
             EasingFunction easing = null,
             Action onComplete = null
         );
@@ -28,6 +29,10 @@ namespace PressR.Graphics
         bool KillTween(Guid tweenKey);
 
         bool CompleteTween(Guid tweenKey);
+
+        bool TryGetTween(Guid tweenKey, out ITween tween);
+
+        void KillAllTweensForTarget(object targetKey);
 
         void UpdateTweens();
 

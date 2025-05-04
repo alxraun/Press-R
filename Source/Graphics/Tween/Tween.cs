@@ -7,6 +7,7 @@ namespace PressR.Graphics.Tween
     public class Tween<TValue> : ITween
     {
         public Guid Key { get; }
+        public string PropertyId { get; }
         public bool IsFinished { get; private set; }
         public Action OnComplete { get; set; }
 
@@ -26,10 +27,12 @@ namespace PressR.Graphics.Tween
             Action<TValue> setter,
             TValue endValue,
             float duration,
+            string propertyId,
             EasingFunction easing = null
         )
         {
             Key = Guid.NewGuid();
+            PropertyId = propertyId ?? throw new ArgumentNullException(nameof(propertyId));
             _getter = getter ?? throw new ArgumentNullException(nameof(getter));
             _setter = setter ?? throw new ArgumentNullException(nameof(setter));
             _endValue = endValue;

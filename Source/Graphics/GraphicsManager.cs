@@ -5,6 +5,7 @@ using System.Linq;
 using PressR.Graphics.GraphicObjects;
 using PressR.Graphics.Tween;
 using UnityEngine;
+using Verse;
 
 namespace PressR.Graphics
 {
@@ -14,12 +15,11 @@ namespace PressR.Graphics
         private readonly Dictionary<Guid, ITween> _activeTweens = new();
         private readonly Dictionary<object, HashSet<Guid>> _objectToActiveTweenIds = new();
         private readonly List<Guid> _finishedTweenKeysToRemove = new();
-        private readonly List<object> _graphicObjectsToRemove = new();
 
-        public bool RegisterGraphicObject(IGraphicObject graphicObject)
+        public IGraphicObject RegisterGraphicObject(IGraphicObject graphicObject)
         {
             if (graphicObject?.Key == null)
-                return false;
+                return null;
 
             object key = graphicObject.Key;
 
@@ -29,11 +29,11 @@ namespace PressR.Graphics
                 {
                     existingObject.State = GraphicObjectState.Active;
                     existingObject.OnRegistered();
-                    return true;
+                    return existingObject;
                 }
                 else
                 {
-                    return false;
+                    return existingObject;
                 }
             }
             else
@@ -41,7 +41,7 @@ namespace PressR.Graphics
                 graphicObject.State = GraphicObjectState.Active;
                 _graphicObjects.Add(key, graphicObject);
                 graphicObject.OnRegistered();
-                return true;
+                return graphicObject;
             }
         }
 
@@ -73,6 +73,7 @@ namespace PressR.Graphics
             Action<TValue> setter,
             TValue endValue,
             float duration,
+            string propertyId,
             EasingFunction easing = null,
             Action onComplete = null
         )
@@ -86,7 +87,28 @@ namespace PressR.Graphics
                 return Guid.Empty;
             }
 
-            var tween = new Tween<TValue>(getter, setter, endValue, duration, easing);
+            if (_objectToActiveTweenIds.TryGetValue(targetKey, out var existingTweenIds))
+            {
+                Guid tweenIdToKill = Guid.Empty;
+                foreach (var existingTweenId in existingTweenIds)
+                {
+                    if (
+                        _activeTweens.TryGetValue(existingTweenId, out var existingTween)
+                        && existingTween.PropertyId == propertyId
+                    )
+                    {
+                        tweenIdToKill = existingTweenId;
+                        break;
+                    }
+                }
+
+                if (tweenIdToKill != Guid.Empty)
+                {
+                    KillTween(tweenIdToKill);
+                }
+            }
+
+            var tween = new Tween<TValue>(getter, setter, endValue, duration, propertyId, easing);
             Guid tweenKey = tween.Key;
 
             tween.OnComplete = () =>
@@ -134,6 +156,25 @@ namespace PressR.Graphics
             return false;
         }
 
+        public bool TryGetTween(Guid tweenKey, out ITween tween)
+        {
+            return _activeTweens.TryGetValue(tweenKey, out tween);
+        }
+
+        public void KillAllTweensForTarget(object targetKey)
+        {
+            if (
+                targetKey != null
+                && _objectToActiveTweenIds.TryGetValue(targetKey, out var tweenIds)
+            )
+            {
+                foreach (var tweenId in tweenIds.ToList())
+                {
+                    KillTween(tweenId);
+                }
+            }
+        }
+
         public void UpdateTweens()
         {
             if (_activeTweens.Count == 0 && _finishedTweenKeysToRemove.Count == 0)
@@ -162,9 +203,19 @@ namespace PressR.Graphics
 
             foreach (var graphicObject in _graphicObjects.Values.ToList())
             {
-                graphicObject.Update();
+                try
+                {
+                    graphicObject.Update();
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(
+                        $"[GraphicsManager] Exception during Update for key {graphicObject.Key}: {ex}"
+                    );
+                }
             }
 
+            var keysToRemoveNow = new List<object>();
             foreach (var kvp in _graphicObjects)
             {
                 object key = kvp.Key;
@@ -172,28 +223,35 @@ namespace PressR.Graphics
 
                 if (graphicObject.State == GraphicObjectState.PendingRemoval)
                 {
-                    if (
-                        !_objectToActiveTweenIds.TryGetValue(key, out var tweenIds)
-                        || tweenIds.Count == 0
-                    )
+                    bool hasActiveTweens =
+                        _objectToActiveTweenIds.TryGetValue(key, out var tweenIds)
+                        && tweenIds.Count > 0;
+
+                    if (!hasActiveTweens)
                     {
-                        _graphicObjectsToRemove.Add(key);
+                        keysToRemoveNow.Add(key);
                     }
                 }
             }
 
-            foreach (var keyToRemove in _graphicObjectsToRemove)
+            foreach (var keyToRemove in keysToRemoveNow)
             {
-                if (_graphicObjects.TryGetValue(keyToRemove, out var graphicObject))
+                if (_graphicObjects.TryGetValue(keyToRemove, out var graphicObjectToDispose))
                 {
                     try
                     {
-                        graphicObject.Dispose();
+                        graphicObjectToDispose.Dispose();
                     }
-                    catch (Exception) { }
+                    catch (Exception ex)
+                    {
+                        Log.Error(
+                            $"[GraphicsManager] Exception during Dispose for key {keyToRemove}: {ex}"
+                        );
+                    }
+                    _graphicObjects.Remove(keyToRemove);
+                    _objectToActiveTweenIds.Remove(keyToRemove);
                 }
             }
-            _graphicObjectsToRemove.Clear();
         }
 
         public void RenderGraphicObjects()
@@ -221,14 +279,18 @@ namespace PressR.Graphics
                 {
                     kvp.Value.Dispose();
                 }
-                catch (Exception) { }
+                catch (Exception ex)
+                {
+                    Log.Error(
+                        $"[GraphicsManager] Exception during Dispose in Clear for key {kvp.Key}: {ex}"
+                    );
+                }
             }
 
             _graphicObjects.Clear();
             _activeTweens.Clear();
             _objectToActiveTweenIds.Clear();
             _finishedTweenKeysToRemove.Clear();
-            _graphicObjectsToRemove.Clear();
         }
 
         private void RemoveTweenFromObjectLinks(Guid tweenKey)
