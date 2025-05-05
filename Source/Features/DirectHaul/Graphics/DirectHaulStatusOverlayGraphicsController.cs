@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using PressR.Features.DirectHaul.Core;
-using PressR.Features.DirectHaul.Graphics;
 using PressR.Features.TabLens.Graphics;
 using PressR.Graphics;
-using PressR.Graphics.Effects;
+using PressR.Graphics.Controllers;
 using PressR.Graphics.GraphicObjects;
+using PressR.Graphics.Tween;
 using PressR.Settings;
 using UnityEngine;
 using Verse;
@@ -14,14 +15,10 @@ using static Verse.UI;
 
 namespace PressR.Features.DirectHaul.Graphics
 {
-    public class DirectHaulStatusOverlayGraphics
+    public class DirectHaulStatusOverlayGraphicsController : IGraphicsController
     {
         private readonly IGraphicsManager _graphicsManager;
-        private readonly Dictionary<
-            Thing,
-            DirectHaulStatusOverlayGraphicObject
-        > _activeStatusOverlays = new Dictionary<Thing, DirectHaulStatusOverlayGraphicObject>();
-        private readonly Dictionary<object, Guid> _activeEffectIds = new Dictionary<object, Guid>();
+        private readonly HashSet<object> _managedOverlayKeys = new HashSet<object>();
 
         private const string TexPathPendingFull = "DirectHaul/pending_overlay_full";
         private const string TexPathPendingPart = "DirectHaul/pending_overlay_part_0";
@@ -35,17 +32,27 @@ namespace PressR.Features.DirectHaul.Graphics
 
         private const float HoverDistanceSquared = HoverDistance * HoverDistance;
 
-        public DirectHaulStatusOverlayGraphics(IGraphicsManager graphicsManager)
+        private bool _isEnabledGlobally = false;
+
+        public DirectHaulStatusOverlayGraphicsController(IGraphicsManager graphicsManager)
         {
             _graphicsManager =
                 graphicsManager ?? throw new ArgumentNullException(nameof(graphicsManager));
         }
 
-        public void UpdateDirectHaulStatusOverlays(Map map)
+        public void ConstantUpdate(Map map, bool isEnabled)
         {
+            _isEnabledGlobally = isEnabled;
+
+            if (!isEnabled)
+            {
+                Clear();
+                return;
+            }
+
             if (!TryGetExposableData(map, out var exposableData))
             {
-                ClearAllOverlays();
+                Clear();
                 return;
             }
 
@@ -63,33 +70,147 @@ namespace PressR.Features.DirectHaul.Graphics
 
             if (!visibleThingsWithStatus.Any())
             {
-                ClearAllOverlays();
+                Clear();
                 return;
             }
 
-            RemoveObsoleteOverlays(visibleThingsWithStatus.Keys.ToHashSet());
-            ProcessOverlayUpdates(
-                visibleThingsWithStatus,
-                targetCellPendingCount,
-                heldThingCells,
-                exposableData
-            );
+            var requiredThings = visibleThingsWithStatus.Keys.ToHashSet();
+            var managedThings = _managedOverlayKeys
+                .Select(key => ((ITuple)key)[0] as Thing)
+                .Where(t => t != null)
+                .ToHashSet();
+
+            var thingsToRemove = managedThings.Except(requiredThings).ToList();
+            var thingsToAdd = requiredThings.Except(managedThings).ToList();
+
+            foreach (var thingToRemove in thingsToRemove)
+            {
+                object overlayKey = (thingToRemove, typeof(DirectHaulStatusOverlayGraphicObject));
+                if (_managedOverlayKeys.Contains(overlayKey))
+                {
+                    if (
+                        _graphicsManager.TryGetGraphicObject(overlayKey, out var overlayBase)
+                        && overlayBase is DirectHaulStatusOverlayGraphicObject overlay
+                    )
+                    {
+                        ApplyFadeOut(overlay);
+                    }
+                    _graphicsManager.UnregisterGraphicObject(overlayKey);
+                    _managedOverlayKeys.Remove(overlayKey);
+                }
+            }
+
+            foreach (var thingToAdd in thingsToAdd)
+            {
+                if (PressRMod.Settings.directHaulSettings.enableStatusOverlays)
+                {
+                    var newOverlay = new DirectHaulStatusOverlayGraphicObject(thingToAdd);
+                    object newOverlayKey = newOverlay.Key;
+
+                    if (_graphicsManager.RegisterGraphicObject(newOverlay) != null)
+                    {
+                        _managedOverlayKeys.Add(newOverlayKey);
+                        string initialTexturePath = GetOverlayTexturePath(
+                            visibleThingsWithStatus[thingToAdd],
+                            ShouldUsePartialTexture(
+                                thingToAdd,
+                                visibleThingsWithStatus[thingToAdd],
+                                exposableData,
+                                targetCellPendingCount,
+                                heldThingCells
+                            )
+                        );
+                        if (!string.IsNullOrEmpty(initialTexturePath))
+                        {
+                            newOverlay.UpdateVisualState(initialTexturePath);
+                        }
+                        ApplyFadeIn(newOverlay);
+                    }
+                }
+            }
+
+            foreach (var currentOverlayKey in _managedOverlayKeys.ToList())
+            {
+                if (
+                    currentOverlayKey is not ValueTuple<Thing, Type> keyTuple
+                    || keyTuple.Item1 is not Thing currentThing
+                )
+                    continue;
+
+                if (!visibleThingsWithStatus.TryGetValue(currentThing, out var status))
+                {
+                    if (_managedOverlayKeys.Contains(currentOverlayKey))
+                    {
+                        _graphicsManager.UnregisterGraphicObject(currentOverlayKey);
+                        _managedOverlayKeys.Remove(currentOverlayKey);
+                    }
+                    continue;
+                }
+
+                bool isPartial = ShouldUsePartialTexture(
+                    currentThing,
+                    status,
+                    exposableData,
+                    targetCellPendingCount,
+                    heldThingCells
+                );
+                string texturePath = GetOverlayTexturePath(status, isPartial);
+
+                if (string.IsNullOrEmpty(texturePath))
+                {
+                    if (_managedOverlayKeys.Contains(currentOverlayKey))
+                    {
+                        if (
+                            _graphicsManager.TryGetGraphicObject(
+                                currentOverlayKey,
+                                out var overlayToRemove
+                            )
+                        )
+                        {
+                            ApplyFadeOut(overlayToRemove as DirectHaulStatusOverlayGraphicObject);
+                        }
+                        _graphicsManager.UnregisterGraphicObject(currentOverlayKey);
+                        _managedOverlayKeys.Remove(currentOverlayKey);
+                    }
+                }
+                else if (
+                    _graphicsManager.TryGetGraphicObject(currentOverlayKey, out var overlayBase)
+                    && overlayBase is DirectHaulStatusOverlayGraphicObject overlay
+                )
+                {
+                    overlay.UpdateVisualState(texturePath);
+                }
+            }
+
             UpdateOverlayAlphasByProximity(map);
         }
 
-        public void ClearAllOverlays()
+        public void Update() { }
+
+        public void Clear()
         {
-            if (_activeStatusOverlays.Count == 0)
+            ClearInternal();
+        }
+
+        private void ClearInternal()
+        {
+            if (_managedOverlayKeys.Count == 0)
                 return;
 
-            var thingsToClear = _activeStatusOverlays.Keys.ToList();
-            foreach (var thing in thingsToClear)
+            var keysToClear = _managedOverlayKeys.ToList();
+            foreach (var overlayKey in keysToClear)
             {
-                UnregisterAndRemoveOverlay(thing);
+                if (
+                    _graphicsManager.TryGetGraphicObject(overlayKey, out var overlayBase)
+                    && overlayBase is DirectHaulStatusOverlayGraphicObject overlay
+                )
+                {
+                    ApplyFadeOut(overlay);
+                }
+                _graphicsManager.UnregisterGraphicObject(overlayKey);
             }
 
-            _activeStatusOverlays.Clear();
-            _activeEffectIds.Clear();
+            _managedOverlayKeys.Clear();
         }
 
         private bool TryGetExposableData(Map map, out DirectHaulExposableData exposableData)
@@ -220,52 +341,6 @@ namespace PressR.Features.DirectHaul.Graphics
             return false;
         }
 
-        private void RemoveObsoleteOverlays(HashSet<Thing> currentVisibleThings)
-        {
-            var currentlyDisplayedThings = _activeStatusOverlays.Keys.ToHashSet();
-            var thingsToRemove = currentlyDisplayedThings.Except(currentVisibleThings).ToList();
-
-            foreach (var thingToRemove in thingsToRemove)
-            {
-                UnregisterAndRemoveOverlay(thingToRemove);
-            }
-        }
-
-        private void ProcessOverlayUpdates(
-            Dictionary<Thing, DirectHaulStatus> visibleThingsWithStatus,
-            Dictionary<IntVec3, int> targetCellPendingCount,
-            HashSet<IntVec3> heldThingCells,
-            DirectHaulExposableData exposableData
-        )
-        {
-            foreach (var (thing, status) in visibleThingsWithStatus)
-            {
-                if (thing == null || thing.Destroyed || !thing.SpawnedOrAnyParentSpawned)
-                {
-                    UnregisterAndRemoveOverlay(thing);
-                    continue;
-                }
-
-                bool isPartial = ShouldUsePartialTexture(
-                    thing,
-                    status,
-                    exposableData,
-                    targetCellPendingCount,
-                    heldThingCells
-                );
-                string texturePath = GetOverlayTexturePath(status, isPartial);
-
-                if (string.IsNullOrEmpty(texturePath))
-                {
-                    UnregisterAndRemoveOverlay(thing);
-                }
-                else
-                {
-                    UpdateOrCreateOverlay(thing, texturePath);
-                }
-            }
-        }
-
         private bool ShouldUsePartialTexture(
             Thing thing,
             DirectHaulStatus status,
@@ -312,56 +387,32 @@ namespace PressR.Features.DirectHaul.Graphics
             };
         }
 
-        private void UpdateOrCreateOverlay(Thing thing, string texturePath)
-        {
-            if (_activeStatusOverlays.TryGetValue(thing, out var existingOverlay))
-            {
-                existingOverlay.UpdateVisualState(texturePath);
-            }
-            else
-            {
-                if (PressRMod.Settings.directHaulSettings.enableStatusOverlays)
-                {
-                    RegisterAndAddOverlay(thing, texturePath);
-                }
-            }
-        }
-
-        private void RegisterAndAddOverlay(Thing thing, string texturePath)
-        {
-            var newOverlay = new DirectHaulStatusOverlayGraphicObject(thing);
-            if (_graphicsManager.RegisterGraphicObject(newOverlay))
-            {
-                newOverlay.UpdateVisualState(texturePath);
-                _activeStatusOverlays.Add(thing, newOverlay);
-            }
-        }
-
-        private void UnregisterAndRemoveOverlay(Thing thing)
-        {
-            if (_activeStatusOverlays.TryGetValue(thing, out var overlay))
-            {
-                StopAndRemoveEffect(overlay.Key);
-                _graphicsManager.UnregisterGraphicObject(overlay.Key);
-                _activeStatusOverlays.Remove(thing);
-            }
-        }
-
         private void UpdateOverlayAlphasByProximity(Map map)
         {
-            if (map == null || !_activeStatusOverlays.Any())
+            if (map == null || !_managedOverlayKeys.Any())
                 return;
 
             Vector3 mousePosition = MouseMapPosition();
 
-            foreach (var (thing, overlay) in _activeStatusOverlays)
+            foreach (var overlayKey in _managedOverlayKeys)
             {
-                if (overlay == null || overlay.State != GraphicObjectState.Active)
+                if (
+                    overlayKey is not ValueTuple<Thing, Type> keyTuple
+                    || keyTuple.Item1 is not Thing thingKey
+                )
                     continue;
 
-                bool shouldFadeOut = ShouldFadeOut(thing, overlay, mousePosition);
+                if (
+                    !(
+                        _graphicsManager.TryGetGraphicObject(overlayKey, out var overlayBase)
+                        && overlayBase is DirectHaulStatusOverlayGraphicObject overlay
+                        && overlay.State != GraphicObjectState.PendingRemoval
+                    )
+                )
+                    continue;
 
-                ManageFadeEffect(overlay, shouldFadeOut);
+                bool shouldFadeOut = ShouldFadeOut(thingKey, overlay, mousePosition);
+                ApplyProximityFade(overlay, shouldFadeOut);
             }
         }
 
@@ -390,71 +441,66 @@ namespace PressR.Features.DirectHaul.Graphics
                 && thingOverlayGo.State == GraphicObjectState.Active;
         }
 
-        private void ManageFadeEffect(
+        private void ApplyFadeIn(DirectHaulStatusOverlayGraphicObject overlay)
+        {
+            if (overlay == null)
+                return;
+            overlay.Alpha = 0f;
+            ApplyAlphaTween(overlay, FadeInDuration, 1.0f);
+        }
+
+        private void ApplyFadeOut(DirectHaulStatusOverlayGraphicObject overlay)
+        {
+            if (overlay == null)
+                return;
+            ApplyAlphaTween(overlay, FadeOutDuration, 0.0f);
+        }
+
+        private void ApplyProximityFade(
             DirectHaulStatusOverlayGraphicObject overlay,
             bool shouldFadeOut
         )
         {
-            if (shouldFadeOut)
+            if (overlay == null)
+                return;
+            float targetAlpha = shouldFadeOut ? MinAlpha : 1.0f;
+            float duration = shouldFadeOut ? FadeOutDuration : FadeInDuration;
+
+            if (Mathf.Approximately(overlay.Alpha, targetAlpha))
             {
-                ApplyFadeEffect<FadeOutEffect>(overlay, FadeOutDuration, MinAlpha);
+                return;
             }
-            else
-            {
-                if (overlay.Alpha < 1.0f)
-                {
-                    ApplyFadeEffect<FadeInEffect>(overlay, FadeInDuration, 1.0f);
-                }
-                else
-                {
-                    StopAndRemoveEffect(overlay.Key);
-                }
-            }
+
+            ApplyAlphaTween(overlay, duration, targetAlpha);
         }
 
-        private void ApplyFadeEffect<T>(IHasAlpha target, float duration, float targetAlpha)
-            where T : IEffect
+        private void ApplyAlphaTween(
+            DirectHaulStatusOverlayGraphicObject target,
+            float duration,
+            float targetAlpha
+        )
         {
-            var effectKey = (target as IGraphicObject)?.Key;
-            if (effectKey == null)
+            if (target?.Key == null)
                 return;
 
-            if (_activeEffectIds.TryGetValue(effectKey, out var existingEffectId))
-            {
-                var activeEffects = _graphicsManager.GetEffectsForTarget(effectKey);
-                bool correctEffectActive = activeEffects.Any(e =>
-                    e is T && e.Key == existingEffectId
-                );
+            object key = target.Key;
 
-                if (correctEffectActive)
-                    return;
+            Action onCompleteAction = () => { };
 
-                _graphicsManager.StopEffect(existingEffectId);
-                _activeEffectIds.Remove(effectKey);
-            }
-
-            IEffect newEffect = typeof(T).Name switch
-            {
-                nameof(FadeOutEffect) => new FadeOutEffect(duration, targetAlpha),
-                nameof(FadeInEffect) => new FadeInEffect(duration, targetAlpha),
-                _ => throw new ArgumentException($"Unsupported effect type: {typeof(T).Name}"),
-            };
-
-            var keys = new List<object> { effectKey };
-            var newEffectId = _graphicsManager.ApplyEffect(keys, newEffect);
-            if (newEffectId != Guid.Empty)
-            {
-                _activeEffectIds[effectKey] = newEffectId;
-            }
-        }
-
-        private void StopAndRemoveEffect(object targetKey)
-        {
-            if (_activeEffectIds.TryGetValue(targetKey, out var effectIdToStop))
-            {
-                _graphicsManager.StopEffect(effectIdToStop);
-                _activeEffectIds.Remove(targetKey);
-            }
+            Guid newTweenId = _graphicsManager.ApplyTween<float>(
+                key,
+                getter: () => target.Alpha,
+                setter: value =>
+                {
+                    if (target is IHasAlpha ha)
+                        ha.Alpha = value;
+                },
+                endValue: targetAlpha,
+                duration: duration,
+                easing: Equations.Linear,
+                onComplete: onCompleteAction,
+                propertyId: nameof(IHasAlpha.Alpha)
+            );
         }
     }
 }

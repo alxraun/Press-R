@@ -8,7 +8,7 @@ namespace PressR.Debugger.Configs
 {
     public class PressRConfig : IDebuggerConfig
     {
-        public string Name => "PressR State";
+        public string Name => "PressR Config";
 
         public float UpdateInterval => 0.05f;
 

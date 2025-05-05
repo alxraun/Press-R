@@ -27,3 +27,4 @@ alwaysApply: false
     - For storing a single instance of `IGraphicObject : IIdentifiable<object>`, the same `IIdentifiable.TKey` should be used.
     - The lifecycle of `IGraphicObject` should not be managed manually (reanimating, destroying). It is sufficient to simply use `IGraphicsManager.RegisterGraphicObject` for creation/reanimation and `IGraphicsManager.UnregisterGraphicObject` for destruction.
     - An `IGraphicObject` in the `GraphicObjectState.PendingRemoval` state must be rendered and updated the same way as `GraphicObjectState.Active`.
+    - Controller should not differentiate between `GraphicObjectState.PendingRemoval` and `GraphicObjectState.Active`, if `TryGetGraphicObject` != null, then it is valid.
