@@ -321,6 +321,7 @@ namespace PressR.Features.DirectHaul.Graphics
                 },
                 1f,
                 FadeInDuration,
+                easing: Equations.Linear,
                 propertyId: nameof(IHasAlpha.Alpha)
             );
         }
@@ -348,6 +349,7 @@ namespace PressR.Features.DirectHaul.Graphics
                 },
                 0f,
                 FadeOutDuration,
+                easing: Equations.Linear,
                 propertyId: nameof(IHasAlpha.Alpha)
             );
         }

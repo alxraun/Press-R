@@ -89,7 +89,6 @@ namespace PressR.Graphics
 
             if (_objectToActiveTweenIds.TryGetValue(targetKey, out var existingTweenIds))
             {
-                Guid tweenIdToKill = Guid.Empty;
                 foreach (var existingTweenId in existingTweenIds)
                 {
                     if (
@@ -97,14 +96,8 @@ namespace PressR.Graphics
                         && existingTween.PropertyId == propertyId
                     )
                     {
-                        tweenIdToKill = existingTweenId;
-                        break;
+                        KillTween(existingTweenId);
                     }
-                }
-
-                if (tweenIdToKill != Guid.Empty)
-                {
-                    KillTween(tweenIdToKill);
                 }
             }
 
@@ -140,7 +133,10 @@ namespace PressR.Graphics
             if (_activeTweens.TryGetValue(tweenKey, out var tween))
             {
                 tween.Kill();
-                _finishedTweenKeysToRemove.Add(tweenKey);
+                if (!_finishedTweenKeysToRemove.Contains(tweenKey))
+                {
+                    _finishedTweenKeysToRemove.Add(tweenKey);
+                }
                 return true;
             }
             return false;

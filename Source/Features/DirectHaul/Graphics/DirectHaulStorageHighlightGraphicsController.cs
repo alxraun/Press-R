@@ -210,6 +210,7 @@ namespace PressR.Features.DirectHaul.Graphics
                     },
                     1f,
                     FadeInDuration,
+                    easing: Equations.Linear,
                     propertyId: nameof(IHasAlpha.Alpha)
                 );
             }
@@ -226,7 +227,7 @@ namespace PressR.Features.DirectHaul.Graphics
                     },
                     targetPadding,
                     SmoothPaddingDuration,
-                    easing: Equations.CubicEaseOut,
+                    easing: Equations.Linear,
                     propertyId: nameof(IHasPadding.Padding)
                 );
             }
@@ -317,7 +318,7 @@ namespace PressR.Features.DirectHaul.Graphics
                 },
                 targetPadding,
                 SmoothPaddingDuration,
-                easing: Equations.ExpoEaseOut,
+                easing: Equations.Linear,
                 propertyId: nameof(IHasPadding.Padding)
             );
         }

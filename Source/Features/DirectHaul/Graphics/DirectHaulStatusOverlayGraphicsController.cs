@@ -32,8 +32,6 @@ namespace PressR.Features.DirectHaul.Graphics
 
         private const float HoverDistanceSquared = HoverDistance * HoverDistance;
 
-        private bool _isEnabledGlobally = false;
-
         public DirectHaulStatusOverlayGraphicsController(IGraphicsManager graphicsManager)
         {
             _graphicsManager =
@@ -42,184 +40,74 @@ namespace PressR.Features.DirectHaul.Graphics
 
         public void ConstantUpdate(Map map, bool isEnabled)
         {
-            _isEnabledGlobally = isEnabled;
-
             if (!isEnabled)
             {
-                Clear();
+                ClearInternal(true);
                 return;
             }
 
-            if (!TryGetExposableData(map, out var exposableData))
+            if (
+                !TryPrepareOverlayData(
+                    map,
+                    out var exposableData,
+                    out var visibleThingsWithStatus,
+                    out var targetCellPendingCount,
+                    out var heldThingCells
+                )
+            )
             {
-                Clear();
+                ClearInternal(true);
                 return;
             }
 
-            var visibleThingsWithStatus = new Dictionary<Thing, DirectHaulStatus>();
-            var targetCellPendingCount = new Dictionary<IntVec3, int>();
-            var heldThingCells = new HashSet<IntVec3>();
+            if (!visibleThingsWithStatus.Any())
+            {
+                ClearInternal(true);
+                return;
+            }
 
-            PrepareOverlayData(
+            SynchronizeManagedOverlays(
+                visibleThingsWithStatus,
+                exposableData,
+                targetCellPendingCount,
+                heldThingCells
+            );
+            UpdateActiveOverlays(
+                visibleThingsWithStatus,
+                exposableData,
+                targetCellPendingCount,
+                heldThingCells
+            );
+            UpdateProximityEffects(map);
+        }
+
+        private bool TryPrepareOverlayData(
+            Map map,
+            out DirectHaulExposableData exposableData,
+            out Dictionary<Thing, DirectHaulStatus> visibleThingsWithStatus,
+            out Dictionary<IntVec3, int> targetCellPendingCount,
+            out HashSet<IntVec3> heldThingCells
+        )
+        {
+            visibleThingsWithStatus = new Dictionary<Thing, DirectHaulStatus>();
+            targetCellPendingCount = new Dictionary<IntVec3, int>();
+            heldThingCells = new HashSet<IntVec3>();
+
+            exposableData = map?.GetComponent<PressRMapComponent>()?.DirectHaulExposableData;
+            if (exposableData == null)
+                return false;
+
+            PrepareOverlayDataInternal(
                 exposableData,
                 map,
                 visibleThingsWithStatus,
                 targetCellPendingCount,
                 heldThingCells
             );
-
-            if (!visibleThingsWithStatus.Any())
-            {
-                Clear();
-                return;
-            }
-
-            var requiredThings = visibleThingsWithStatus.Keys.ToHashSet();
-            var managedThings = _managedOverlayKeys
-                .Select(key => ((ITuple)key)[0] as Thing)
-                .Where(t => t != null)
-                .ToHashSet();
-
-            var thingsToRemove = managedThings.Except(requiredThings).ToList();
-            var thingsToAdd = requiredThings.Except(managedThings).ToList();
-
-            foreach (var thingToRemove in thingsToRemove)
-            {
-                object overlayKey = (thingToRemove, typeof(DirectHaulStatusOverlayGraphicObject));
-                if (_managedOverlayKeys.Contains(overlayKey))
-                {
-                    if (
-                        _graphicsManager.TryGetGraphicObject(overlayKey, out var overlayBase)
-                        && overlayBase is DirectHaulStatusOverlayGraphicObject overlay
-                    )
-                    {
-                        ApplyFadeOut(overlay);
-                    }
-                    _graphicsManager.UnregisterGraphicObject(overlayKey);
-                    _managedOverlayKeys.Remove(overlayKey);
-                }
-            }
-
-            foreach (var thingToAdd in thingsToAdd)
-            {
-                if (PressRMod.Settings.directHaulSettings.enableStatusOverlays)
-                {
-                    var newOverlay = new DirectHaulStatusOverlayGraphicObject(thingToAdd);
-                    object newOverlayKey = newOverlay.Key;
-
-                    if (_graphicsManager.RegisterGraphicObject(newOverlay) != null)
-                    {
-                        _managedOverlayKeys.Add(newOverlayKey);
-                        string initialTexturePath = GetOverlayTexturePath(
-                            visibleThingsWithStatus[thingToAdd],
-                            ShouldUsePartialTexture(
-                                thingToAdd,
-                                visibleThingsWithStatus[thingToAdd],
-                                exposableData,
-                                targetCellPendingCount,
-                                heldThingCells
-                            )
-                        );
-                        if (!string.IsNullOrEmpty(initialTexturePath))
-                        {
-                            newOverlay.UpdateVisualState(initialTexturePath);
-                        }
-                        ApplyFadeIn(newOverlay);
-                    }
-                }
-            }
-
-            foreach (var currentOverlayKey in _managedOverlayKeys.ToList())
-            {
-                if (
-                    currentOverlayKey is not ValueTuple<Thing, Type> keyTuple
-                    || keyTuple.Item1 is not Thing currentThing
-                )
-                    continue;
-
-                if (!visibleThingsWithStatus.TryGetValue(currentThing, out var status))
-                {
-                    if (_managedOverlayKeys.Contains(currentOverlayKey))
-                    {
-                        _graphicsManager.UnregisterGraphicObject(currentOverlayKey);
-                        _managedOverlayKeys.Remove(currentOverlayKey);
-                    }
-                    continue;
-                }
-
-                bool isPartial = ShouldUsePartialTexture(
-                    currentThing,
-                    status,
-                    exposableData,
-                    targetCellPendingCount,
-                    heldThingCells
-                );
-                string texturePath = GetOverlayTexturePath(status, isPartial);
-
-                if (string.IsNullOrEmpty(texturePath))
-                {
-                    if (_managedOverlayKeys.Contains(currentOverlayKey))
-                    {
-                        if (
-                            _graphicsManager.TryGetGraphicObject(
-                                currentOverlayKey,
-                                out var overlayToRemove
-                            )
-                        )
-                        {
-                            ApplyFadeOut(overlayToRemove as DirectHaulStatusOverlayGraphicObject);
-                        }
-                        _graphicsManager.UnregisterGraphicObject(currentOverlayKey);
-                        _managedOverlayKeys.Remove(currentOverlayKey);
-                    }
-                }
-                else if (
-                    _graphicsManager.TryGetGraphicObject(currentOverlayKey, out var overlayBase)
-                    && overlayBase is DirectHaulStatusOverlayGraphicObject overlay
-                )
-                {
-                    overlay.UpdateVisualState(texturePath);
-                }
-            }
-
-            UpdateOverlayAlphasByProximity(map);
+            return true;
         }
 
-        public void Update() { }
-
-        public void Clear()
-        {
-            ClearInternal();
-        }
-
-        private void ClearInternal()
-        {
-            if (_managedOverlayKeys.Count == 0)
-                return;
-
-            var keysToClear = _managedOverlayKeys.ToList();
-            foreach (var overlayKey in keysToClear)
-            {
-                if (
-                    _graphicsManager.TryGetGraphicObject(overlayKey, out var overlayBase)
-                    && overlayBase is DirectHaulStatusOverlayGraphicObject overlay
-                )
-                {
-                    ApplyFadeOut(overlay);
-                }
-                _graphicsManager.UnregisterGraphicObject(overlayKey);
-            }
-
-            _managedOverlayKeys.Clear();
-        }
-
-        private bool TryGetExposableData(Map map, out DirectHaulExposableData exposableData)
-        {
-            exposableData = map?.GetComponent<PressRMapComponent>()?.DirectHaulExposableData;
-            return exposableData != null;
-        }
-
-        private void PrepareOverlayData(
+        private void PrepareOverlayDataInternal(
             DirectHaulExposableData exposableData,
             Map map,
             Dictionary<Thing, DirectHaulStatus> visibleThingsWithStatus,
@@ -227,7 +115,7 @@ namespace PressR.Features.DirectHaul.Graphics
             HashSet<IntVec3> heldThingCells
         )
         {
-            if (exposableData == null || map == null)
+            if (map == null)
                 return;
 
             var viewRect = Find.CameraDriver.CurrentViewRect;
@@ -266,7 +154,7 @@ namespace PressR.Features.DirectHaul.Graphics
                     }
                     else
                     {
-                        positionToCheck = GetRelevantPosition(thing, status);
+                        positionToCheck = thing.Position;
                     }
                 }
                 else
@@ -287,31 +175,197 @@ namespace PressR.Features.DirectHaul.Graphics
             }
         }
 
-        private bool IsThingPositionVisible(
-            Thing thing,
-            Map map,
-            CellRect viewRect,
-            FogGrid fogGrid,
-            DirectHaulStatus status
+        private void SynchronizeManagedOverlays(
+            IReadOnlyDictionary<Thing, DirectHaulStatus> visibleThingsWithStatus,
+            DirectHaulExposableData exposableData,
+            Dictionary<IntVec3, int> targetCellPendingCount,
+            HashSet<IntVec3> heldThingCells
         )
         {
-            IntVec3 positionToCheck;
-            if (
-                status == DirectHaulStatus.Pending
-                && IsThingCarriedByVisiblePawn(thing, map, out var carrierPawn)
-            )
+            var requiredThings = visibleThingsWithStatus.Keys.ToHashSet();
+
+            var managedThings = _managedOverlayKeys
+                .Select(key => key is ValueTuple<Thing, Type> tuple ? tuple.Item1 : null)
+                .Where(t => t != null)
+                .ToHashSet();
+
+            var thingsToRemove = managedThings.Except(requiredThings).ToList();
+            var thingsToAdd = requiredThings.Except(managedThings).ToList();
+
+            HandleRemovingOverlays(thingsToRemove);
+            HandleAddingOverlays(
+                thingsToAdd,
+                visibleThingsWithStatus,
+                exposableData,
+                targetCellPendingCount,
+                heldThingCells
+            );
+        }
+
+        private void HandleRemovingOverlays(IEnumerable<Thing> thingsToRemove)
+        {
+            foreach (var thingToRemove in thingsToRemove)
             {
-                positionToCheck = carrierPawn.Position;
+                object overlayKey = (thingToRemove, typeof(DirectHaulStatusOverlayGraphicObject));
+
+                if (_managedOverlayKeys.Contains(overlayKey))
+                {
+                    if (
+                        _graphicsManager.TryGetGraphicObject(overlayKey, out var overlayBase)
+                        && overlayBase is DirectHaulStatusOverlayGraphicObject overlay
+                    )
+                    {
+                        ApplyFadeOut(overlay);
+                    }
+                    _graphicsManager.UnregisterGraphicObject(overlayKey);
+                    _managedOverlayKeys.Remove(overlayKey);
+                }
+            }
+        }
+
+        private void HandleAddingOverlays(
+            IEnumerable<Thing> thingsToAdd,
+            IReadOnlyDictionary<Thing, DirectHaulStatus> visibleThingsWithStatus,
+            DirectHaulExposableData exposableData,
+            Dictionary<IntVec3, int> targetCellPendingCount,
+            HashSet<IntVec3> heldThingCells
+        )
+        {
+            if (!PressRMod.Settings.directHaulSettings.enableStatusOverlays)
+                return;
+
+            foreach (var thingToAdd in thingsToAdd)
+            {
+                var newOverlay = new DirectHaulStatusOverlayGraphicObject(thingToAdd);
+                object newOverlayKey = newOverlay.Key;
+
+                if (_graphicsManager.RegisterGraphicObject(newOverlay) != null)
+                {
+                    _managedOverlayKeys.Add(newOverlayKey);
+                    UpdateOverlayVisualState(
+                        newOverlay,
+                        visibleThingsWithStatus[thingToAdd],
+                        exposableData,
+                        targetCellPendingCount,
+                        heldThingCells
+                    );
+                    ApplyFadeIn(newOverlay);
+                }
+            }
+        }
+
+        private void UpdateActiveOverlays(
+            IReadOnlyDictionary<Thing, DirectHaulStatus> visibleThingsWithStatus,
+            DirectHaulExposableData exposableData,
+            Dictionary<IntVec3, int> targetCellPendingCount,
+            HashSet<IntVec3> heldThingCells
+        )
+        {
+            foreach (var currentOverlayKey in _managedOverlayKeys.ToList())
+            {
+                if (
+                    currentOverlayKey is not ValueTuple<Thing, Type> keyTuple
+                    || keyTuple.Item1 is not Thing currentThing
+                )
+                {
+                    _managedOverlayKeys.Remove(currentOverlayKey);
+                    continue;
+                }
+
+                if (
+                    !_graphicsManager.TryGetGraphicObject(currentOverlayKey, out var overlayBase)
+                    || overlayBase is not DirectHaulStatusOverlayGraphicObject overlay
+                )
+                {
+                    _managedOverlayKeys.Remove(currentOverlayKey);
+                    continue;
+                }
+
+                if (visibleThingsWithStatus.TryGetValue(currentThing, out var status))
+                {
+                    UpdateOverlayVisualState(
+                        overlay,
+                        status,
+                        exposableData,
+                        targetCellPendingCount,
+                        heldThingCells
+                    );
+                }
+                else
+                {
+                    HandleRemovingOverlays(new List<Thing> { currentThing });
+                }
+            }
+        }
+
+        private void UpdateOverlayVisualState(
+            DirectHaulStatusOverlayGraphicObject overlay,
+            DirectHaulStatus status,
+            DirectHaulExposableData exposableData,
+            Dictionary<IntVec3, int> targetCellPendingCount,
+            HashSet<IntVec3> heldThingCells
+        )
+        {
+            if (overlay?.Key == null)
+                return;
+
+            if (
+                overlay.Key is not ValueTuple<Thing, Type> keyTuple
+                || keyTuple.Item1 is not Thing currentThing
+            )
+                return;
+
+            bool isPartial = ShouldUsePartialTexture(
+                currentThing,
+                status,
+                exposableData,
+                targetCellPendingCount,
+                heldThingCells
+            );
+            string texturePath = GetOverlayTexturePath(status, isPartial);
+
+            if (string.IsNullOrEmpty(texturePath))
+            {
+                HandleRemovingOverlays(new List<Thing> { currentThing });
             }
             else
             {
-                positionToCheck = GetRelevantPosition(thing, status);
+                overlay.UpdateVisualState(texturePath);
+            }
+        }
+
+        private void UpdateProximityEffects(Map map)
+        {
+            UpdateOverlayAlphasByProximity(map);
+        }
+
+        public void Update() { }
+
+        public void Clear()
+        {
+            ClearInternal(true);
+        }
+
+        private void ClearInternal(bool applyFadeOut = false)
+        {
+            if (_managedOverlayKeys.Count == 0)
+                return;
+
+            var keysToClear = _managedOverlayKeys.ToList();
+            foreach (var overlayKey in keysToClear)
+            {
+                if (
+                    applyFadeOut
+                    && _graphicsManager.TryGetGraphicObject(overlayKey, out var overlayBase)
+                    && overlayBase is DirectHaulStatusOverlayGraphicObject overlay
+                )
+                {
+                    ApplyFadeOut(overlay);
+                }
+                _graphicsManager.UnregisterGraphicObject(overlayKey);
             }
 
-            if (!positionToCheck.IsValid)
-                return false;
-
-            return viewRect.Contains(positionToCheck) && !fogGrid.IsFogged(positionToCheck);
+            _managedOverlayKeys.Clear();
         }
 
         private IntVec3 GetRelevantPosition(Thing thing, DirectHaulStatus status)
@@ -411,20 +465,29 @@ namespace PressR.Features.DirectHaul.Graphics
                 )
                     continue;
 
-                bool shouldFadeOut = ShouldFadeOut(thingKey, overlay, mousePosition);
-                ApplyProximityFade(overlay, shouldFadeOut);
-            }
-        }
+                bool isThingOverlayActive = IsAssociatedThingOverlayActive(thingKey);
+                float targetAlpha;
+                bool isCloseToMouse = IsOverlayCloseToMouse(overlay.Position, mousePosition);
 
-        private bool ShouldFadeOut(
-            Thing thing,
-            DirectHaulStatusOverlayGraphicObject overlay,
-            Vector3 mousePosition
-        )
-        {
-            bool isCloseToMouse = IsOverlayCloseToMouse(overlay.Position, mousePosition);
-            bool isThingOverlayActive = IsAssociatedThingOverlayActive(thing);
-            return isCloseToMouse || isThingOverlayActive;
+                if (isThingOverlayActive)
+                {
+                    targetAlpha = MinAlpha;
+                }
+                else
+                {
+                    targetAlpha = isCloseToMouse ? MinAlpha : 1.0f;
+                }
+
+                bool shouldFadeOutToMin = targetAlpha < 1.0f;
+                float duration = shouldFadeOutToMin ? FadeOutDuration : FadeInDuration;
+
+                if (Mathf.Approximately(overlay.Alpha, targetAlpha))
+                {
+                    continue;
+                }
+
+                ApplyAlphaTween(overlay, duration, targetAlpha);
+            }
         }
 
         private bool IsOverlayCloseToMouse(Vector3 overlayPosition, Vector3 mousePosition)
@@ -454,24 +517,6 @@ namespace PressR.Features.DirectHaul.Graphics
             if (overlay == null)
                 return;
             ApplyAlphaTween(overlay, FadeOutDuration, 0.0f);
-        }
-
-        private void ApplyProximityFade(
-            DirectHaulStatusOverlayGraphicObject overlay,
-            bool shouldFadeOut
-        )
-        {
-            if (overlay == null)
-                return;
-            float targetAlpha = shouldFadeOut ? MinAlpha : 1.0f;
-            float duration = shouldFadeOut ? FadeOutDuration : FadeInDuration;
-
-            if (Mathf.Approximately(overlay.Alpha, targetAlpha))
-            {
-                return;
-            }
-
-            ApplyAlphaTween(overlay, duration, targetAlpha);
         }
 
         private void ApplyAlphaTween(
