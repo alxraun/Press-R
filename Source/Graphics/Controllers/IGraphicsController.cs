@@ -2,10 +2,9 @@ using System;
 
 namespace PressR.Graphics.Controllers
 {
-    public interface IGraphicsController<TContext>
-        where TContext : struct
+    public interface IGraphicsController
     {
-        void Update(TContext context);
+        void Update();
 
         void Clear();
     }

@@ -22,14 +22,17 @@ namespace PressR.Features.DirectHaul
         private const int FillMaxCellsToProcess = 750;
         private static readonly IntVec3[] NeighborDirections = GenAdj.AdjacentCells;
 
-        public List<IntVec3> FindPlacementCells(
-            IntVec3 focus1,
-            IntVec3 focus2,
-            DirectHaulFrameData frameData,
-            Map map
-        )
+        public List<IntVec3> FindPlacementCells(DirectHaulState state)
         {
-            int requiredCount = frameData?.NonPendingSelectedThings?.Count ?? 0;
+            IntVec3 focus1 = state.StartDragCell.IsValid
+                ? state.StartDragCell
+                : state.CurrentMouseCell;
+            IntVec3 focus2 = state.IsDragging
+                ? state.CurrentDragCell
+                : (state.StartDragCell.IsValid ? state.StartDragCell : state.CurrentMouseCell);
+            Map map = state.Map;
+            int requiredCount = state.NonPendingSelectedThings.Count;
+
             if (!AreInputsValid(focus1, map, requiredCount))
             {
                 _lastValidPlacementCells.Clear();
@@ -38,14 +41,8 @@ namespace PressR.Features.DirectHaul
 
             List<IntVec3> currentPlacementCells =
                 (focus1 == focus2)
-                    ? CalculatePlacementCellsBfs(focus1, frameData, map, requiredCount)
-                    : CalculatePlacementCellsInterpolated(
-                        focus1,
-                        focus2,
-                        frameData,
-                        map,
-                        requiredCount
-                    );
+                    ? CalculatePlacementCellsBfs(focus1, state, requiredCount)
+                    : CalculatePlacementCellsInterpolated(focus1, focus2, state, requiredCount);
 
             return UpdateAndReturnCachedCells(currentPlacementCells, requiredCount);
         }
@@ -68,13 +65,12 @@ namespace PressR.Features.DirectHaul
 
         private List<IntVec3> CalculatePlacementCellsBfs(
             IntVec3 center,
-            DirectHaulFrameData frameData,
-            Map map,
+            DirectHaulState state,
             int requiredCount
         )
         {
             var placementCells = new List<IntVec3>(requiredCount);
-            InitializeBfs(center, map);
+            InitializeBfs(center, state.Map);
 
             if (_bfsQueue.Count == 0)
                 return placementCells;
@@ -86,7 +82,7 @@ namespace PressR.Features.DirectHaul
                 && depth < BfsMaxSearchDepth
             )
             {
-                ProcessBfsLayer(placementCells, center, frameData, map, requiredCount);
+                ProcessBfsLayer(placementCells, center, state, requiredCount);
                 depth++;
             }
 
@@ -120,19 +116,19 @@ namespace PressR.Features.DirectHaul
         private void ProcessBfsLayer(
             List<IntVec3> placementCells,
             IntVec3 sortCenter,
-            DirectHaulFrameData frameData,
-            Map map,
+            DirectHaulState state,
             int requiredCount
         )
         {
             _bfsLayerBuffer.Clear();
             int countInLayer = _bfsQueue.Count;
+            Map map = state.Map;
 
             for (int i = 0; i < countInLayer; i++)
             {
                 IntVec3 currentCell = _bfsQueue.Dequeue();
 
-                if (IsCellValidForPlacement(currentCell, map, frameData, null))
+                if (IsCellValidForPlacement(currentCell, state, null))
                 {
                     _bfsLayerBuffer.Add(currentCell);
                 }
@@ -162,13 +158,13 @@ namespace PressR.Features.DirectHaul
         private List<IntVec3> CalculatePlacementCellsInterpolated(
             IntVec3 focus1,
             IntVec3 focus2,
-            DirectHaulFrameData frameData,
-            Map map,
+            DirectHaulState state,
             int requiredCount
         )
         {
             var placementCells = new List<IntVec3>(requiredCount);
             _interpolationUsedCells.Clear();
+            Map map = state.Map;
 
             float distance = focus1.DistanceTo(focus2);
             float interpolationFactor = Mathf.Clamp01(distance / MaxDistanceForInterpolation);
@@ -187,8 +183,7 @@ namespace PressR.Features.DirectHaul
 
                 IntVec3 foundCell = FindNearestAvailableValidCell(
                     interpolatedCell,
-                    map,
-                    frameData,
+                    state,
                     _interpolationUsedCells,
                     InterpolationMaxRadialSearchRadius
                 );
@@ -205,8 +200,7 @@ namespace PressR.Features.DirectHaul
                 TryFillRemainingCells(
                     placementCells,
                     _interpolationUsedCells,
-                    map,
-                    frameData,
+                    state,
                     requiredCount
                 );
             }
@@ -230,13 +224,12 @@ namespace PressR.Features.DirectHaul
 
         private static IntVec3 FindNearestAvailableValidCell(
             IntVec3 targetCell,
-            Map map,
-            DirectHaulFrameData frameData,
+            DirectHaulState state,
             ISet<IntVec3> usedCells,
             int maxRadius
         )
         {
-            if (IsCellValidForPlacement(targetCell, map, frameData, usedCells))
+            if (IsCellValidForPlacement(targetCell, state, usedCells))
             {
                 return targetCell;
             }
@@ -245,8 +238,7 @@ namespace PressR.Features.DirectHaul
             {
                 IntVec3 foundCell = TryFindValidCellInRadialOffset(
                     targetCell,
-                    map,
-                    frameData,
+                    state,
                     usedCells,
                     radius
                 );
@@ -259,17 +251,17 @@ namespace PressR.Features.DirectHaul
 
         private static IntVec3 TryFindValidCellInRadialOffset(
             IntVec3 center,
-            Map map,
-            DirectHaulFrameData frameData,
+            DirectHaulState state,
             ISet<IntVec3> usedCells,
             int radius
         )
         {
             int numCellsInRadius = GenRadial.NumCellsInRadius(radius);
+            Map map = state.Map;
             for (int i = 0; i < numCellsInRadius; ++i)
             {
                 IntVec3 checkCell = center + GenRadial.RadialPattern[i];
-                if (IsCellValidForPlacement(checkCell, map, frameData, usedCells))
+                if (IsCellValidForPlacement(checkCell, state, usedCells))
                 {
                     return checkCell;
                 }
@@ -280,8 +272,7 @@ namespace PressR.Features.DirectHaul
         private static void TryFillRemainingCells(
             List<IntVec3> placementCells,
             ISet<IntVec3> usedCells,
-            Map map,
-            DirectHaulFrameData frameData,
+            DirectHaulState state,
             int requiredCount
         )
         {
@@ -290,6 +281,7 @@ namespace PressR.Features.DirectHaul
 
             var fillQueue = new Queue<IntVec3>(placementCells);
             var visitedDuringFill = new HashSet<IntVec3>(usedCells);
+            Map map = state.Map;
 
             int depth = 0;
             int cellsProcessed = 0;
@@ -314,7 +306,7 @@ namespace PressR.Features.DirectHaul
                     {
                         if (neighbor.InBounds(map) && visitedDuringFill.Add(neighbor))
                         {
-                            if (IsCellValidForPlacement(neighbor, map, frameData, usedCells))
+                            if (IsCellValidForPlacement(neighbor, state, usedCells))
                             {
                                 placementCells.Add(neighbor);
                                 usedCells.Add(neighbor);
@@ -332,11 +324,11 @@ namespace PressR.Features.DirectHaul
 
         private static bool IsCellValidForPlacement(
             IntVec3 cell,
-            Map map,
-            DirectHaulFrameData frameData,
+            DirectHaulState state,
             ISet<IntVec3> dynamicallyUsedCells
         )
         {
+            Map map = state.Map;
             if (!cell.InBounds(map) || cell.Fogged(map) || cell.ContainsStaticFire(map))
                 return false;
 
@@ -352,7 +344,7 @@ namespace PressR.Features.DirectHaul
             if (IsUnreachableMapEdge(cell, map))
                 return false;
 
-            if (IsPendingTargetCell(cell, frameData))
+            if (IsPendingTargetCell(cell, state))
                 return false;
 
             return !CellContainsBlockingThing(cell, map);
@@ -362,8 +354,8 @@ namespace PressR.Features.DirectHaul
             cell.OnEdge(map)
             && !map.reachability.CanReachMapEdge(cell, TraverseParms.For(TraverseMode.PassDoors));
 
-        private static bool IsPendingTargetCell(IntVec3 cell, DirectHaulFrameData frameData) =>
-            frameData?.PendingTargetCells != null && frameData.PendingTargetCells.Contains(cell);
+        private static bool IsPendingTargetCell(IntVec3 cell, DirectHaulState state) =>
+            state?.PendingTargetCells != null && state.PendingTargetCells.Contains(cell);
 
         private static bool CellContainsBlockingThing(IntVec3 cell, Map map)
         {

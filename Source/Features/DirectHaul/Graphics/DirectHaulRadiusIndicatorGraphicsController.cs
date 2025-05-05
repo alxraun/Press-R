@@ -12,11 +12,10 @@ using Verse;
 
 namespace PressR.Features.DirectHaul.Graphics
 {
-    public class DirectHaulRadiusIndicatorGraphicsController
-        : IGraphicsController<DirectHaulUpdateContext>
+    public class DirectHaulRadiusIndicatorGraphicsController : IGraphicsController
     {
         private readonly IGraphicsManager _graphicsManager;
-        private readonly DirectHaulFrameData _frameData;
+        private readonly DirectHaulState _state;
 
         private bool _isTemporarilyHidden = false;
 
@@ -38,17 +37,17 @@ namespace PressR.Features.DirectHaul.Graphics
 
         public DirectHaulRadiusIndicatorGraphicsController(
             IGraphicsManager graphicsManager,
-            DirectHaulFrameData frameData
+            DirectHaulState state
         )
         {
             _graphicsManager =
                 graphicsManager ?? throw new ArgumentNullException(nameof(graphicsManager));
-            _frameData = frameData ?? throw new ArgumentNullException(nameof(frameData));
+            _state = state ?? throw new ArgumentNullException(nameof(state));
         }
 
-        public void Update(DirectHaulUpdateContext context)
+        public void Update()
         {
-            if (context.Mode == DirectHaulMode.Storage)
+            if (_state.Mode == DirectHaulMode.Storage)
             {
                 Clear();
                 return;
@@ -58,10 +57,7 @@ namespace PressR.Features.DirectHaul.Graphics
 
             Color targetColor = GetColorForMode(IsPendingMode());
 
-            bool shouldShowIndicator = DetermineIfIndicatorShouldBeVisible(
-                context,
-                controllerEnabled
-            );
+            bool shouldShowIndicator = DetermineIfIndicatorShouldBeVisible(controllerEnabled);
 
             _graphicsManager.TryGetGraphicObject(IndicatorKey, out var graphicObject);
             var currentInstance = graphicObject as DirectHaulRadiusIndicatorGraphicObject;
@@ -76,8 +72,8 @@ namespace PressR.Features.DirectHaul.Graphics
                 if (shouldShowIndicator)
                 {
                     float targetRadius = CalculateTargetRadius(
-                        context.CurrentMouseCell,
-                        GetPreviewPositions(context)
+                        _state.CurrentMouseCell,
+                        GetPreviewPositions()
                     );
                     bool needsFadeIn = _isTemporarilyHidden;
                     _isTemporarilyHidden = false;
@@ -98,8 +94,8 @@ namespace PressR.Features.DirectHaul.Graphics
                 if (shouldShowIndicator)
                 {
                     float targetRadius = CalculateTargetRadius(
-                        context.CurrentMouseCell,
-                        GetPreviewPositions(context)
+                        _state.CurrentMouseCell,
+                        GetPreviewPositions()
                     );
 
                     CreateAndRegisterIndicator(targetRadius, targetColor);
@@ -125,19 +121,16 @@ namespace PressR.Features.DirectHaul.Graphics
             _lastAppliedTargetRadius = 0f;
         }
 
-        private bool DetermineIfIndicatorShouldBeVisible(
-            DirectHaulUpdateContext context,
-            bool controllerEnabled
-        )
+        private bool DetermineIfIndicatorShouldBeVisible(bool controllerEnabled)
         {
-            if (!controllerEnabled || context.Map == null || context.DragState.IsDragging)
+            if (!controllerEnabled || _state.Map == null || _state.IsDragging)
                 return false;
 
-            bool hasAnySelected = context.FrameData.AllSelectedThings.Any();
+            bool hasAnySelected = _state.AllSelectedThings.Any();
             if (!hasAnySelected)
                 return false;
 
-            bool hasNonPending = context.FrameData.NonPendingSelectedThings.Any();
+            bool hasNonPending = _state.NonPendingSelectedThings.Any();
 
             if (!hasNonPending)
             {
@@ -145,14 +138,14 @@ namespace PressR.Features.DirectHaul.Graphics
             }
 
             bool canShowBasedOnCell =
-                context.CurrentMouseCell.IsValid
-                && context.CurrentMouseCell.InBounds(context.Map)
-                && !context.CurrentMouseCell.Impassable(context.Map);
+                _state.CurrentMouseCell.IsValid
+                && _state.CurrentMouseCell.InBounds(_state.Map)
+                && !_state.CurrentMouseCell.Impassable(_state.Map);
             if (!canShowBasedOnCell)
                 return false;
 
-            int nonPendingCount = context.FrameData.NonPendingSelectedThings.Count;
-            var placementCellsFound = context.FrameData.CalculatedPlacementCells;
+            int nonPendingCount = _state.NonPendingSelectedThings.Count;
+            var placementCellsFound = _state.CalculatedPlacementCells;
             bool placementPossible =
                 placementCellsFound != null && placementCellsFound.Count == nonPendingCount;
             if (!placementPossible)
@@ -161,13 +154,13 @@ namespace PressR.Features.DirectHaul.Graphics
             return true;
         }
 
-        private Dictionary<Thing, IntVec3> GetPreviewPositions(DirectHaulUpdateContext context)
+        private Dictionary<Thing, IntVec3> GetPreviewPositions()
         {
             var previewPositionsList =
-                context.FrameData.CalculatedPlacementCells ?? Array.Empty<IntVec3>();
-            var thingsToConsider = context.FrameData.NonPendingSelectedThings.Any()
-                ? context.FrameData.NonPendingSelectedThings
-                : context.FrameData.AllSelectedThings;
+                _state.CalculatedPlacementCells ?? (IReadOnlyList<IntVec3>)Array.Empty<IntVec3>();
+            var thingsToConsider = _state.HasAnyNonPendingSelected
+                ? _state.NonPendingSelectedThings
+                : _state.AllSelectedThings;
             return previewPositionsList
                 .Select((cell, index) => new { Cell = cell, Index = index })
                 .Where(pair => pair.Index < thingsToConsider.Count)
@@ -181,7 +174,7 @@ namespace PressR.Features.DirectHaul.Graphics
 
         private bool IsPendingMode()
         {
-            return _frameData.AllSelectedThings.Any() && !_frameData.NonPendingSelectedThings.Any();
+            return _state.AllSelectedThings.Any() && !_state.HasAnyNonPendingSelected;
         }
 
         private DirectHaulRadiusIndicatorGraphicObject CreateAndRegisterIndicator(

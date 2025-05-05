@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using LudeonTK;
 using PressR.Features.DirectHaul.Core;
-using PressR.Features.DirectHaul.Graphics;
 using PressR.Graphics;
 using PressR.Graphics.Controllers;
 using PressR.Graphics.Effects;
@@ -16,10 +15,10 @@ using Verse;
 namespace PressR.Features.DirectHaul.Graphics
 {
     [StaticConstructorOnStartup]
-    public class DirectHaulGhostGraphicsController : IGraphicsController<DirectHaulUpdateContext>
+    public class DirectHaulGhostGraphicsController : IGraphicsController
     {
         private readonly IGraphicsManager _graphicsManager;
-        private readonly DirectHaulFrameData _frameData;
+        private readonly DirectHaulState _state;
         private readonly DirectHaulPreview _preview = new();
 
         private const float FadeInDuration = 0.05f;
@@ -45,17 +44,17 @@ namespace PressR.Features.DirectHaul.Graphics
 
         public DirectHaulGhostGraphicsController(
             IGraphicsManager graphicsManager,
-            DirectHaulFrameData frameData
+            DirectHaulState state
         )
         {
             _graphicsManager =
                 graphicsManager ?? throw new ArgumentNullException(nameof(graphicsManager));
-            _frameData = frameData ?? throw new ArgumentNullException(nameof(frameData));
+            _state = state ?? throw new ArgumentNullException(nameof(state));
         }
 
-        public void Update(DirectHaulUpdateContext context)
+        public void Update()
         {
-            if (context.Mode == DirectHaulMode.Storage)
+            if (_state.Mode == DirectHaulMode.Storage)
             {
                 ClearInternal();
                 return;
@@ -67,25 +66,22 @@ namespace PressR.Features.DirectHaul.Graphics
                 return;
             }
 
-            if (!TryGetContext(context.Map, out var viewRect, out var directHaulData))
+            if (!TryGetContext(_state.Map, out var viewRect, out var directHaulData))
             {
                 ClearInternal();
                 return;
             }
 
             _preview.TryGetPreviewPositions(
-                context.DragState.StartDragCell.IsValid
-                    ? context.DragState.StartDragCell
-                    : context.CurrentMouseCell,
-                context.DragState.IsDragging
-                    ? context.DragState.CurrentDragCell
+                _state.StartDragCell.IsValid ? _state.StartDragCell : _state.CurrentMouseCell,
+                _state.IsDragging
+                    ? _state.CurrentDragCell
                     : (
-                        context.DragState.StartDragCell.IsValid
-                            ? context.DragState.StartDragCell
-                            : context.CurrentMouseCell
+                        _state.StartDragCell.IsValid
+                            ? _state.StartDragCell
+                            : _state.CurrentMouseCell
                     ),
-                context.Map,
-                _frameData,
+                _state,
                 out var desiredPreviewPositions
             );
 
@@ -139,7 +135,7 @@ namespace PressR.Features.DirectHaul.Graphics
             out DirectHaulExposableData directHaulData
         )
         {
-            directHaulData = _frameData?.ExposedData;
+            directHaulData = _state?.ExposedData;
             return TryGetContext(map, out viewRect) && directHaulData != null;
         }
 
@@ -148,7 +144,7 @@ namespace PressR.Features.DirectHaul.Graphics
             CellRect viewRect
         )
         {
-            var heldThingPositions = _frameData
+            var heldThingPositions = _state
                 .AllHeldThingsOnMap.Where(t => t.PositionHeld.IsValid)
                 .Select(t => t.PositionHeld)
                 .ToHashSet();

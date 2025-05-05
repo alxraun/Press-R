@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using PressR.Features.DirectHaul.Core;
-using PressR.Features.DirectHaul.Graphics;
 using PressR.Graphics;
 using PressR.Graphics.Controllers;
 using PressR.Graphics.GraphicObjects;
@@ -14,10 +13,10 @@ using Verse;
 
 namespace PressR.Features.DirectHaul.Graphics
 {
-    public class DirectHaulStorageHighlightGraphicsController
-        : IGraphicsController<DirectHaulUpdateContext>
+    public class DirectHaulStorageHighlightGraphicsController : IGraphicsController
     {
         private readonly IGraphicsManager _graphicsManager;
+        private readonly DirectHaulState _state;
         private IStoreSettingsParent _currentTarget;
         private IGraphicObject _currentHighlightObject;
 
@@ -34,23 +33,27 @@ namespace PressR.Features.DirectHaul.Graphics
         private static readonly object ZoneHighlightKey =
             typeof(DirectHaulZoneHighlightGraphicObject);
 
-        public DirectHaulStorageHighlightGraphicsController(IGraphicsManager graphicsManager)
+        public DirectHaulStorageHighlightGraphicsController(
+            IGraphicsManager graphicsManager,
+            DirectHaulState state
+        )
         {
             _graphicsManager =
                 graphicsManager ?? throw new ArgumentNullException(nameof(graphicsManager));
+            _state = state ?? throw new ArgumentNullException(nameof(state));
         }
 
-        public void Update(DirectHaulUpdateContext context)
+        public void Update()
         {
             bool shouldShow =
-                context.Mode == DirectHaulMode.Storage
-                && !context.DragState.IsDragging
+                _state.Mode == DirectHaulMode.Storage
+                && !_state.IsDragging
                 && PressRMod.Settings.directHaulSettings.enableStorageHighlightOnHover
-                && context.StorageUnderMouse != null;
+                && _state.StorageUnderMouse != null;
 
             if (shouldShow)
             {
-                UpdateHighlightInternal(context.StorageUnderMouse, context.Map, context.FrameData);
+                UpdateHighlightInternal(_state.StorageUnderMouse);
             }
             else
             {
@@ -58,15 +61,11 @@ namespace PressR.Features.DirectHaul.Graphics
             }
         }
 
-        private void UpdateHighlightInternal(
-            IStoreSettingsParent storeSettingsParent,
-            Map map,
-            DirectHaulFrameData frameData
-        )
+        private void UpdateHighlightInternal(IStoreSettingsParent storeSettingsParent)
         {
             if (storeSettingsParent == _currentTarget)
             {
-                UpdateExistingHighlightColor(frameData);
+                UpdateExistingHighlightColor();
                 return;
             }
 
@@ -83,7 +82,7 @@ namespace PressR.Features.DirectHaul.Graphics
             _currentTarget = storeSettingsParent;
 
             Color highlightColor = GetHighlightColorForStorage(
-                frameData.AllSelectedThings,
+                _state.AllSelectedThings,
                 _currentTarget
             );
 
@@ -115,12 +114,12 @@ namespace PressR.Features.DirectHaul.Graphics
             }
         }
 
-        private void UpdateExistingHighlightColor(DirectHaulFrameData frameData)
+        private void UpdateExistingHighlightColor()
         {
             if (_currentHighlightObject is IHasColor colorable && _currentTarget != null)
             {
                 colorable.Color = GetHighlightColorForStorage(
-                    frameData.AllSelectedThings,
+                    _state.AllSelectedThings,
                     _currentTarget
                 );
             }

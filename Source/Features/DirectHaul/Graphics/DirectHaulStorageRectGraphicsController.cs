@@ -8,33 +8,35 @@ using Verse;
 
 namespace PressR.Features.DirectHaul.Graphics
 {
-    public class DirectHaulStorageRectGraphicsController
-        : IGraphicsController<DirectHaulUpdateContext>
+    public class DirectHaulStorageRectGraphicsController : IGraphicsController
     {
         private readonly IGraphicsManager _graphicsManager;
         private readonly DirectHaulStorage _directHaulStorage;
+        private readonly DirectHaulState _state;
         private DirectHaulStorageRectGraphicObject _rectGraphicObject;
 
         private static object Key => DirectHaulStorageRectGraphicObject.GraphicObjectId;
 
         public DirectHaulStorageRectGraphicsController(
             IGraphicsManager graphicsManager,
-            DirectHaulStorage directHaulStorage
+            DirectHaulStorage directHaulStorage,
+            DirectHaulState state
         )
         {
             _graphicsManager =
                 graphicsManager ?? throw new ArgumentNullException(nameof(graphicsManager));
             _directHaulStorage =
                 directHaulStorage ?? throw new ArgumentNullException(nameof(directHaulStorage));
+            _state = state ?? throw new ArgumentNullException(nameof(state));
         }
 
-        public void Update(DirectHaulUpdateContext context)
+        public void Update()
         {
             bool shouldBeVisible =
-                context.Mode == DirectHaulMode.Storage
-                && context.DragState.IsDragging
-                && context.DragState.StartDragCell.IsValid
-                && context.DragState.CurrentDragCell.IsValid
+                _state.Mode == DirectHaulMode.Storage
+                && _state.IsDragging
+                && _state.StartDragCell.IsValid
+                && _state.CurrentDragCell.IsValid
                 && PressRMod.Settings.directHaulSettings.enableStorageCreationPreview;
 
             if (_rectGraphicObject == null)
@@ -47,8 +49,8 @@ namespace PressR.Features.DirectHaul.Graphics
 
             if (shouldBeVisible)
             {
-                IntVec3 startCell = context.DragState.StartDragCell;
-                IntVec3 currentCell = context.DragState.CurrentDragCell;
+                IntVec3 startCell = _state.StartDragCell;
+                IntVec3 currentCell = _state.CurrentDragCell;
                 Color edgeTargetColor = GetEdgeColor(startCell);
 
                 EnsureGraphicObjectExistsAndActive(startCell, currentCell, edgeTargetColor);

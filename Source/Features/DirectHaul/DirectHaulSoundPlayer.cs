@@ -9,19 +9,20 @@ namespace PressR.Features.DirectHaul
 {
     public class DirectHaulSoundPlayer
     {
+        private readonly DirectHaulState _state;
         private Sustainer _dragSustainer;
         private float _lastDragRealTime = -1000f;
         private int _lastDragCellCount;
         private IntVec3 _previousDragCell = IntVec3.Invalid;
 
-        public void UpdateDragSound(
-            DirectHaulDragState dragState,
-            DirectHaulMode mode,
-            IReadOnlyList<IntVec3> placementCells,
-            Map map
-        )
+        public DirectHaulSoundPlayer(DirectHaulState state)
         {
-            if (!dragState.IsDragging)
+            _state = state ?? throw new System.ArgumentNullException(nameof(state));
+        }
+
+        public void UpdateSound()
+        {
+            if (!_state.IsDragging)
             {
                 EndDragSustainer();
                 return;
@@ -29,11 +30,11 @@ namespace PressR.Features.DirectHaul
 
             bool playChangedSound = false;
 
-            if (mode == DirectHaulMode.Storage)
+            if (_state.Mode == DirectHaulMode.Storage)
             {
                 var rect = CellRect
-                    .FromLimits(dragState.StartDragCell, dragState.CurrentDragCell)
-                    .ClipInsideMap(map);
+                    .FromLimits(_state.StartDragCell, _state.CurrentDragCell)
+                    .ClipInsideMap(_state.Map);
                 int currentCount = rect.IsEmpty ? 0 : rect.Area;
                 if (currentCount != _lastDragCellCount)
                 {
@@ -44,8 +45,8 @@ namespace PressR.Features.DirectHaul
             else
             {
                 if (
-                    dragState.CurrentDragCell != _previousDragCell
-                    && dragState.CurrentDragCell != dragState.StartDragCell
+                    _state.CurrentDragCell != _previousDragCell
+                    && _state.CurrentDragCell != _state.StartDragCell
                 )
                 {
                     playChangedSound = true;
@@ -75,7 +76,7 @@ namespace PressR.Features.DirectHaul
                 _dragSustainer.Maintain();
             }
 
-            _previousDragCell = dragState.CurrentDragCell;
+            _previousDragCell = _state.CurrentDragCell;
         }
 
         public void EndDragSustainer()

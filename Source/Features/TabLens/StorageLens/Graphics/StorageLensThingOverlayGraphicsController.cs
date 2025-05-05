@@ -13,22 +13,27 @@ using Verse;
 
 namespace PressR.Features.TabLens.StorageLens.Graphics
 {
-    public class StorageLensThingOverlayGraphicsController
-        : IGraphicsController<StorageLensUpdateContext>
+    public class StorageLensThingOverlayGraphicsController : IGraphicsController
     {
         private readonly IGraphicsManager _graphicsManager;
-        private const float FadeInDuration = 0.5f;
-        private const float FadeOutDuration = 0.5f;
+        private readonly TrackedThingsData _trackedThingsData;
+        private const float FadeInDuration = 0.05f;
+        private const float FadeOutDuration = 0.05f;
 
-        public StorageLensThingOverlayGraphicsController(IGraphicsManager graphicsManager)
+        public StorageLensThingOverlayGraphicsController(
+            IGraphicsManager graphicsManager,
+            TrackedThingsData trackedThingsData
+        )
         {
             _graphicsManager =
                 graphicsManager ?? throw new ArgumentNullException(nameof(graphicsManager));
+            _trackedThingsData =
+                trackedThingsData ?? throw new ArgumentNullException(nameof(trackedThingsData));
         }
 
-        public void Update(StorageLensUpdateContext context)
+        public void Update()
         {
-            if (context.TrackedThingsData?.CurrentThings == null)
+            if (_trackedThingsData?.CurrentThings == null)
             {
                 ClearInternal(_graphicsManager);
                 return;
@@ -40,8 +45,8 @@ namespace PressR.Features.TabLens.StorageLens.Graphics
                 return;
             }
 
-            HashSet<object> desiredKeys = context
-                .TrackedThingsData.CurrentThings.Select(thing =>
+            HashSet<object> desiredKeys = _trackedThingsData
+                .CurrentThings.Select(thing =>
                     (object)(thing, typeof(TabLensThingOverlayGraphicObject))
                 )
                 .ToHashSet();
@@ -60,12 +65,12 @@ namespace PressR.Features.TabLens.StorageLens.Graphics
             var keysToUpdate = desiredKeys.Intersect(registeredKeys).ToList();
 
             RemoveObsoleteOverlays(_graphicsManager, keysToRemove);
-            AddNewOverlays(_graphicsManager, keysToAdd, context.TrackedThingsData);
+            AddNewOverlays(_graphicsManager, keysToAdd, _trackedThingsData);
             UpdateExistingOverlays(
                 _graphicsManager,
                 keysToUpdate,
                 registeredObjects,
-                context.TrackedThingsData
+                _trackedThingsData
             );
         }
 

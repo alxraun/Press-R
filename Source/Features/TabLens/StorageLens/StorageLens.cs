@@ -34,7 +34,10 @@ namespace PressR.Features.TabLens.StorageLens
         {
             _graphicsManager =
                 graphicsManager ?? throw new ArgumentNullException(nameof(graphicsManager));
-            _graphicsController = new StorageLensThingOverlayGraphicsController(_graphicsManager);
+            _graphicsController = new StorageLensThingOverlayGraphicsController(
+                _graphicsManager,
+                _trackedThingsData
+            );
         }
 
         public bool TryActivate()
@@ -83,8 +86,7 @@ namespace PressR.Features.TabLens.StorageLens
                 HandleMouseHover();
             }
 
-            var context = new StorageLensUpdateContext(_currentMap, _trackedThingsData);
-            _graphicsController.Update(context);
+            _graphicsController.Update();
 
             HandleMouseInput();
         }
