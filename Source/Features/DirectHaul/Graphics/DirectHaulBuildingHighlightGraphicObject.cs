@@ -9,7 +9,6 @@ namespace PressR.Features.DirectHaul.Graphics
 {
     public class DirectHaulBuildingHighlightGraphicObject
         : IGraphicObject,
-            IEffectTarget,
             IHasPadding,
             IHasAlpha,
             IHasColor,

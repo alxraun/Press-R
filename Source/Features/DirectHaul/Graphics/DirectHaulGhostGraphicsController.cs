@@ -5,7 +5,6 @@ using LudeonTK;
 using PressR.Features.DirectHaul.Core;
 using PressR.Graphics;
 using PressR.Graphics.Controllers;
-using PressR.Graphics.Effects;
 using PressR.Graphics.GraphicObjects;
 using PressR.Graphics.Tween;
 using RimWorld;
