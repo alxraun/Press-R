@@ -26,8 +26,8 @@ namespace PressR.Features.DirectHaul.Graphics
         private const string TexPathHeldPart = "DirectHaul/held_overlay_part_0";
 
         private const float HoverDistance = 0.25f;
-        private const float FadeOutDuration = 0.05f;
-        private const float FadeInDuration = 0.05f;
+        private const float FadeOutDuration = 0.035f;
+        private const float FadeInDuration = 0.035f;
         private const float MinAlpha = 0.25f;
 
         private const float HoverDistanceSquared = HoverDistance * HoverDistance;
