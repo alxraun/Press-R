@@ -22,10 +22,22 @@ namespace PressR.Features.DirectHaul.Graphics
         public float Alpha { get; set; } = 1.0f;
         public Vector3 Position { get; set; }
 
+        private Material _cachedMaterial;
+        private string _materialTexturePathUsedForCache;
+        private Vector2 _cachedThingDrawSize;
+
         public DirectHaulStatusOverlayGraphicObject(Thing targetThing)
         {
             _targetThing =
                 targetThing ?? throw new System.ArgumentNullException(nameof(targetThing));
+            if (_targetThing.Graphic != null)
+            {
+                _cachedThingDrawSize = _targetThing.Graphic.drawSize;
+            }
+            else
+            {
+                _cachedThingDrawSize = Vector2.one;
+            }
         }
 
         public void OnRegistered() { }
@@ -40,6 +52,7 @@ namespace PressR.Features.DirectHaul.Graphics
             if (!IsValid(_targetThing))
             {
                 State = GraphicObjectState.PendingRemoval;
+                Position = Vector3.zero;
                 return;
             }
             CalculatePosition();
@@ -59,79 +72,20 @@ namespace PressR.Features.DirectHaul.Graphics
                 && carryTracker.pawn != null
             )
             {
-                Pawn pawn = carryTracker.pawn;
-                if (!pawn.Spawned || pawn.Map != Find.CurrentMap)
+                Vector3? pawnBasedPosition = CalculatePositionWhenCarriedByPawn(carryTracker.pawn);
+                if (pawnBasedPosition.HasValue)
                 {
-                    Position = Vector3.zero;
-                    State = GraphicObjectState.PendingRemoval;
-                    return;
-                }
-
-                Vector3 currentOffset = BaseCarriedOffset;
-                Rot4 pawnRotation = pawn.Rotation;
-                switch (pawnRotation.AsInt)
-                {
-                    case 0:
-                        currentOffset.z = BaseCarriedNorthZOffset;
-                        break;
-                    case 1:
-                        currentOffset.x = BaseCarriedEastXOffset;
-                        break;
-                    case 3:
-                        currentOffset.x = BaseCarriedWestXOffset;
-                        break;
-                }
-
-                if (pawn.DevelopmentalStage == DevelopmentalStage.Child)
-                {
-                    currentOffset.z += ChildOffsetZ;
-                }
-
-                float finalX = pawn.DrawPos.x + currentOffset.x;
-                float finalZ = pawn.DrawPos.z + currentOffset.z;
-
-                float baseOriginalItemY = pawn.DrawPos.y;
-                float targetY;
-
-                if (pawnRotation == Rot4.North)
-                {
-                    baseOriginalItemY -= VanillaCarriedYOffsetValue;
-                    targetY = baseOriginalItemY;
+                    Position = pawnBasedPosition.Value;
                 }
                 else
                 {
-                    baseOriginalItemY += VanillaCarriedYOffsetValue;
-                    targetY = baseOriginalItemY + Altitudes.AltInc;
+                    Position = Vector3.zero;
+                    State = GraphicObjectState.PendingRemoval;
                 }
-
-                Vector3 itemCenterPos = new Vector3(finalX, targetY, finalZ);
-
-                Vector2 thingDrawSize = _targetThing.Graphic.drawSize;
-                Vector3 cornerOffset = new Vector3(
-                    thingDrawSize.x / 2f - overlayGraphicSize / 2f,
-                    0f,
-                    thingDrawSize.y / 2f - overlayGraphicSize / 2f
-                );
-
-                Vector3 overlayPos = itemCenterPos + cornerOffset;
-
-                overlayPos.y += Altitudes.AltInc * 2;
-
-                Position = overlayPos;
             }
             else if (_targetThing.Spawned)
             {
-                Vector3 baseDrawPos = _targetThing.DrawPos;
-                baseDrawPos.y += Altitudes.AltInc * 2;
-
-                Vector2 thingDrawSize = _targetThing.Graphic.drawSize;
-                Vector3 cornerOffset = new Vector3(
-                    thingDrawSize.x / 2f - overlayGraphicSize / 2f,
-                    0f,
-                    thingDrawSize.y / 2f - overlayGraphicSize / 2f
-                );
-
-                Position = baseDrawPos + cornerOffset;
+                Position = CalculatePositionWhenSpawnedOnMap();
             }
             else
             {
@@ -140,23 +94,104 @@ namespace PressR.Features.DirectHaul.Graphics
             }
         }
 
+        private Vector3? CalculatePositionWhenCarriedByPawn(Pawn pawn)
+        {
+            if (!pawn.Spawned || pawn.Map != Find.CurrentMap)
+            {
+                return null;
+            }
+
+            Vector3 carrierOffset = GetCarrierDisplayOffset(pawn.Rotation, pawn.DevelopmentalStage);
+
+            float finalX = pawn.DrawPos.x + carrierOffset.x;
+            float finalZ = pawn.DrawPos.z + carrierOffset.z;
+            float baseOriginalItemY = pawn.DrawPos.y;
+            float targetY;
+
+            if (pawn.Rotation == Rot4.North)
+            {
+                baseOriginalItemY -= VanillaCarriedYOffsetValue;
+                targetY = baseOriginalItemY;
+            }
+            else
+            {
+                baseOriginalItemY += VanillaCarriedYOffsetValue;
+                targetY = baseOriginalItemY + Altitudes.AltInc;
+            }
+
+            Vector3 itemCenterPos = new Vector3(finalX, targetY, finalZ);
+            Vector3 cornerOffset = CalculateOverlayCornerOffset(_cachedThingDrawSize);
+            Vector3 overlayPos = itemCenterPos + cornerOffset;
+            overlayPos.y += Altitudes.AltInc * 2;
+
+            return overlayPos;
+        }
+
+        private Vector3 GetCarrierDisplayOffset(
+            Rot4 pawnRotation,
+            DevelopmentalStage developmentalStage
+        )
+        {
+            Vector3 offset = BaseCarriedOffset;
+            offset = pawnRotation.AsInt switch
+            {
+                0 => offset with { z = BaseCarriedNorthZOffset },
+                1 => offset with { x = BaseCarriedEastXOffset },
+                3 => offset with { x = BaseCarriedWestXOffset },
+                _ => offset,
+            };
+
+            if (developmentalStage == DevelopmentalStage.Child)
+            {
+                offset.z += ChildOffsetZ;
+            }
+            return offset;
+        }
+
+        private Vector3 CalculatePositionWhenSpawnedOnMap()
+        {
+            Vector3 baseDrawPos = _targetThing.DrawPos;
+            baseDrawPos.y += Altitudes.AltInc * 2;
+            Vector3 cornerOffset = CalculateOverlayCornerOffset(_cachedThingDrawSize);
+            return baseDrawPos + cornerOffset;
+        }
+
+        private Vector3 CalculateOverlayCornerOffset(Vector2 thingDrawSize)
+        {
+            return new Vector3(
+                thingDrawSize.x / 2f - overlayGraphicSize / 2f,
+                0f,
+                thingDrawSize.y / 2f - overlayGraphicSize / 2f
+            );
+        }
+
         public void Render()
         {
-            if (
-                State != GraphicObjectState.Active
-                || string.IsNullOrEmpty(_currentTexturePath)
-                || Position == Vector3.zero
-            )
+            if (State != GraphicObjectState.Active || Position == Vector3.zero)
             {
                 return;
             }
 
-            Material material = MaterialPool.MatFrom(
-                _currentTexturePath,
-                ShaderDatabase.MetaOverlay
-            );
+            if (string.IsNullOrEmpty(_currentTexturePath))
+            {
+                if (_cachedMaterial != null)
+                {
+                    _cachedMaterial = null;
+                }
+                _materialTexturePathUsedForCache = null;
+                return;
+            }
 
-            if (material == null)
+            if (_cachedMaterial == null || _materialTexturePathUsedForCache != _currentTexturePath)
+            {
+                _cachedMaterial = MaterialPool.MatFrom(
+                    _currentTexturePath,
+                    ShaderDatabase.MetaOverlay
+                );
+                _materialTexturePathUsedForCache = _currentTexturePath;
+            }
+
+            if (_cachedMaterial == null)
             {
                 return;
             }
@@ -174,12 +209,16 @@ namespace PressR.Features.DirectHaul.Graphics
 
             Matrix4x4 matrix = Matrix4x4.TRS(finalDrawPos, rotation, scale);
 
-            UnityEngine.Graphics.DrawMesh(mesh, matrix, material, 0, null, 0, mpb);
+            UnityEngine.Graphics.DrawMesh(mesh, matrix, _cachedMaterial, 0, null, 0, mpb);
         }
 
         private static bool IsValid(Thing thing) =>
             thing != null && !thing.Destroyed && thing.SpawnedOrAnyParentSpawned;
 
-        public void Dispose() { }
+        public void Dispose()
+        {
+            _cachedMaterial = null;
+            _materialTexturePathUsedForCache = null;
+        }
     }
 }

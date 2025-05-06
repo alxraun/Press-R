@@ -182,24 +182,51 @@ namespace PressR.Features.DirectHaul.Graphics
             HashSet<IntVec3> heldThingCells
         )
         {
-            var requiredThings = visibleThingsWithStatus.Keys.ToHashSet();
+            List<Thing> thingsToRemove = null;
+            foreach (object managedKey in _managedOverlayKeys)
+            {
+                if (
+                    managedKey is ValueTuple<Thing, Type> keyTuple
+                    && keyTuple.Item1 is Thing thingInManagedKey
+                )
+                {
+                    if (!visibleThingsWithStatus.ContainsKey(thingInManagedKey))
+                    {
+                        thingsToRemove ??= new List<Thing>();
+                        thingsToRemove.Add(thingInManagedKey);
+                    }
+                }
+            }
 
-            var managedThings = _managedOverlayKeys
-                .Select(key => key is ValueTuple<Thing, Type> tuple ? tuple.Item1 : null)
-                .Where(t => t != null)
-                .ToHashSet();
+            if (thingsToRemove != null && thingsToRemove.Any())
+            {
+                HandleRemovingOverlays(thingsToRemove);
+            }
 
-            var thingsToRemove = managedThings.Except(requiredThings).ToList();
-            var thingsToAdd = requiredThings.Except(managedThings).ToList();
+            List<Thing> thingsToAdd = null;
+            foreach (Thing thingInVisible in visibleThingsWithStatus.Keys)
+            {
+                object potentialOverlayKey = (
+                    thingInVisible,
+                    typeof(DirectHaulStatusOverlayGraphicObject)
+                );
+                if (!_managedOverlayKeys.Contains(potentialOverlayKey))
+                {
+                    thingsToAdd ??= new List<Thing>();
+                    thingsToAdd.Add(thingInVisible);
+                }
+            }
 
-            HandleRemovingOverlays(thingsToRemove);
-            HandleAddingOverlays(
-                thingsToAdd,
-                visibleThingsWithStatus,
-                exposableData,
-                targetCellPendingCount,
-                heldThingCells
-            );
+            if (thingsToAdd != null && thingsToAdd.Any())
+            {
+                HandleAddingOverlays(
+                    thingsToAdd,
+                    visibleThingsWithStatus,
+                    exposableData,
+                    targetCellPendingCount,
+                    heldThingCells
+                );
+            }
         }
 
         private void HandleRemovingOverlays(IEnumerable<Thing> thingsToRemove)
@@ -460,7 +487,6 @@ namespace PressR.Features.DirectHaul.Graphics
                     !(
                         _graphicsManager.TryGetGraphicObject(overlayKey, out var overlayBase)
                         && overlayBase is DirectHaulStatusOverlayGraphicObject overlay
-                        && overlay.State != GraphicObjectState.PendingRemoval
                     )
                 )
                     continue;
@@ -500,8 +526,7 @@ namespace PressR.Features.DirectHaul.Graphics
         private bool IsAssociatedThingOverlayActive(Thing targetThing)
         {
             object thingOverlayKey = (targetThing, typeof(TabLensThingOverlayGraphicObject));
-            return _graphicsManager.TryGetGraphicObject(thingOverlayKey, out var thingOverlayGo)
-                && thingOverlayGo.State == GraphicObjectState.Active;
+            return _graphicsManager.TryGetGraphicObject(thingOverlayKey, out var thingOverlayGo);
         }
 
         private void ApplyFadeIn(DirectHaulStatusOverlayGraphicObject overlay)
