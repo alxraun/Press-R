@@ -16,7 +16,7 @@ namespace PressR.Debugger.Configs
         public string Name => "Example Config";
 
         /* How often (in seconds) the debugger updates the displayed values while recording. Lower values mean more frequent updates. */
-        public float UpdateInterval => 0.5f;
+        public float UpdateInterval => 0.05f;
 
         /* Delay (in seconds) after pressing 'Start Recording' before data capture actually begins. */
         public float StartDelaySeconds => 1.0f;

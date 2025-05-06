@@ -2,12 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using PressR.Features.TabLens.Graphics;
 using PressR.Features.TabLens.StorageLens.Commands;
 using PressR.Features.TabLens.StorageLens.Core;
-using PressR.Graphics;
-using PressR.Graphics.Effects;
-using PressR.Graphics.GraphicObjects;
 using PressR.Utils;
 using RimWorld;
 using UnityEngine;
@@ -17,110 +13,6 @@ namespace PressR.Features.TabLens.StorageLens
 {
     public static class StorageLensHelper
     {
-        public static void RemoveObsoleteOverlays(
-            IGraphicsManager graphicsManager,
-            IEnumerable<object> keysToRemove
-        )
-        {
-            keysToRemove.ToList().ForEach(key => graphicsManager.UnregisterGraphicObject(key));
-        }
-
-        public static void AddNewOverlays(
-            IGraphicsManager graphicsManager,
-            IEnumerable<object> keysToAdd,
-            TrackedThingsData trackedThingsData,
-            float fadeInDuration
-        )
-        {
-            keysToAdd
-                .ToList()
-                .ForEach(key =>
-                {
-                    if (key is ValueTuple<Thing, Type> { Item1: var thing })
-                    {
-                        bool allowed = trackedThingsData.GetAllowanceState(thing);
-                        Color color = GraphicsUtils.GetColorForState(allowed);
-
-                        var graphicObject = new TabLensThingOverlayGraphicObject(
-                            thing,
-                            ShaderManager.HSVColorizeCutoutShader
-                        );
-                        graphicObject.Alpha = 0f;
-
-                        if (graphicsManager.RegisterGraphicObject(graphicObject))
-                        {
-                            if (graphicObject is IHasColor colorTarget)
-                            {
-                                colorTarget.Color = color;
-                            }
-
-                            var fadeIn = new FadeInEffect(fadeInDuration);
-
-                            graphicsManager.ApplyEffect(new[] { key }, fadeIn);
-                        }
-                    }
-                });
-        }
-
-        public static void UpdateExistingOverlays(
-            IGraphicsManager graphicsManager,
-            IEnumerable<object> keysToUpdate,
-            IReadOnlyDictionary<object, IGraphicObject> registeredObjects,
-            TrackedThingsData trackedThingsData
-        )
-        {
-            keysToUpdate
-                .ToList()
-                .ForEach(key =>
-                {
-                    if (key is ValueTuple<Thing, Type> { Item1: var thing })
-                    {
-                        if (registeredObjects.TryGetValue(key, out IGraphicObject graphicObject))
-                        {
-                            bool allowed = trackedThingsData.GetAllowanceState(thing);
-                            Color desiredColor = GraphicsUtils.GetColorForState(allowed);
-
-                            if (graphicObject is IHasColor colorTarget)
-                            {
-                                colorTarget.Color = desiredColor;
-                            }
-                        }
-                    }
-                });
-        }
-
-        public static void ClearAllOverlays(IGraphicsManager graphicsManager, float fadeOutDuration)
-        {
-            if (graphicsManager == null)
-                return;
-
-            var activeObjects = graphicsManager.GetActiveGraphicObjects();
-
-            var storageLensKeys = activeObjects
-                .Keys.Where(key =>
-                    key is ValueTuple<Thing, Type> tuple
-                    && tuple.Item2 == typeof(TabLensThingOverlayGraphicObject)
-                )
-                .ToList();
-
-            foreach (var key in storageLensKeys)
-            {
-                var fadeInEffects = graphicsManager
-                    .GetEffectsForTarget(key)
-                    .OfType<FadeInEffect>()
-                    .ToList();
-                foreach (var effect in fadeInEffects)
-                {
-                    graphicsManager.StopEffect(effect.Key);
-                }
-
-                var fadeOut = new FadeOutEffect(fadeOutDuration);
-                graphicsManager.ApplyEffect(new[] { key }, fadeOut);
-
-                graphicsManager.UnregisterGraphicObject(key);
-            }
-        }
-
         public static HashSet<Thing> FilterItemsByParentSettings(
             IEnumerable<Thing> things,
             IStoreSettingsParent storageParent

@@ -10,20 +10,19 @@ namespace PressR.Features.DirectHaul
         public bool TryGetPreviewPositions(
             IntVec3 focus1,
             IntVec3 focus2,
-            Map map,
-            DirectHaulFrameData frameData,
+            DirectHaulState state,
             out Dictionary<Thing, IntVec3> previewPositions
         )
         {
             previewPositions = null;
 
-            if (!IsValidContextForPreview(focus1, focus2, map, frameData))
+            if (!IsValidContextForPreview(focus1, focus2, state))
             {
                 return false;
             }
 
-            IReadOnlyList<IntVec3> placementCells = frameData.CalculatedPlacementCells;
-            IReadOnlyList<Thing> thingsToPlace = frameData.NonPendingSelectedThings;
+            IReadOnlyList<IntVec3> placementCells = state.CalculatedPlacementCells;
+            IReadOnlyList<Thing> thingsToPlace = state.NonPendingSelectedThings;
 
             if (!AreEnoughPlacementCellsAvailable(placementCells, thingsToPlace))
             {
@@ -37,15 +36,14 @@ namespace PressR.Features.DirectHaul
         private static bool IsValidContextForPreview(
             IntVec3 focus1,
             IntVec3 focus2,
-            Map map,
-            DirectHaulFrameData frameData
+            DirectHaulState state
         )
         {
-            return map != null
-                && frameData != null
-                && frameData.HasAnyNonPendingSelected
-                && IsValidCellForPreview(focus1, map)
-                && IsValidCellForPreview(focus2, map);
+            return state != null
+                && state.Map != null
+                && state.HasAnyNonPendingSelected
+                && IsValidCellForPreview(focus1, state.Map)
+                && IsValidCellForPreview(focus2, state.Map);
         }
 
         private static bool IsValidCellForPreview(IntVec3 cell, Map map)

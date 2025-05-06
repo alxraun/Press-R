@@ -18,8 +18,11 @@ namespace PressR.Features.DirectHaul.Graphics
         private Mesh _currentMesh;
         private Matrix4x4 _baseMatrix;
         private Material _overlayMaterial;
+        private Material _lastUsedOriginalMaterial = null;
         private Texture _lastOriginalMainTexture = null;
         private bool _disposed = false;
+
+        private readonly ThingRenderStateCache _renderStateCache;
 
         public GraphicObjectState State { get; set; } = GraphicObjectState.Active;
 
@@ -43,6 +46,44 @@ namespace PressR.Features.DirectHaul.Graphics
             _targetThing = targetThing ?? throw new ArgumentNullException(nameof(targetThing));
             Position = targetPosition ?? _targetThing.DrawPos;
             Shader = shader;
+
+            _renderStateCache = new ThingRenderStateCache(
+                _targetThing,
+                IsRenderUpdateRequiredForGhost
+            );
+        }
+
+        private static bool IsRenderUpdateRequiredForGhost(Thing thing, ThingRenderStateCache cache)
+        {
+            if (cache.LastUpdateTick == -1)
+                return true;
+            if (thing.Graphic != cache.LastGraphic)
+                return true;
+            if (thing.Stuff != cache.LastStuffDef)
+                return true;
+            return false;
+        }
+
+        public void OnRegistered() { }
+
+        private bool TryRefreshCoreRenderData()
+        {
+            var renderData = ThingRenderDataReplicator.GetRenderData(
+                _targetThing,
+                returnOriginalMaterial: true
+            );
+
+            if (renderData.Material == null)
+            {
+                return false;
+            }
+
+            _currentMesh = renderData.Mesh;
+            _baseMatrix = renderData.Matrix;
+            _lastUsedOriginalMaterial = renderData.Material;
+
+            _renderStateCache.RecordCurrentState();
+            return true;
         }
 
         public void Update()
@@ -56,49 +97,56 @@ namespace PressR.Features.DirectHaul.Graphics
                 return;
             }
 
-            var renderData = ThingRenderDataReplicator.GetRenderData(
-                _targetThing,
-                returnOriginalMaterial: true
-            );
-
-            _currentMesh = renderData.Mesh;
-            _baseMatrix = renderData.Matrix;
-            Material originalMaterial = renderData.Material;
-
-            if (originalMaterial == null)
+            if (_renderStateCache.IsUpdateNeeded())
             {
-                State = GraphicObjectState.PendingRemoval;
+                if (!TryRefreshCoreRenderData())
+                {
+                    State = GraphicObjectState.PendingRemoval;
+                    return;
+                }
+            }
+
+            if (_lastUsedOriginalMaterial != null)
+            {
+                UpdateOverlayMaterial(_lastUsedOriginalMaterial);
+            }
+        }
+
+        private void UpdateOverlayMaterial(Material originalMaterial)
+        {
+            if (originalMaterial == null)
+                return;
+
+            Shader shaderToUse = this.Shader;
+            if (shaderToUse == null)
+            {
+                if (_overlayMaterial != null)
+                    UnityEngine.Object.Destroy(_overlayMaterial);
+                _overlayMaterial = null;
+                _lastOriginalMainTexture = null;
                 return;
             }
 
             bool needsRecreation =
                 _overlayMaterial == null
                 || originalMaterial.mainTexture != _lastOriginalMainTexture
-                || (Shader != null && _overlayMaterial.shader != Shader);
+                || _overlayMaterial.shader != shaderToUse;
 
-            if (needsRecreation)
+            if (!needsRecreation)
+                return;
+
+            if (_overlayMaterial != null)
             {
-                if (_overlayMaterial != null)
-                {
-                    UnityEngine.Object.Destroy(_overlayMaterial);
-                }
-
-                _overlayMaterial = new Material(originalMaterial);
-                _lastOriginalMainTexture = originalMaterial.mainTexture;
-
-                if (Shader != null)
-                {
-                    _overlayMaterial.shader = Shader;
-                }
+                UnityEngine.Object.Destroy(_overlayMaterial);
             }
+            _overlayMaterial = new Material(originalMaterial) { shader = shaderToUse };
+            _lastOriginalMainTexture = originalMaterial.mainTexture;
         }
 
         public void Render()
         {
             if (_disposed || !IsRenderDataValid())
-            {
                 return;
-            }
 
             Vector3 finalPosition = Position;
             finalPosition += new Vector3(0f, Altitudes.AltInc, 0f);
@@ -110,9 +158,7 @@ namespace PressR.Features.DirectHaul.Graphics
             );
 
             if (_overlayMaterial == null || _overlayMaterial.shader == null)
-            {
                 return;
-            }
 
             IMpbConfigurator configurator = ShaderManager.GetConfigurator(_overlayMaterial.shader);
 
@@ -152,8 +198,7 @@ namespace PressR.Features.DirectHaul.Graphics
             && !_targetThing.Destroyed
             && _targetThing.SpawnedOrAnyParentSpawned;
 
-        private bool IsRenderDataValid() =>
-            IsThingValidForUpdate() && _currentMesh != null && _overlayMaterial != null;
+        private bool IsRenderDataValid() => _currentMesh != null && _overlayMaterial != null;
 
         public void Dispose()
         {
