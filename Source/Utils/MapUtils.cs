@@ -38,10 +38,11 @@ namespace PressR.Utils
                 Thing thing = allThings[i];
                 if (thing is T typedThing)
                 {
+                    IntVec3 position = typedThing.PositionHeld;
                     if (
-                        typedThing.PositionHeld.IsValid
-                        && viewRect.Contains(typedThing.PositionHeld)
-                        && !map.fogGrid.IsFogged(typedThing.PositionHeld)
+                        position.IsValid
+                        && viewRect.Contains(position)
+                        && !map.fogGrid.IsFogged(position)
                         && (filter == null || filter(typedThing))
                     )
                     {
@@ -54,11 +55,12 @@ namespace PressR.Utils
             for (int i = 0; i < pawns.Count; i++)
             {
                 Pawn pawn = pawns[i];
+                IntVec3 pawnPosition = pawn.PositionHeld;
 
                 if (
-                    pawn.PositionHeld.IsValid
-                    && viewRect.Contains(pawn.PositionHeld)
-                    && !map.fogGrid.IsFogged(pawn.PositionHeld)
+                    pawnPosition.IsValid
+                    && viewRect.Contains(pawnPosition)
+                    && !map.fogGrid.IsFogged(pawnPosition)
                 )
                 {
                     Thing carriedThing = pawn.carryTracker?.CarriedThing;
