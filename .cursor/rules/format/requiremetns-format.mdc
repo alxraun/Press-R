@@ -1,0 +1,25 @@
+---
+description: Formatting requirements.
+globs: **/*-requirements.md
+alwaysApply: false
+---
+### Formatting requirements:
+
+```markdown
+- **FR-1:** Requirement.
+- **FR-2:** Requirement.
+    - **FR-2.1:** Requirement.
+        - **FR-2.1.1:** Requirement.
+```
+
+### Notations:
+
+`FR` - Functional Requirement
+`NFR` - Non-Functional Requirement
+`UR` - User Requirement
+`SR` - System Requirement
+`UC` - Use Case
+
+### Important Note
+
+- The current format is not a final design; the developer should independently design the best solution that meets all requirements.

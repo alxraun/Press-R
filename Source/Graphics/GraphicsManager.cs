@@ -2,22 +2,24 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using PressR.Graphics.Effects;
 using PressR.Graphics.GraphicObjects;
+using PressR.Graphics.Tween;
 using UnityEngine;
+using Verse;
 
 namespace PressR.Graphics
 {
     public class GraphicsManager : IGraphicsManager
     {
         private readonly Dictionary<object, IGraphicObject> _graphicObjects = new();
-        private readonly Dictionary<Guid, IEffect> _activeEffects = new();
-        private readonly Dictionary<object, HashSet<Guid>> _objectToActiveEffectIds = new();
+        private readonly Dictionary<Guid, ITween> _activeTweens = new();
+        private readonly Dictionary<object, HashSet<Guid>> _objectToActiveTweenIds = new();
+        private readonly List<Guid> _finishedTweenKeysToRemove = new();
 
-        public bool RegisterGraphicObject(IGraphicObject graphicObject)
+        public IGraphicObject RegisterGraphicObject(IGraphicObject graphicObject)
         {
             if (graphicObject?.Key == null)
-                return false;
+                return null;
 
             object key = graphicObject.Key;
 
@@ -26,48 +28,33 @@ namespace PressR.Graphics
                 if (existingObject.State == GraphicObjectState.PendingRemoval)
                 {
                     existingObject.State = GraphicObjectState.Active;
-
-                    if (_objectToActiveEffectIds.TryGetValue(key, out var effectIds))
-                    {
-                        foreach (var effectId in effectIds.ToList())
-                        {
-                            StopEffect(effectId);
-                        }
-                    }
-                    return true;
+                    existingObject.OnRegistered();
+                    return existingObject;
                 }
                 else
                 {
-                    return false;
+                    return existingObject;
                 }
             }
             else
             {
                 graphicObject.State = GraphicObjectState.Active;
                 _graphicObjects.Add(key, graphicObject);
-                return true;
+                graphicObject.OnRegistered();
+                return graphicObject;
             }
         }
 
-        public bool UnregisterGraphicObject(object key, bool force = false)
+        public bool UnregisterGraphicObject(object key)
         {
             if (key == null || !_graphicObjects.TryGetValue(key, out var graphicObject))
                 return false;
 
-            if (force)
-            {
-                ForceRemoveGraphicObject(key);
+            if (graphicObject.State == GraphicObjectState.PendingRemoval)
                 return true;
-            }
-            else
-            {
-                if (graphicObject.State == GraphicObjectState.PendingRemoval)
-                    return true;
 
-                graphicObject.State = GraphicObjectState.PendingRemoval;
-
-                return true;
-            }
+            graphicObject.State = GraphicObjectState.PendingRemoval;
+            return true;
         }
 
         public bool TryGetGraphicObject(object key, out IGraphicObject graphicObject)
@@ -75,110 +62,191 @@ namespace PressR.Graphics
             return _graphicObjects.TryGetValue(key, out graphicObject);
         }
 
-        public IReadOnlyDictionary<object, IGraphicObject> GetActiveGraphicObjects()
+        public IReadOnlyDictionary<object, IGraphicObject> GetAllGraphicObjects()
         {
-            var activeObjects = _graphicObjects
-                .Where(kvp => kvp.Value.State == GraphicObjectState.Active)
-                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-            return new ReadOnlyDictionary<object, IGraphicObject>(activeObjects);
+            return new ReadOnlyDictionary<object, IGraphicObject>(_graphicObjects);
         }
 
-        public Guid ApplyEffect(IEnumerable<object> targetKeys, IEffect effectInstance)
+        public Guid ApplyTween<TValue>(
+            object targetKey,
+            Func<TValue> getter,
+            Action<TValue> setter,
+            TValue endValue,
+            float duration,
+            string propertyId,
+            EasingFunction easing = null,
+            Action onComplete = null
+        )
         {
-            if (effectInstance == null || targetKeys == null)
-                throw new ArgumentNullException(
-                    nameof(effectInstance) + " or " + nameof(targetKeys)
-                );
-
-            Guid effectId = effectInstance.Key;
-
             if (
-                _activeEffects.TryGetValue(effectId, out var existingEffect)
-                && existingEffect.State != EffectState.PendingRemoval
+                targetKey == null
+                || !_graphicObjects.TryGetValue(targetKey, out var targetObject)
+                || targetObject.State != GraphicObjectState.Active
             )
             {
                 return Guid.Empty;
             }
 
-            effectInstance.State = EffectState.Active;
-            _activeEffects[effectId] = effectInstance;
-
-            bool appliedToAnyTarget = false;
-            foreach (var key in targetKeys.ToList())
+            if (_objectToActiveTweenIds.TryGetValue(targetKey, out var existingTweenIds))
             {
-                if (TryGetGraphicObject(key, out var targetObject))
+                foreach (var existingTweenId in existingTweenIds)
                 {
-                    if (targetObject.State != GraphicObjectState.PendingRemoval)
+                    if (
+                        _activeTweens.TryGetValue(existingTweenId, out var existingTween)
+                        && existingTween.PropertyId == propertyId
+                    )
                     {
-                        AddLink(targetObject, effectInstance);
-                        effectInstance.OnAttach(targetObject);
-                        appliedToAnyTarget = true;
+                        KillTween(existingTweenId);
                     }
                 }
             }
 
-            if (!appliedToAnyTarget)
-            {
-                _activeEffects.Remove(effectId);
-                return Guid.Empty;
-            }
+            var tween = new Tween<TValue>(getter, setter, endValue, duration, propertyId, easing);
+            Guid tweenKey = tween.Key;
 
-            return effectId;
+            tween.OnComplete = () =>
+            {
+                try
+                {
+                    onComplete?.Invoke();
+                }
+                finally
+                {
+                    _finishedTweenKeysToRemove.Add(tweenKey);
+                }
+            };
+
+            _activeTweens.Add(tweenKey, tween);
+
+            if (!_objectToActiveTweenIds.TryGetValue(targetKey, out var tweenIds))
+            {
+                tweenIds = new HashSet<Guid>();
+                _objectToActiveTweenIds[targetKey] = tweenIds;
+            }
+            tweenIds.Add(tweenKey);
+
+            return tweenKey;
         }
 
-        public bool StopEffect(Guid effectId)
+        public bool KillTween(Guid tweenKey)
         {
-            if (_activeEffects.TryGetValue(effectId, out var effect))
+            if (_activeTweens.TryGetValue(tweenKey, out var tween))
             {
-                if (effect.State == EffectState.PendingRemoval)
-                    return false;
-
-                effect.State = EffectState.PendingRemoval;
+                tween.Kill();
+                if (!_finishedTweenKeysToRemove.Contains(tweenKey))
+                {
+                    _finishedTweenKeysToRemove.Add(tweenKey);
+                }
                 return true;
             }
             return false;
         }
 
-        public IReadOnlyList<IEffect> GetEffectsForTarget(object targetKey)
+        public bool CompleteTween(Guid tweenKey)
         {
-            if (_objectToActiveEffectIds.TryGetValue(targetKey, out var effectIds))
+            if (_activeTweens.TryGetValue(tweenKey, out var tween))
             {
-                return effectIds
-                    .Select(id => _activeEffects.TryGetValue(id, out var effect) ? effect : null)
-                    .Where(effect => effect != null && effect.State == EffectState.Active)
-                    .ToList()
-                    .AsReadOnly();
+                tween.Complete();
+                return true;
             }
-            return Array.Empty<IEffect>();
+            return false;
         }
 
-        public void Update()
+        public bool TryGetTween(Guid tweenKey, out ITween tween)
         {
-            if (_graphicObjects.Count == 0)
-                return;
-
-            UpdateEffects();
-            UpdateGraphicObjects();
-            ProcessRemovals();
+            return _activeTweens.TryGetValue(tweenKey, out tween);
         }
 
-        private void UpdateEffects()
+        public void KillAllTweensForTarget(object targetKey)
         {
-            float deltaTime = Time.deltaTime;
-            foreach (var effect in _activeEffects.Values.ToList())
+            if (
+                targetKey != null
+                && _objectToActiveTweenIds.TryGetValue(targetKey, out var tweenIds)
+            )
             {
-                if (effect.State == EffectState.Active)
+                foreach (var tweenId in tweenIds.ToList())
                 {
-                    effect.Update(deltaTime);
+                    KillTween(tweenId);
                 }
             }
         }
 
-        private void UpdateGraphicObjects()
+        public void UpdateTweens()
         {
+            if (_activeTweens.Count == 0 && _finishedTweenKeysToRemove.Count == 0)
+                return;
+
+            foreach (var keyToRemove in _finishedTweenKeysToRemove)
+            {
+                if (_activeTweens.Remove(keyToRemove))
+                {
+                    RemoveTweenFromObjectLinks(keyToRemove);
+                }
+            }
+            _finishedTweenKeysToRemove.Clear();
+
+            float deltaTime = Time.deltaTime;
+            foreach (var tween in _activeTweens.Values.ToList())
+            {
+                tween.Update(deltaTime);
+            }
+        }
+
+        public void UpdateGraphicObjects()
+        {
+            if (_graphicObjects.Count == 0)
+                return;
+
             foreach (var graphicObject in _graphicObjects.Values.ToList())
             {
-                graphicObject.Update();
+                try
+                {
+                    graphicObject.Update();
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(
+                        $"[GraphicsManager] Exception during Update for key {graphicObject.Key}: {ex}"
+                    );
+                }
+            }
+
+            var keysToRemoveNow = new List<object>();
+            foreach (var kvp in _graphicObjects)
+            {
+                object key = kvp.Key;
+                IGraphicObject graphicObject = kvp.Value;
+
+                if (graphicObject.State == GraphicObjectState.PendingRemoval)
+                {
+                    bool hasActiveTweens =
+                        _objectToActiveTweenIds.TryGetValue(key, out var tweenIds)
+                        && tweenIds.Count > 0;
+
+                    if (!hasActiveTweens)
+                    {
+                        keysToRemoveNow.Add(key);
+                    }
+                }
+            }
+
+            foreach (var keyToRemove in keysToRemoveNow)
+            {
+                if (_graphicObjects.TryGetValue(keyToRemove, out var graphicObjectToDispose))
+                {
+                    try
+                    {
+                        graphicObjectToDispose.Dispose();
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(
+                            $"[GraphicsManager] Exception during Dispose for key {keyToRemove}: {ex}"
+                        );
+                    }
+                    _graphicObjects.Remove(keyToRemove);
+                    _objectToActiveTweenIds.Remove(keyToRemove);
+                }
             }
         }
 
@@ -189,137 +257,56 @@ namespace PressR.Graphics
 
             foreach (var graphicObject in _graphicObjects.Values.ToList())
             {
-                if (
-                    graphicObject.State == GraphicObjectState.Active
-                    || graphicObject.State == GraphicObjectState.PendingRemoval
-                )
-                {
-                    graphicObject.Render();
-                }
+                graphicObject.Render();
             }
         }
 
         public void Clear()
         {
-            foreach (Guid effectId in _activeEffects.Keys.ToList())
+            foreach (Guid tweenKey in _activeTweens.Keys.ToList())
             {
-                ForceRemoveEffect(effectId);
+                KillTween(tweenKey);
             }
-
-            foreach (var key in _graphicObjects.Keys.ToList())
-            {
-                ForceRemoveGraphicObject(key);
-            }
-
-            _graphicObjects.Clear();
-            _activeEffects.Clear();
-            _objectToActiveEffectIds.Clear();
-        }
-
-        private void ProcessRemovals()
-        {
-            foreach (var effect in _activeEffects.Values.ToList())
-            {
-                if (effect.State == EffectState.PendingRemoval || effect.IsFinished)
-                {
-                    ForceRemoveEffect(effect.Key);
-                }
-            }
+            UpdateTweens();
 
             foreach (var kvp in _graphicObjects.ToList())
             {
-                if (
-                    kvp.Value.State == GraphicObjectState.PendingRemoval
-                    && !_objectToActiveEffectIds.ContainsKey(kvp.Key)
-                )
+                try
                 {
-                    ForceRemoveGraphicObject(kvp.Key);
+                    kvp.Value.Dispose();
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(
+                        $"[GraphicsManager] Exception during Dispose in Clear for key {kvp.Key}: {ex}"
+                    );
                 }
             }
+
+            _graphicObjects.Clear();
+            _activeTweens.Clear();
+            _objectToActiveTweenIds.Clear();
+            _finishedTweenKeysToRemove.Clear();
         }
 
-        private void ForceRemoveGraphicObject(object key)
+        private void RemoveTweenFromObjectLinks(Guid tweenKey)
         {
-            if (_graphicObjects.TryGetValue(key, out var graphicObject))
+            List<object> keysToRemoveLinkFrom = new List<object>();
+            foreach (var kvp in _objectToActiveTweenIds)
             {
-                if (_objectToActiveEffectIds.TryGetValue(key, out var effectIds))
+                if (kvp.Value.Contains(tweenKey))
                 {
-                    foreach (var effectId in effectIds.ToList())
+                    kvp.Value.Remove(tweenKey);
+                    if (kvp.Value.Count == 0)
                     {
-                        if (_activeEffects.TryGetValue(effectId, out var effect))
-                        {
-                            RemoveLink(graphicObject, effect);
-                            effect.OnDetach(graphicObject);
-                            if (
-                                effect.Targets.Count == 0
-                                && effect.IsFinished
-                                && effect.State == EffectState.Active
-                            )
-                            {
-                                effect.State = EffectState.PendingRemoval;
-                            }
-                        }
+                        keysToRemoveLinkFrom.Add(kvp.Key);
                     }
-                    _objectToActiveEffectIds.Remove(key);
                 }
-
-                graphicObject.Dispose();
-
-                _graphicObjects.Remove(key);
-            }
-        }
-
-        private void ForceRemoveEffect(Guid effectId)
-        {
-            if (!_activeEffects.TryGetValue(effectId, out var effect))
-            {
-                return;
             }
 
-            var targetsToDetach = effect.Targets.ToList();
-            foreach (var target in targetsToDetach)
+            foreach (var key in keysToRemoveLinkFrom)
             {
-                RemoveLink(target, effect);
-                effect.OnDetach(target);
-            }
-
-            effect.Targets.Clear();
-
-            _activeEffects.Remove(effectId);
-        }
-
-        private void AddLink(IGraphicObject obj, IEffect effect)
-        {
-            if (
-                obj.State == GraphicObjectState.PendingRemoval
-                || effect.State == EffectState.PendingRemoval
-            )
-                return;
-
-            if (!effect.Targets.Contains(obj))
-            {
-                effect.Targets.Add(obj);
-            }
-
-            if (!_objectToActiveEffectIds.TryGetValue(obj.Key, out var effectIds))
-            {
-                effectIds = new HashSet<Guid>();
-                _objectToActiveEffectIds[obj.Key] = effectIds;
-            }
-            effectIds.Add(effect.Key);
-        }
-
-        private void RemoveLink(IGraphicObject obj, IEffect effect)
-        {
-            effect.Targets.Remove(obj);
-
-            if (_objectToActiveEffectIds.TryGetValue(obj.Key, out var effectIds))
-            {
-                effectIds.Remove(effect.Key);
-                if (effectIds.Count == 0)
-                {
-                    _objectToActiveEffectIds.Remove(obj.Key);
-                }
+                _objectToActiveTweenIds.Remove(key);
             }
         }
     }

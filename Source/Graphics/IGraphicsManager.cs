@@ -1,27 +1,42 @@
 using System;
 using System.Collections.Generic;
-using PressR.Graphics.Effects;
 using PressR.Graphics.GraphicObjects;
+using PressR.Graphics.Tween;
 
 namespace PressR.Graphics
 {
     public interface IGraphicsManager
     {
-        bool RegisterGraphicObject(IGraphicObject graphicObject);
+        IGraphicObject RegisterGraphicObject(IGraphicObject graphicObject);
 
-        bool UnregisterGraphicObject(object key, bool force = false);
+        bool UnregisterGraphicObject(object key);
 
         bool TryGetGraphicObject(object key, out IGraphicObject graphicObject);
 
-        Guid ApplyEffect(IEnumerable<object> targetKeys, IEffect effectPrototype);
+        IReadOnlyDictionary<object, IGraphicObject> GetAllGraphicObjects();
 
-        bool StopEffect(Guid effectId);
+        Guid ApplyTween<TValue>(
+            object targetKey,
+            Func<TValue> getter,
+            Action<TValue> setter,
+            TValue endValue,
+            float duration,
+            string propertyId,
+            EasingFunction easing = null,
+            Action onComplete = null
+        );
 
-        IReadOnlyList<IEffect> GetEffectsForTarget(object targetKey);
+        bool KillTween(Guid tweenKey);
 
-        IReadOnlyDictionary<object, IGraphicObject> GetActiveGraphicObjects();
+        bool CompleteTween(Guid tweenKey);
 
-        void Update();
+        bool TryGetTween(Guid tweenKey, out ITween tween);
+
+        void KillAllTweensForTarget(object targetKey);
+
+        void UpdateTweens();
+
+        void UpdateGraphicObjects();
 
         void RenderGraphicObjects();
 

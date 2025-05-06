@@ -9,7 +9,6 @@ namespace PressR.Features.DirectHaul.Graphics
 {
     public class DirectHaulBuildingHighlightGraphicObject
         : IGraphicObject,
-            IEffectTarget,
             IHasPadding,
             IHasAlpha,
             IHasColor,
@@ -55,6 +54,8 @@ namespace PressR.Features.DirectHaul.Graphics
             _lineMaterial = new Material(baseMat);
             Color = _lineMaterial.color;
         }
+
+        public void OnRegistered() { }
 
         public void Update()
         {

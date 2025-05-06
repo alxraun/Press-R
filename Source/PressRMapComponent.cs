@@ -23,7 +23,8 @@ namespace PressR
 
         public override void MapComponentUpdate()
         {
-            PressRMain.GraphicsManager?.Update();
+            PressRMain.GraphicsManager?.UpdateTweens();
+            PressRMain.GraphicsManager?.UpdateGraphicObjects();
             PressRMain.GraphicsManager?.RenderGraphicObjects();
         }
 

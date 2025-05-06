@@ -1,5 +1,5 @@
 ---
-description: C# Guidelines for UI Component Style
+description: C# UI Component Style Guidelines
 globs: **/UI/**/*.cs
 alwaysApply: false
 ---

@@ -1,0 +1,30 @@
+---
+description: Graphics Controller Guidelines
+globs: **/*GraphicsController.cs
+alwaysApply: false
+---
+- When working with [IGraphicsController.cs](mdc:Source/Graphics/Controllers/IGraphicsController.cs), consider the specifics of [GraphicsManager.cs](mdc:Source/Graphics/GraphicsManager.cs) and [Tween.cs](mdc:Source/Graphics/Tween/Tween.cs)
+
+### Working with `Tween`
+
+- If `ApplyTween` is applied twice to the same `propertyId`, the old Tween will be safely overwritten in `GraphicsManager`. This implies that:
+    - Tweens should not be removed manually.
+    - Tweens can be safely applied to the same `propertyId` any number of times.
+
+- To apply `ApplyTween` to a specific `propertyId`, private methods for semantic effects should be created, such as `ApplyFadeInEffect`, `ApplyFadeOutEffect`, etc.
+
+### Handling `Clear()`
+
+- Graphics cleanup must be uniform. Only one method for cleaning up graphic objects should be called. However:
+    - Within the cleanup method, there can be several different cleanup scenarios. For this, use a `private enum CleanupContext`.
+
+### Working with `GraphicObjectState.PendingRemoval` and `GraphicObjectState.Active`
+
+- `IGraphicsManager.UnregisterGraphicObject(IGraphicObject)` marks the `IGraphicObject` as `GraphicObjectState.PendingRemoval`, meaning it will be automatically and safely removed after all its `Tweens` are completed.
+- `IGraphicsManager.RegisterGraphicObject(IGraphicObject)` reanimates an `IGraphicObject` with `GraphicObjectState.PendingRemoval`, returning it to `GraphicObjectState.Active`.
+- This implies that:
+    - `IGraphicsController` must use `IGraphicsManager` as the single source of truth for storing `IGraphicObject`.
+    - For storing a single instance of `IGraphicObject : IIdentifiable<object>`, the same `IIdentifiable.TKey` should be used.
+    - The lifecycle of `IGraphicObject` should not be managed manually (reanimating, destroying). It is sufficient to simply use `IGraphicsManager.RegisterGraphicObject` for creation/reanimation and `IGraphicsManager.UnregisterGraphicObject` for destruction.
+    - An `IGraphicObject` in the `GraphicObjectState.PendingRemoval` state must be rendered and updated the same way as `GraphicObjectState.Active`.
+    - Controller should not differentiate between `GraphicObjectState.PendingRemoval` and `GraphicObjectState.Active`, if `TryGetGraphicObject` != null, then it is valid.

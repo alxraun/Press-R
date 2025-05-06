@@ -1,0 +1,36 @@
+---
+description: C# Project Naming Guidelines
+globs: **/*.cs
+alwaysApply: false
+---
+### General
+
+1. **Use recognizable terms and domain names**
+
+- Important to use standard, established and understandable terms that correspond to `POLS`.
+
+2. **Avoid mental mapping**
+
+### Functions and Methods
+
+1. **Semantic and Technical Accuracy**
+
+- Names must be semantically and technically accurate, clearly and unambiguously describing what the function should do, what it returns, and what it does. Avoid ambiguity.
+
+- Good: `GetVisibleThingsInViewRectOfType`, `GetThingsInCellOfType`, `GetSelectedHaulableThings`, `IsThingInViewRect`, `AllowThingDefsInFilter`
+
+2. **Logically and semantically related functions or methods should have consistent names**
+
+- Bad: `KillTween`, `RemoveAllTweens`, `DeleteAllTweensForTarget`.
+- Good: `KillTween`, `KillAllTweens`, `KillAllTweensForTarget`.
+
+3. **For functions returning `bool`, use the prefixes `is` or `has`**
+
+### Variables
+
+1. **Logically and semantically related variables should have consistent names**
+
+- Bad: `desiredKeys`, `keysToRemove`.
+- Good: `keysToAdd`, `keysToRemove`.
+
+2. **Name the variable to reflect what it is used for**

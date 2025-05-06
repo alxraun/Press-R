@@ -10,8 +10,7 @@ namespace PressR.Features.DirectHaul.Graphics
             IHasPosition,
             IHasAlpha,
             IHasColor,
-            IHasRadius,
-            IEffectTarget
+            IHasRadius
     {
         private const float DefaultAlpha = 0.3f;
         private static readonly Color DefaultColor = Color.white;
@@ -32,6 +31,8 @@ namespace PressR.Features.DirectHaul.Graphics
                 MaterialPool.MatFrom(GenDraw.LineTexPath, ShaderDatabase.MetaOverlay, Color.white)
             );
         }
+
+        public void OnRegistered() { }
 
         public void Update()
         {

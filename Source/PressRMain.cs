@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using PressR.Features;
 using PressR.Features.DirectHaul;
 using PressR.Features.TabLens;
@@ -27,6 +28,15 @@ namespace PressR
         public static IGraphicsManager GraphicsManager => _graphicsManager;
 
         public static IEnumerable<IPressRFeature> Features => _features;
+
+#if DEBUG
+
+        public static DirectHaulFeature Debug_DirectHaulFeatureInstance =>
+            _features.OfType<DirectHaulFeature>().FirstOrDefault();
+
+        public static TabLensFeature Debug_TabLensFeatureInstance =>
+            _features.OfType<TabLensFeature>().FirstOrDefault();
+#endif
 
         public static void RegisterFeature(IPressRFeature feature)
         {

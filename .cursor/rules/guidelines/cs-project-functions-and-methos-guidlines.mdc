@@ -1,0 +1,28 @@
+---
+description: C# Project Functions And Methods Guidelines
+globs: **/*.cs
+alwaysApply: false
+---
+1. **`Single Responsibility Principle`**
+
+- Methods and functions should do one thing, do it well and do only that
+- Break down methods/functions that perform multiple tasks.
+- Favor small, single-purpose private methods.
+- Avoid side effects in methods and functions.
+- Functions and methods should only be one level of abstraction
+
+2. **Avoid side effects in methods and functions**
+
+- Functions should take input and return output, not change external state.
+- Centralize necessary side effects in specific services.
+
+3. **Functions and methods should only be one level of abstraction**
+
+- Mixing high-level logic (e.g., parsing workflow) with low-level details (e.g., regex specifics) in one function makes it complex. Extract details into helper functions or classes.
+
+4. **In methods and functions, there should be no more than two levels of indentation**
+
+5. **Function arguments (2 or fewer ideally)**
+
+- Fewer arguments make functions easier to understand.
+- Consolidate multiple arguments into a parameter object/class.

@@ -5,116 +5,126 @@ alwaysApply: false
 ---
 # Creating Debugger Configurations
 
-This document describes how to create custom configurations for the Press-R Debugger module, allowing you to monitor specific values during gameplay.
+This document outlines the process for creating custom configurations for the Press-R Debugger module. These configurations allow developers to monitor specific game or mod values during runtime.
 
-## The `IDebuggerConfig` Interface
+## Core Concept: The `IDebuggerConfig` Interface
 
-All debugger configurations must implement the `IDebuggerConfig` interface found in `[IDebuggerConfig.cs](mdc:Source/Debugger/IDebuggerConfig.cs)`. This interface defines the behavior and the data points for a specific debugging session.
+Every debugger configuration must implement the `IDebuggerConfig` interface, located in `Source/Debugger/IDebuggerConfig.cs`. This interface serves as the contract for defining a specific debugging profile.
 
-### Interface Members
+### Interface Definition
 
-*   **`string Name { get; }`**: A user-friendly name for the configuration, displayed in the debugger window's dropdown menu.
-*   **`float UpdateInterval { get; }`**: The desired time interval (in seconds) between taking value snapshots while recording. A smaller value means more frequent updates but potentially more data.
-*   **`float StartDelaySeconds { get; }`**: An optional delay (in seconds) before the debugger starts recording after the "Start" button is pressed. Useful if you need to wait for certain game states to initialize. Use `0f` for no delay.
-*   **`IEnumerable<DebuggerTrackedValueInfo> GetTrackedValues()`**: The core method where you define *which* values to track and *how* they should be displayed. This method returns a list of `DebuggerTrackedValueInfo` objects.
+```csharp
+public interface IDebuggerConfig
+{
+    // A user-friendly name displayed in the debugger UI.
+    string Name { get; }
 
-## Defining Tracked Values (`GetTrackedValues`)
+    // The time interval (seconds) between value snapshots during recording.
+    // Smaller values increase frequency but generate more data.
+    float UpdateInterval { get; }
 
-The `GetTrackedValues` method returns a list of `DebuggerTrackedValueInfo` objects. Each object represents one data point to be monitored.
+    // Optional delay (seconds) before recording starts after activation.
+    // Useful for waiting for game state initialization. Use 0f for no delay.
+    float StartDelaySeconds { get; }
 
-The recommended way to create these objects is by using the static factory methods provided by the `DebuggerTrackedValueInfo` class. It's highly recommended to add the following using directive to your config file for brevity:
+    // Defines the values to track and their display format.
+    IEnumerable<DebuggerTrackedValueInfo> GetTrackedValues();
+}
+```
+
+## Defining Tracked Values: `GetTrackedValues()`
+
+The `GetTrackedValues()` method is central to a configuration. It returns a collection of `DebuggerTrackedValueInfo` objects, each representing a single data point to monitor.
+
+**Recommendation:** Use the static factory methods provided by `DebuggerTrackedValueInfo` for creating these objects. Add the following `using` directive for cleaner code:
 
 ```csharp
 using static PressR.Debugger.DebuggerTrackedValueInfo;
 ```
 
-### API for Creating `DebuggerTrackedValueInfo`
+### Tracking API (`DebuggerTrackedValueInfo`)
 
-The API uses a combination of static factory methods (to define the *primary intent*) and a fluent interface (to *refine* collection display). See `[DebuggerTrackedValueInfo.cs](mdc:Source/Debugger/DebuggerTrackedValueInfo.cs)` for the implementation details.
+The API utilizes static factory methods to specify the primary tracking goal, combined with a fluent interface for refining how collections are displayed. Refer to `Source/Debugger/DebuggerTrackedValueInfo.cs` for full implementation details.
 
-1.  **`TrackValue(string path, string displayName = null)`**:
-    *   **Purpose**: Tracks a simple value (primitive, struct, or object) and displays its `ToString()` representation.
+1.  **`TrackValue(string path, string displayName = null)`**
+    *   **Purpose**: Monitor a single value (primitive, struct, object) and display its `ToString()` representation.
     *   **Example**:
         ```csharp
-        TrackValue("Find.TickManager.TicksGame", "Ticks Game")
+        TrackValue("Find.TickManager.TicksGame", "Game Ticks")
         ```
 
-2.  **`TrackCollectionCount(string path, string displayName = null)`**:
-    *   **Purpose**: Tracks a collection (`ICollection` or `IDictionary`) and displays only the number of elements/pairs it contains.
+2.  **`TrackCollectionCount(string path, string displayName = null)`**
+    *   **Purpose**: Monitor a collection (`ICollection` or `IDictionary`) and display only its element count.
     *   **Example**:
         ```csharp
-        TrackCollectionCount("Find.CurrentMap.mapPawns.AllPawns", "Map Pawns (Count Only)")
+        TrackCollectionCount("Find.CurrentMap.mapPawns.AllPawns", "Map Pawns Count")
         ```
 
-3.  **`TrackCollectionItems(string path, string displayName = null)`**:
-    *   **Purpose**: Tracks a collection (`ICollection`, like `List<T>`, `T[]`) and displays its items. Returns a configurator object to refine display options.
+3.  **`TrackCollectionItems(string path, string displayName = null)`**
+    *   **Purpose**: Monitor an `ICollection` (e.g., `List<T>`, `T[]`) and display its items. Returns a configurator for display options.
     *   **Refinement Methods**:
-        *   `.WithLimit(int limit)`: Show only the first `limit` items.
-        *   `.ShowAll()`: Show all items in the collection (no limit).
-        *   *(Default)*: If neither `.WithLimit()` nor `.ShowAll()` is called, shows the default number of items (currently 3).
+        *   `.WithLimit(int limit)`: Display up to `limit` items.
+        *   `.ShowAll()`: Display all items.
+        *   *(Default)*: Displays a default number of items (e.g., 3) if no refinement method is called.
     *   **Examples**:
         ```csharp
-        // Show first 5 items
+        // Display first 5 items
         TrackCollectionItems("Find.CurrentMap.listerThings.AllThings", "All Things (<=5)")
-            .WithLimit(5)
+            .WithLimit(5);
 
-        // Show all items
-        TrackCollectionItems("Find.Selector.SelectedObjectsListForReading", "Selected Items (all)")
-            .ShowAll()
+        // Display all selected objects
+        TrackCollectionItems("Find.Selector.SelectedObjectsListForReading", "Selected (All)")
+            .ShowAll();
 
-        // Show default number of items (e.g., 3)
-        TrackCollectionItems("SomeList.Items", "Some Items (Default Limit)")
+        // Display default number of items
+        TrackCollectionItems("SomeComponent.InternalList", "Internal List (Default)");
         ```
-    *   **Tracking Dictionary Values**: To track only the *values* of a dictionary, access its `.Values` property in the path:
+    *   **Tracking Dictionary Values**: Access the `.Values` property in the path.
         ```csharp
-        // Show all IGraphicObject values from the dictionary
-        TrackCollectionItems(
-            "PressR.PressRMain._graphicsManager._graphicObjects.Values",
-            "Graphic Objects (Values Only)"
-        ).ShowAll()
+        // Display all IGraphicObject values
+        TrackCollectionItems("PressR.PressRMain._graphicsManager._graphicObjects.Values", "Graphic Objects (Values)")
+            .ShowAll();
         ```
 
-4.  **`TrackDictionaryKeys(string path, string displayName = null)`**:
-    *   **Purpose**: Tracks a dictionary (`IDictionary`) and displays its keys. Returns a configurator object to refine display options.
+4.  **`TrackDictionaryKeys(string path, string displayName = null)`**
+    *   **Purpose**: Monitor an `IDictionary` and display its keys. Returns a configurator for display options.
     *   **Refinement Methods**:
-        *   `.WithLimit(int limit)`: Show only the first `limit` keys.
-        *   `.ShowAll()`: Show all keys in the dictionary (no limit).
-        *   *(Default)*: If neither `.WithLimit()` nor `.ShowAll()` is called, shows the default number of keys (currently 3).
+        *   `.WithLimit(int limit)`: Display up to `limit` keys.
+        *   `.ShowAll()`: Display all keys.
+        *   *(Default)*: Displays a default number of keys (e.g., 3) if no refinement method is called.
     *   **Examples**:
         ```csharp
-        // Show first 5 keys
-        TrackDictionaryKeys("Find.World.worldObjects.AllWorldObjects", "World Objects Keys (<=5)")
-            .WithLimit(5)
+        // Display first 10 world object keys
+        TrackDictionaryKeys("Find.World.worldObjects.AllWorldObjects", "World Objects Keys (<=10)")
+            .WithLimit(10);
 
-        // Show all keys
-        TrackDictionaryKeys("SomeDictionary.Data", "All Dict Keys")
-            .ShowAll()
-
-        // Show default number of keys (e.g., 3)
-        TrackDictionaryKeys("AnotherDictionary.Map", "Dict Keys (Default Limit)")
+        // Display all dictionary keys
+        TrackDictionaryKeys("SomeManager.DataCache", "Cache Keys (All)")
+            .ShowAll();
         ```
 
 ### Value Path Syntax
 
-The `path` parameter in the factory methods specifies how the debugger should find the value to track. It uses a dot-separated string to navigate through static classes, instance members (fields and properties).
+The `path` parameter uses a dot-separated string to navigate through static classes and instance members (fields, properties) to locate the target value.
 
-*   **Standard Paths**: `Find.CurrentMap.mapPawns.AllPawns`
-*   **Static Members**: `UnityEngine.Time.time`
-*   **Type Names (Limited Scope)**: `TickManager.TicksGame` (works for common namespaces like `Verse`, `RimWorld`, `UnityEngine`, etc.)
-*   **Assembly Qualified Names (AQN)**: `Namespace.TypeName, AssemblyName.StaticMember.InstanceMember` (rarely needed)
-*   **Accessing Dictionary Values/Keys**: Use `.Values` or `.Keys` properties: `MyObject.MyDictionary.Values`
+*   **Standard Navigation**: `Find.CurrentMap.mapPawns.AllPawns`
+*   **Static Members**: `UnityEngine.Time.time`, `Verse.Prefs.DevMode`
+*   **Type Name Resolution (Limited Scope)**: `TickManager.TicksGame` (resolves common game/engine namespaces)
+*   **Assembly Qualified Names (AQN)**: `Namespace.TypeName, AssemblyName.StaticMember...` (rarely required)
+*   **Dictionary Access**: Use `.Values` or `.Keys` (e.g., `MyObject.MyDictionary.Values`)
 
-**Unsupported**: Indexers (`[]`), method calls (`()`), conditional access (`?.`).
+**Unsupported Features**: Indexers (`[]`), method calls (`()`), conditional access (`?.`).
 
-For detailed examples and known entry points (`Find`, `Current`, `Game`), refer to the `ValuePathSyntax` static helper class within `[DebuggerTrackedValueInfo.cs](mdc:Source/Debugger/DebuggerTrackedValueInfo.cs)`. You can also view this help text in-game by clicking the info (`i`) button in the debugger window.
+Refer to the `ValuePathSyntax` helper class within `Source/Debugger/DebuggerTrackedValueInfo.cs` or the in-game help (`i` button) for more details and common entry points (`Find`, `Current`, `Game`).
 
-## Examples
+**Limitations (To Be Addressed):**
 
-Refer to the existing configuration files for practical examples:
+1.  **`GetTargetTypeName()` Ignored for Path Resolution:** The `ValueResolver` currently does not use `IDebuggerConfig.GetTargetTypeName()` to establish a starting instance for relative paths.
+2.  **Relative Instance Paths Not Supported:** Paths like `"_myField"` or `"MyProperty"` (intended to resolve against a target instance) will fail, as the resolver attempts to find a global type with that name. This results in errors like "Could not resolve type from 'YourMemberName'".
+3.  **Workaround:** Paths **must** start from a known static entry point (e.g., `Find`, `Current`, `PressR.PressRMain.Instance`) and navigate down to the desired instance member.
+    *   Example: `"Find.CurrentMap.GetComponent<YourMapComponent>().YourField"`
+    *   Example: `"PressR.PressRMain.Instance.GetFeature<MyFeature>().SomeState"`
 
-*   `[ExampleConfig.cs](mdc:Source/Debugger/Configs/ExampleConfig.cs)`: Demonstrates various tracking types.
-*   `[GraphicsManagerConfig.cs](mdc:Source/Debugger/Configs/GraphicsManagerConfig.cs)`: Shows tracking of internal mod state.
+**Future Improvements:**
 
-## Discovery
-
-All classes implementing `IDebuggerConfig` within the same assembly as the debugger core (`PressR.dll`) are automatically discovered at startup and made available in the debugger window's dropdown menu. Simply create your class, implement the interface, and it should appear next time you open the debugger window in-game (after recompiling).
+*   The `ValueResolver` will be enhanced to utilize `GetTargetTypeName()`, enabling simpler, instance-relative path definitions in configurations.

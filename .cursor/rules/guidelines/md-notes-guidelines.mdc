@@ -7,28 +7,27 @@ alwaysApply: false
 
 `note` (`.cursor/docs/notes/*.md`) is a file containing any information in the most concentrated form, in the style of a "Cheat Sheet".
 
-### Guidelines for `note`s:
+### Guidelines for `note`s
 
 - A `note` must contain concise facts in a "Cheat Sheet" style to save space.
 - A `note` must have a strict hierarchical structure, including sections and subsections.
 - Each section and subsection of a `note` must strictly adhere to the `Single Responsibility Principle` (`SRP`).
 - A `note` must contain only facts, without opinions, assumptions, or evaluations.
 
-### Possible actions with `note`s:
+### Possible actions with `note`s
 
 - `Adding new information` - adding and integrating new details, while adhering to all Guidelines for `note`s.
 - `Updating existing information` - clarifying, correcting, changing existing information and details, while adhering to all Guidelines for `note`s.
 - `Refactoring` - rewriting the entire `note` text from scratch, preserving all information and details, and adhering to all Guidelines for `note`s.
 
-### Example of a excellent `note`:
+### Example of a excellent `note`
 
 ```markdown
-- **`DynamicDrawManager.DrawDynamicThings()`**: Draws dynamic objects on the map.
-- **`Thing.DynamicDrawPhaseAt(DrawPhase phase, Vector3 drawLoc, bool flip)`**: Entry point for 
+- `DynamicDrawManager.DrawDynamicThings()`: Draws dynamic objects on the map.
+- `Thing.DynamicDrawPhaseAt(DrawPhase phase, Vector3 drawLoc, bool flip)`: Entry point for 
 `Thing` rendering.
-- **`Thing.DrawAt(Vector3 drawLoc, bool flip)`**: Base method for drawing a `Thing` at a position.
-- **`Graphic.Draw(Vector3 loc, Rot4 rot, Thing thing, float extraRotation)`**: Prepares parameters 
+- `Thing.DrawAt(Vector3 drawLoc, bool flip)`: Base method for drawing a `Thing` at a position.
+- `Graphic.Draw(Vector3 loc, Rot4 rot, Thing thing, float extraRotation)`: Prepares parameters 
 and calls `DrawWorker`.
-- **`Graphic.DrawWorker(Vector3 loc, Rot4 rot, ThingDef thingDef, Thing thing, float extraRotation)
-`**: **Main method**: calculates `Matrix4x4` and calls `Graphics.DrawMesh`.
+- `Graphic.DrawWorker(Vector3 loc, Rot4 rot, ThingDef thingDef, Thing thing, float extraRotation)`: Main method: calculates `Matrix4x4` and calls `Graphics.DrawMesh`.
 ```

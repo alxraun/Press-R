@@ -4,7 +4,9 @@ using System.Linq;
 using PressR.Features.TabLens.Graphics;
 using PressR.Features.TabLens.StorageLens.Commands;
 using PressR.Features.TabLens.StorageLens.Core;
+using PressR.Features.TabLens.StorageLens.Graphics;
 using PressR.Graphics;
+using PressR.Graphics.Controllers;
 using PressR.Utils;
 using RimWorld;
 using UnityEngine;
@@ -18,6 +20,7 @@ namespace PressR.Features.TabLens.StorageLens
         public string Label => "Storage Lens";
 
         private readonly IGraphicsManager _graphicsManager;
+        private readonly StorageLensThingOverlayGraphicsController _graphicsController;
         private Map _currentMap;
         private readonly TrackedThingsData _trackedThingsData = new TrackedThingsData();
         private StorageSettingsData _storageSettingsData;
@@ -25,15 +28,16 @@ namespace PressR.Features.TabLens.StorageLens
         private UIStateSnapshot _UIStateSnapshot;
         private SetStorageQuickSearchFromThingCommand.SearchTargetType? _lastHoverFocusType = null;
 
-        const float _fadeInDuration = 0.05f;
-        const float _fadeOutDuration = 0.05f;
-
         public bool IsActive { get; private set; }
 
         public StorageLens(IGraphicsManager graphicsManager)
         {
             _graphicsManager =
                 graphicsManager ?? throw new ArgumentNullException(nameof(graphicsManager));
+            _graphicsController = new StorageLensThingOverlayGraphicsController(
+                _graphicsManager,
+                _trackedThingsData
+            );
         }
 
         public bool TryActivate()
@@ -48,10 +52,6 @@ namespace PressR.Features.TabLens.StorageLens
             }
 
             UpdateTrackedThings();
-            if (PressRMod.Settings.tabLensSettings.enableStorageLensOverlays)
-            {
-                RefreshThingOverlays();
-            }
             IsActive = true;
             return true;
         }
@@ -62,7 +62,7 @@ namespace PressR.Features.TabLens.StorageLens
             {
                 RestoreUIState();
             }
-            StorageLensHelper.ClearAllOverlays(_graphicsManager, _fadeOutDuration);
+            _graphicsController.Clear();
             ClearState();
             IsActive = false;
         }
@@ -72,6 +72,7 @@ namespace PressR.Features.TabLens.StorageLens
             if (!IsValidStateForUpdate())
             {
                 IsActive = false;
+                _graphicsController.Clear();
                 return;
             }
 
@@ -85,10 +86,7 @@ namespace PressR.Features.TabLens.StorageLens
                 HandleMouseHover();
             }
 
-            if (PressRMod.Settings.tabLensSettings.enableStorageLensOverlays)
-            {
-                RefreshThingOverlays();
-            }
+            _graphicsController.Update();
 
             HandleMouseInput();
         }
@@ -123,45 +121,6 @@ namespace PressR.Features.TabLens.StorageLens
 
             _trackedThingsData.CurrentThings = thingsAllowedByParent;
             _trackedThingsData.AllowanceStates = newAllowanceStates;
-        }
-
-        private void RefreshThingOverlays()
-        {
-            if (_trackedThingsData.CurrentThings == null || _graphicsManager == null)
-                return;
-
-            HashSet<object> desiredKeys = _trackedThingsData
-                .CurrentThings.Select(thing =>
-                    (object)(thing, typeof(TabLensThingOverlayGraphicObject))
-                )
-                .ToHashSet();
-
-            var registeredObjects = _graphicsManager.GetActiveGraphicObjects();
-
-            var registeredKeys = registeredObjects
-                .Keys.Where(key =>
-                    key is ValueTuple<Thing, Type> tuple
-                    && tuple.Item2 == typeof(TabLensThingOverlayGraphicObject)
-                )
-                .ToHashSet();
-
-            var keysToRemove = registeredKeys.Except(desiredKeys).ToList();
-            var keysToAdd = desiredKeys.Except(registeredKeys).ToList();
-            var keysToUpdate = desiredKeys.Intersect(registeredKeys).ToList();
-
-            StorageLensHelper.RemoveObsoleteOverlays(_graphicsManager, keysToRemove);
-            StorageLensHelper.AddNewOverlays(
-                _graphicsManager,
-                keysToAdd,
-                _trackedThingsData,
-                _fadeInDuration
-            );
-            StorageLensHelper.UpdateExistingOverlays(
-                _graphicsManager,
-                keysToUpdate,
-                registeredObjects,
-                _trackedThingsData
-            );
         }
 
         private void HandleMouseHover()
