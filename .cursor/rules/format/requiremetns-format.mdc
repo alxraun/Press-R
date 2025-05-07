@@ -22,4 +22,4 @@ alwaysApply: false
 
 ### Important Note
 
-- The current format is not a final design; the developer should independently design the best solution that meets all requirements.
+- The requirements are not a final design; the developer should independently design the best solution that meets all requirements.
