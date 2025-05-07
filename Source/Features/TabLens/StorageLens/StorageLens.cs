@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using PressR.Features.TabLens.Graphics;
 using PressR.Features.TabLens.StorageLens.Commands;
-using PressR.Features.TabLens.StorageLens.Core;
 using PressR.Features.TabLens.StorageLens.Graphics;
 using PressR.Graphics;
 using PressR.Graphics.Controllers;
@@ -21,12 +20,9 @@ namespace PressR.Features.TabLens.StorageLens
 
         private readonly IGraphicsManager _graphicsManager;
         private readonly StorageLensThingOverlayGraphicsController _graphicsController;
-        private Map _currentMap;
-        private readonly TrackedThingsData _trackedThingsData = new TrackedThingsData();
-        private StorageSettingsData _storageSettingsData;
-        private StorageTabUIData _storageTabUIData;
-        private UIStateSnapshot _UIStateSnapshot;
-        private SetStorageQuickSearchFromThingCommand.SearchTargetType? _lastHoverFocusType = null;
+        private readonly StorageLensState _state;
+        private readonly StorageLensThingsProvider _thingsProvider;
+        private readonly StorageLensUIManager _storageLensUIManager;
 
         public bool IsActive { get; private set; }
 
@@ -34,10 +30,13 @@ namespace PressR.Features.TabLens.StorageLens
         {
             _graphicsManager =
                 graphicsManager ?? throw new ArgumentNullException(nameof(graphicsManager));
+            _state = new StorageLensState();
             _graphicsController = new StorageLensThingOverlayGraphicsController(
                 _graphicsManager,
-                _trackedThingsData
+                _state
             );
+            _thingsProvider = new StorageLensThingsProvider();
+            _storageLensUIManager = new StorageLensUIManager();
         }
 
         public bool TryActivate()
@@ -60,7 +59,7 @@ namespace PressR.Features.TabLens.StorageLens
         {
             if (PressRMod.Settings.tabLensSettings.restoreUIStateOnDeactivate)
             {
-                RestoreUIState();
+                _storageLensUIManager.RestorePreviousUIState(_state);
             }
             _graphicsController.Clear();
             ClearState();
@@ -78,10 +77,7 @@ namespace PressR.Features.TabLens.StorageLens
 
             UpdateTrackedThings();
 
-            if (
-                PressRMod.Settings.tabLensSettings.FocusItemInTabOnHover
-                && PressRMod.Settings.tabLensSettings.FocusItemInTabOnClick
-            )
+            if (PressRMod.Settings.tabLensSettings.FocusItemInTabOnHover)
             {
                 HandleMouseHover();
             }
@@ -94,56 +90,58 @@ namespace PressR.Features.TabLens.StorageLens
         private void UpdateTrackedThings()
         {
             if (
-                _currentMap == null
-                || _storageSettingsData == null
-                || !_storageSettingsData.IsValid
+                _state.CurrentMap == null
+                || _state.SelectedStorage == null
+                || !_state.HasStorageSettings
             )
             {
-                _trackedThingsData.Clear();
+                _state.ClearTrackedThingsData();
                 return;
             }
 
-            HashSet<Thing> initialVisibleThings = MapUtils.GetVisibleThingsInViewRectOfType<Thing>(
-                _currentMap,
-                thing => thing.def.category == ThingCategory.Item
+            HashSet<Thing> initialVisibleThings = _thingsProvider.GetVisibleItemsInViewRect(
+                _state.CurrentMap
             );
 
             HashSet<Thing> thingsAllowedByParent = StorageLensHelper.FilterItemsByParentSettings(
                 initialVisibleThings,
-                _storageSettingsData.SelectedStorage
+                _state.SelectedStorage
             );
 
             Dictionary<Thing, bool> newAllowanceStates =
                 StorageLensHelper.CalculateItemAllowanceStates(
                     thingsAllowedByParent,
-                    _storageSettingsData.CurrentStorageSettings
+                    _state.CurrentStorageSettings
                 );
 
-            _trackedThingsData.CurrentThings = thingsAllowedByParent;
-            _trackedThingsData.AllowanceStates = newAllowanceStates;
+            _state.CurrentThings = thingsAllowedByParent;
+            _state.AllowanceStates = newAllowanceStates;
         }
 
         private void HandleMouseHover()
         {
             Thing currentHoveredThing = InputUtils.GetInteractableThingUnderMouse(
-                _currentMap,
-                thing =>
-                    _trackedThingsData.CurrentThings != null
-                    && _trackedThingsData.CurrentThings.Contains(thing)
+                _state.CurrentMap,
+                thing => _state.CurrentThings != null && _state.CurrentThings.Contains(thing)
             );
-            Thing previousHoveredThing = _trackedThingsData.HoveredThing;
+            Thing previousHoveredThing = _state.HoveredThing;
 
             if (currentHoveredThing == null && previousHoveredThing != null)
             {
-                if ((_storageTabUIData?.IsValid ?? false) && _UIStateSnapshot != null)
+                if (
+                    _state.HasStorageTabUIData
+                    && _state.HasUISnapshotData
+                    && _state.Inspector != null
+                    && Find.WindowStack.CurrentWindowGetsInput
+                )
                 {
-                    new ClearStorageTabSearchTextCommand(_storageTabUIData).Execute();
+                    new ClearStorageTabSearchTextCommand(_state).Execute();
                     new SetStorageTabScrollPositionCommand(
-                        _storageTabUIData,
-                        _UIStateSnapshot.StorageTabScrollPosition
+                        _state,
+                        _state.UISnapshot_StorageTabScrollPosition
                     ).Execute();
                 }
-                _lastHoverFocusType = null;
+                _state.LastHoverFocusType = null;
             }
             else if (currentHoveredThing != null)
             {
@@ -151,35 +149,30 @@ namespace PressR.Features.TabLens.StorageLens
 
                 bool needsCommandCall =
                     (currentHoveredThing != previousHoveredThing)
-                    || (currentFocusType != _lastHoverFocusType);
+                    || (currentFocusType != _state.LastHoverFocusType);
 
-                if (
-                    needsCommandCall
-                    && (_storageTabUIData?.IsValid ?? false)
-                    && (_storageSettingsData?.IsValid ?? false)
-                )
+                if (needsCommandCall && _state.HasStorageTabUIData && _state.HasStorageSettings)
                 {
                     if (PressRMod.Settings.tabLensSettings.openStorageTabAutomatically)
                     {
                         new OpenStorageTabCommand(
-                            _storageSettingsData.SelectedStorage,
-                            _storageTabUIData.Inspector,
-                            _storageTabUIData.Selector
+                            _state.SelectedStorage,
+                            _state.Inspector,
+                            _state.Selector
                         ).Execute();
                     }
 
                     new SetStorageQuickSearchFromThingCommand(
                         currentHoveredThing,
-                        _storageSettingsData.SelectedStorage,
-                        _storageTabUIData,
+                        _state,
                         currentFocusType
                     ).Execute();
 
-                    _lastHoverFocusType = currentFocusType;
+                    _state.LastHoverFocusType = currentFocusType;
                 }
             }
 
-            _trackedThingsData.HoveredThing = currentHoveredThing;
+            _state.HoveredThing = currentHoveredThing;
         }
 
         private void HandleMouseInput()
@@ -188,10 +181,8 @@ namespace PressR.Features.TabLens.StorageLens
                 return;
 
             Thing clickedThing = InputUtils.GetInteractableThingUnderMouse(
-                _currentMap,
-                thing =>
-                    _trackedThingsData.CurrentThings != null
-                    && _trackedThingsData.CurrentThings.Contains(thing)
+                _state.CurrentMap,
+                thing => _state.CurrentThings != null && _state.CurrentThings.Contains(thing)
             );
 
             Event.current.Use();
@@ -209,56 +200,56 @@ namespace PressR.Features.TabLens.StorageLens
             if (
                 PressRMod.Settings.tabLensSettings.openStorageTabAutomatically
                 && PressRMod.Settings.tabLensSettings.FocusItemInTabOnClick
+                && _state.HasStorageSettings
+                && _state.Inspector != null
+                && _state.Selector != null
             )
             {
                 new OpenStorageTabCommand(
-                    _storageSettingsData.SelectedStorage,
-                    _storageTabUIData.Inspector,
-                    _storageTabUIData.Selector
+                    _state.SelectedStorage,
+                    _state.Inspector,
+                    _state.Selector
                 ).Execute();
             }
 
             if (
                 PressRMod.Settings.tabLensSettings.FocusItemInTabOnClick
                 && !PressRMod.Settings.tabLensSettings.FocusItemInTabOnHover
+                && _state.HasStorageSettings
+                && _state.HasStorageTabUIData
             )
             {
                 new SetStorageQuickSearchFromThingCommand(
                     clickedThing,
-                    _storageSettingsData.SelectedStorage,
-                    _storageTabUIData,
+                    _state,
                     focusType
                 ).Execute();
             }
 
-            new ToggleAllowanceCommand(
-                clickedThing,
-                _storageSettingsData.CurrentStorageSettings,
-                _trackedThingsData,
-                toggleType
-            ).Execute();
+            if (_state.HasStorageSettings)
+            {
+                new ToggleAllowanceCommand(clickedThing, _state, toggleType).Execute();
+            }
         }
 
         private bool TryInitializeLensState()
         {
+            _state.ClearAllState();
+
             if (!(Find.Selector.SingleSelectedObject is IStoreSettingsParent selectedStorage))
                 return false;
 
-            if (UIUtils.GetActiveITabOfType<ITab_Storage>() == null)
+            _state.CurrentMap = Find.CurrentMap;
+            if (_state.CurrentMap == null)
                 return false;
 
-            _currentMap = Find.CurrentMap;
-            if (_currentMap == null)
-                return false;
+            _storageLensUIManager.FetchAndSaveCurrentUIState(_state);
 
-            var (snapshot, uiData) = StorageLensHelper.FetchUIData();
-            if (snapshot == null || uiData == null)
+            if (!_state.HasUISnapshotData || !_state.HasStorageTabUIData)
             {
                 ClearState();
                 return false;
             }
-            _UIStateSnapshot = snapshot;
-            _storageTabUIData = uiData;
 
             var currentStorageSettings = selectedStorage.GetStoreSettings();
             if (currentStorageSettings == null)
@@ -267,8 +258,10 @@ namespace PressR.Features.TabLens.StorageLens
                 return false;
             }
 
-            _storageSettingsData = new StorageSettingsData(selectedStorage, currentStorageSettings);
-            if (!_storageSettingsData.IsValid)
+            _state.SelectedStorage = selectedStorage;
+            _state.CurrentStorageSettings = currentStorageSettings;
+
+            if (!_state.IsFullyInitialized)
             {
                 ClearState();
                 return false;
@@ -277,56 +270,33 @@ namespace PressR.Features.TabLens.StorageLens
             return true;
         }
 
-        private void RestoreUIState()
-        {
-            if (_UIStateSnapshot == null)
-            {
-                return;
-            }
-
-            new SetSelectionCommand(_UIStateSnapshot.SelectedObject, _storageTabUIData).Execute();
-
-            new SetOpenTabCommand(
-                _UIStateSnapshot.OpenTabType,
-                _UIStateSnapshot.Inspector,
-                _UIStateSnapshot.Selector
-            ).Execute();
-
-            new SetStorageQuickSearchCommand(
-                _storageTabUIData.QuickSearchFilter,
-                _storageTabUIData.QuickSearchTextProperty,
-                _UIStateSnapshot.StorageTabSearchText
-            ).Execute();
-
-            new SetStorageTabScrollPositionCommand(
-                _storageTabUIData,
-                _UIStateSnapshot.StorageTabScrollPosition
-            ).Execute();
-        }
-
         private bool IsValidStateForUpdate()
         {
-            return IsActive
-                && _currentMap != null
-                && _graphicsManager != null
-                && _storageSettingsData.IsValid
-                && _storageTabUIData.IsValid
-                && Find.Selector.SingleSelectedObject
+            if (!IsActive || !_state.IsFullyInitialized)
+                return false;
+
+            if (
+                !(
+                    Find.Selector.SingleSelectedObject
                     is IStoreSettingsParent currentlySelectedStorage
-                && currentlySelectedStorage == _storageSettingsData.SelectedStorage
-                && currentlySelectedStorage.GetStoreSettings()
-                    is StorageSettings currentStorageSettings
-                && currentStorageSettings == _storageSettingsData.CurrentStorageSettings;
+                )
+                || currentlySelectedStorage != _state.SelectedStorage
+            )
+                return false;
+
+            StorageSettings currentStorageSettings = currentlySelectedStorage.GetStoreSettings();
+            if (
+                currentStorageSettings == null
+                || currentStorageSettings != _state.CurrentStorageSettings
+            )
+                return false;
+
+            return true;
         }
 
         private void ClearState()
         {
-            _currentMap = null;
-            _trackedThingsData.Clear();
-            _storageSettingsData = null;
-            _storageTabUIData = null;
-            _UIStateSnapshot = null;
-            _lastHoverFocusType = null;
+            _state.ClearAllState();
         }
     }
 }

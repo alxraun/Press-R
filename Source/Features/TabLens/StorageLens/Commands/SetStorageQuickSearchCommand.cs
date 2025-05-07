@@ -1,29 +1,28 @@
 using System.Reflection;
+using PressR.Features.TabLens.StorageLens;
 
 namespace PressR.Features.TabLens.StorageLens.Commands
 {
     public class SetStorageQuickSearchCommand : ICommand
     {
-        private readonly object _quickSearchFilter;
-        private readonly PropertyInfo _quickSearchTextProperty;
+        private readonly StorageLensState _state;
         private readonly string _searchText;
 
-        public SetStorageQuickSearchCommand(
-            object quickSearchFilter,
-            PropertyInfo quickSearchTextProperty,
-            string searchText
-        )
+        public SetStorageQuickSearchCommand(StorageLensState state, string searchText)
         {
-            _quickSearchFilter = quickSearchFilter;
-            _quickSearchTextProperty = quickSearchTextProperty;
+            _state = state;
             _searchText = searchText;
         }
 
         public void Execute()
         {
-            if (_quickSearchTextProperty != null && _quickSearchFilter != null)
+            if (
+                _state != null
+                && _state.QuickSearchTextProperty != null
+                && _state.QuickSearchFilter != null
+            )
             {
-                _quickSearchTextProperty.SetValue(_quickSearchFilter, _searchText);
+                _state.QuickSearchTextProperty.SetValue(_state.QuickSearchFilter, _searchText);
             }
         }
     }
