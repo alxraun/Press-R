@@ -1,4 +1,4 @@
-using PressR.Features.TabLens.StorageLens.Core;
+using PressR.Features.TabLens.StorageLens;
 using RimWorld;
 using Verse;
 
@@ -15,39 +15,41 @@ namespace PressR.Features.TabLens.StorageLens.Commands
         }
 
         private readonly Thing _thing;
-        private readonly IStoreSettingsParent _storageParent;
-        private readonly StorageTabUIData _uiData;
+        private readonly StorageLensState _state;
         private readonly SearchTargetType _focusType;
 
         public SetStorageQuickSearchFromThingCommand(
             Thing thing,
-            IStoreSettingsParent storageParent,
-            StorageTabUIData uiData,
+            StorageLensState state,
             SearchTargetType focusType
         )
         {
             _thing = thing;
-            _storageParent = storageParent;
-            _uiData = uiData;
+            _state = state;
             _focusType = focusType;
         }
 
         public void Execute()
         {
+            if (_state == null)
+                return;
+
             if (_focusType == SearchTargetType.Clear)
             {
-                new ClearStorageTabSearchTextCommand(_uiData).Execute();
+                if (_state.HasStorageTabUIData)
+                {
+                    new ClearStorageTabSearchTextCommand(_state).Execute();
+                }
                 return;
             }
 
             string searchText = GetSearchText();
             if (searchText != null)
             {
-                new SetStorageQuickSearchCommand(
-                    _uiData.QuickSearchFilter,
-                    _uiData.QuickSearchTextProperty,
-                    searchText
-                ).Execute();
+                if (_state.HasStorageTabUIData)
+                {
+                    new SetStorageQuickSearchCommand(_state, searchText).Execute();
+                }
             }
         }
 

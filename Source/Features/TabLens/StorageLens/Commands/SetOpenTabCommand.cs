@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using PressR.Features.TabLens.StorageLens;
 using RimWorld;
 using Verse;
 

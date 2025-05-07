@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using PressR.Features.TabLens.Graphics;
-using PressR.Features.TabLens.StorageLens.Core;
 using PressR.Graphics;
 using PressR.Graphics.Controllers;
 using PressR.Graphics.GraphicObjects;
@@ -16,24 +15,23 @@ namespace PressR.Features.TabLens.StorageLens.Graphics
     public class StorageLensThingOverlayGraphicsController : IGraphicsController
     {
         private readonly IGraphicsManager _graphicsManager;
-        private readonly TrackedThingsData _trackedThingsData;
+        private readonly StorageLensState _state;
         private const float FadeInDuration = 0.05f;
         private const float FadeOutDuration = 0.05f;
 
         public StorageLensThingOverlayGraphicsController(
             IGraphicsManager graphicsManager,
-            TrackedThingsData trackedThingsData
+            StorageLensState state
         )
         {
             _graphicsManager =
                 graphicsManager ?? throw new ArgumentNullException(nameof(graphicsManager));
-            _trackedThingsData =
-                trackedThingsData ?? throw new ArgumentNullException(nameof(trackedThingsData));
+            _state = state ?? throw new ArgumentNullException(nameof(state));
         }
 
         public void Update()
         {
-            if (_trackedThingsData?.CurrentThings == null)
+            if (_state?.CurrentThings == null)
             {
                 ClearInternal(_graphicsManager);
                 return;
@@ -45,7 +43,7 @@ namespace PressR.Features.TabLens.StorageLens.Graphics
                 return;
             }
 
-            HashSet<object> desiredKeys = _trackedThingsData
+            HashSet<object> desiredKeys = _state
                 .CurrentThings.Select(thing =>
                     (object)(thing, typeof(TabLensThingOverlayGraphicObject))
                 )
@@ -65,13 +63,8 @@ namespace PressR.Features.TabLens.StorageLens.Graphics
             var keysToUpdate = desiredKeys.Intersect(registeredKeys).ToList();
 
             RemoveObsoleteOverlays(_graphicsManager, keysToRemove);
-            AddNewOverlays(_graphicsManager, keysToAdd, _trackedThingsData);
-            UpdateExistingOverlays(
-                _graphicsManager,
-                keysToUpdate,
-                registeredObjects,
-                _trackedThingsData
-            );
+            AddNewOverlays(_graphicsManager, keysToAdd, _state);
+            UpdateExistingOverlays(_graphicsManager, keysToUpdate, registeredObjects, _state);
         }
 
         public void Clear()
@@ -112,7 +105,7 @@ namespace PressR.Features.TabLens.StorageLens.Graphics
         private void AddNewOverlays(
             IGraphicsManager graphicsManager,
             IEnumerable<object> keysToAdd,
-            TrackedThingsData trackedThingsData
+            StorageLensState state
         )
         {
             keysToAdd
@@ -121,7 +114,7 @@ namespace PressR.Features.TabLens.StorageLens.Graphics
                 {
                     if (key is ValueTuple<Thing, Type> { Item1: var thing })
                     {
-                        bool allowed = trackedThingsData.GetAllowanceState(thing);
+                        bool allowed = state.GetAllowanceState(thing);
                         Color color = GraphicsUtils.GetColorForState(allowed);
 
                         var graphicObject = new TabLensThingOverlayGraphicObject(
@@ -149,7 +142,7 @@ namespace PressR.Features.TabLens.StorageLens.Graphics
             IGraphicsManager graphicsManager,
             IEnumerable<object> keysToUpdate,
             IReadOnlyDictionary<object, IGraphicObject> registeredObjects,
-            TrackedThingsData trackedThingsData
+            StorageLensState state
         )
         {
             keysToUpdate
@@ -160,7 +153,7 @@ namespace PressR.Features.TabLens.StorageLens.Graphics
                     {
                         if (registeredObjects.TryGetValue(key, out IGraphicObject graphicObject))
                         {
-                            bool allowed = trackedThingsData.GetAllowanceState(thing);
+                            bool allowed = state.GetAllowanceState(thing);
                             Color desiredColor = GraphicsUtils.GetColorForState(allowed);
 
                             if (graphicObject is IHasColor colorTarget)

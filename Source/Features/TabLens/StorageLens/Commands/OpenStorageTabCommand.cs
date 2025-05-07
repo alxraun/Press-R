@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using PressR.Features.TabLens.StorageLens;
 using RimWorld;
 using Verse;
 
@@ -25,8 +26,7 @@ namespace PressR.Features.TabLens.StorageLens.Commands
         public void Execute()
         {
             if (_storageParent == null || _inspector == null || _selector == null)
-                if (_storageParent == null || _inspector == null || _selector == null)
-                    return;
+                return;
 
             var inspector = _inspector;
             var selector = _selector;
