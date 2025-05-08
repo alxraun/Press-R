@@ -21,6 +21,15 @@ namespace PressR.Features.TabLens.StorageLens.Graphics
         private const float SubsequentFadeInDuration = 0.2f;
         private bool _isInitialActivation = true;
 
+        private static readonly Type _graphicObjectType = typeof(TabLensThingOverlayGraphicObject);
+
+        private readonly HashSet<object> _desiredKeysSet = new HashSet<object>();
+        private readonly HashSet<object> _registeredKeysSet = new HashSet<object>();
+        private readonly List<object> _keysToAddList = new List<object>();
+        private readonly List<object> _keysToUpdateList = new List<object>();
+        private readonly List<object> _keysToReactivateList = new List<object>();
+        private readonly List<object> _keysToRemoveList = new List<object>();
+
         public StorageLensThingOverlayGraphicsController(
             IGraphicsManager graphicsManager,
             StorageLensState state
@@ -42,47 +51,73 @@ namespace PressR.Features.TabLens.StorageLens.Graphics
                 return;
             }
 
-            HashSet<object> desiredKeys = _state
-                .CurrentThings.Select(thing =>
-                    (object)(thing, typeof(TabLensThingOverlayGraphicObject))
-                )
-                .ToHashSet();
+            _desiredKeysSet.Clear();
+            foreach (var thing in _state.CurrentThings)
+            {
+                _desiredKeysSet.Add((object)(thing, _graphicObjectType));
+            }
 
             var registeredObjects = _graphicsManager.GetAllGraphicObjects();
+            _registeredKeysSet.Clear();
+            foreach (var key in registeredObjects.Keys)
+            {
+                if (key is ValueTuple<Thing, Type> tuple && tuple.Item2 == _graphicObjectType)
+                {
+                    _registeredKeysSet.Add(key);
+                }
+            }
 
-            var registeredKeys = registeredObjects
-                .Keys.Where(key =>
-                    key is ValueTuple<Thing, Type> tuple
-                    && tuple.Item2 == typeof(TabLensThingOverlayGraphicObject)
-                )
-                .ToHashSet();
+            _keysToRemoveList.Clear();
+            foreach (var registeredKey in _registeredKeysSet)
+            {
+                if (!_desiredKeysSet.Contains(registeredKey))
+                {
+                    _keysToRemoveList.Add(registeredKey);
+                }
+            }
 
-            var keysToRemove = registeredKeys.Except(desiredKeys).ToList();
-            var keysToAdd = desiredKeys.Except(registeredKeys).ToList();
-            var keysToUpdate = desiredKeys.Intersect(registeredKeys).ToList();
-            var keysToReactivate = keysToUpdate
-                .Where(k =>
+            _keysToAddList.Clear();
+            _keysToUpdateList.Clear();
+            foreach (var key in _desiredKeysSet)
+            {
+                if (_registeredKeysSet.Contains(key))
+                {
+                    _keysToUpdateList.Add(key);
+                }
+                else
+                {
+                    _keysToAddList.Add(key);
+                }
+            }
+
+            _keysToReactivateList.Clear();
+            foreach (var k in _keysToUpdateList)
+            {
+                if (
                     registeredObjects.TryGetValue(k, out var obj)
                     && obj.State == GraphicObjectState.PendingRemoval
                 )
-                .ToList();
+                {
+                    _keysToReactivateList.Add(k);
+                }
+            }
 
-            RemoveObsoleteOverlays(_graphicsManager, keysToRemove);
+            RemoveObsoleteOverlays(_graphicsManager, _keysToRemoveList);
 
             float currentFadeInDuration = _isInitialActivation
                 ? FadeInDuration
                 : SubsequentFadeInDuration;
 
-            AddNewOverlays(_graphicsManager, keysToAdd, _state, currentFadeInDuration);
+            AddNewOverlays(_graphicsManager, _keysToAddList, _state, currentFadeInDuration);
             UpdateExistingOverlays(
                 _graphicsManager,
-                keysToUpdate,
+                _keysToUpdateList,
                 registeredObjects,
                 _state,
                 currentFadeInDuration
             );
 
-            if (_isInitialActivation && (keysToAdd.Any() || keysToReactivate.Any()))
+            if (_isInitialActivation && (_keysToAddList.Any() || _keysToReactivateList.Any()))
             {
                 _isInitialActivation = false;
             }
@@ -102,18 +137,16 @@ namespace PressR.Features.TabLens.StorageLens.Graphics
 
             var allObjects = graphicsManager.GetAllGraphicObjects();
 
-            var storageLensKeys = allObjects
-                .Where(kvp =>
+            foreach (var kvp in allObjects)
+            {
+                if (
                     kvp.Key is ValueTuple<Thing, Type> tuple
-                    && tuple.Item2 == typeof(TabLensThingOverlayGraphicObject)
+                    && tuple.Item2 == _graphicObjectType
                     && kvp.Value.State == GraphicObjectState.Active
                 )
-                .Select(kvp => kvp.Key)
-                .ToList();
-
-            foreach (var key in storageLensKeys)
-            {
-                RemoveGraphicObjectWithFadeOut(key);
+                {
+                    RemoveGraphicObjectWithFadeOut(kvp.Key);
+                }
             }
         }
 
@@ -122,7 +155,10 @@ namespace PressR.Features.TabLens.StorageLens.Graphics
             IEnumerable<object> keysToRemove
         )
         {
-            keysToRemove.ToList().ForEach(RemoveGraphicObjectWithFadeOut);
+            foreach (var key in keysToRemove)
+            {
+                RemoveGraphicObjectWithFadeOut(key);
+            }
         }
 
         private void AddNewOverlays(
@@ -132,34 +168,32 @@ namespace PressR.Features.TabLens.StorageLens.Graphics
             float fadeInDuration
         )
         {
-            keysToAdd
-                .ToList()
-                .ForEach(key =>
+            foreach (var key in keysToAdd)
+            {
+                if (key is ValueTuple<Thing, Type> { Item1: var thing })
                 {
-                    if (key is ValueTuple<Thing, Type> { Item1: var thing })
+                    bool allowed = state.GetAllowanceState(thing);
+                    Color color = GraphicsUtils.GetColorForState(allowed);
+
+                    var graphicObject = new TabLensThingOverlayGraphicObject(
+                        thing,
+                        ShaderManager.HSVColorizeCutoutShader
+                    );
+                    graphicObject.Alpha = 0f;
+
+                    var registeredObject = graphicsManager.RegisterGraphicObject(graphicObject);
+
+                    if (registeredObject is IHasColor colorTarget)
                     {
-                        bool allowed = state.GetAllowanceState(thing);
-                        Color color = GraphicsUtils.GetColorForState(allowed);
-
-                        var graphicObject = new TabLensThingOverlayGraphicObject(
-                            thing,
-                            ShaderManager.HSVColorizeCutoutShader
-                        );
-                        graphicObject.Alpha = 0f;
-
-                        var registeredObject = graphicsManager.RegisterGraphicObject(graphicObject);
-
-                        if (registeredObject is IHasColor colorTarget)
-                        {
-                            colorTarget.Color = color;
-                        }
-
-                        if (registeredObject is IHasAlpha alphaTarget)
-                        {
-                            ApplyFadeInEffect(graphicsManager, key, alphaTarget, fadeInDuration);
-                        }
+                        colorTarget.Color = color;
                     }
-                });
+
+                    if (registeredObject is IHasAlpha alphaTarget)
+                    {
+                        ApplyFadeInEffect(graphicsManager, key, alphaTarget, fadeInDuration);
+                    }
+                }
+            }
         }
 
         private void UpdateExistingOverlays(
@@ -170,43 +204,41 @@ namespace PressR.Features.TabLens.StorageLens.Graphics
             float fadeInDuration
         )
         {
-            keysToUpdate
-                .ToList()
-                .ForEach(key =>
+            foreach (var key in keysToUpdate)
+            {
+                if (key is ValueTuple<Thing, Type> { Item1: var thing })
                 {
-                    if (key is ValueTuple<Thing, Type> { Item1: var thing })
+                    if (registeredObjects.TryGetValue(key, out IGraphicObject graphicObject))
                     {
-                        if (registeredObjects.TryGetValue(key, out IGraphicObject graphicObject))
+                        bool allowed = state.GetAllowanceState(thing);
+                        Color desiredColor = GraphicsUtils.GetColorForState(allowed);
+
+                        if (graphicObject is IHasColor colorTarget)
                         {
-                            bool allowed = state.GetAllowanceState(thing);
-                            Color desiredColor = GraphicsUtils.GetColorForState(allowed);
+                            colorTarget.Color = desiredColor;
+                        }
 
-                            if (graphicObject is IHasColor colorTarget)
+                        if (graphicObject.State == GraphicObjectState.PendingRemoval)
+                        {
+                            var reactivatedObject = graphicsManager.RegisterGraphicObject(
+                                graphicObject
+                            );
+                            if (
+                                reactivatedObject != null
+                                && reactivatedObject is IHasAlpha alphaTarget
+                            )
                             {
-                                colorTarget.Color = desiredColor;
-                            }
-
-                            if (graphicObject.State == GraphicObjectState.PendingRemoval)
-                            {
-                                var reactivatedObject = graphicsManager.RegisterGraphicObject(
-                                    graphicObject
+                                ApplyFadeInEffect(
+                                    graphicsManager,
+                                    key,
+                                    alphaTarget,
+                                    fadeInDuration
                                 );
-                                if (
-                                    reactivatedObject != null
-                                    && reactivatedObject is IHasAlpha alphaTarget
-                                )
-                                {
-                                    ApplyFadeInEffect(
-                                        graphicsManager,
-                                        key,
-                                        alphaTarget,
-                                        fadeInDuration
-                                    );
-                                }
                             }
                         }
                     }
-                });
+                }
+            }
         }
 
         private static void ApplyFadeInEffect(
