@@ -1,5 +1,5 @@
 using System.Reflection;
-using PressR.Features.TabLens.StorageLens.Core;
+using PressR.Features.TabLens.StorageLens;
 using RimWorld;
 using Verse;
 
@@ -7,19 +7,19 @@ namespace PressR.Features.TabLens.StorageLens.Commands
 {
     public class ClearStorageTabSearchTextCommand : ICommand
     {
-        private readonly StorageTabUIData _uiData;
+        private readonly StorageLensState _state;
 
-        public ClearStorageTabSearchTextCommand(StorageTabUIData uiData)
+        public ClearStorageTabSearchTextCommand(StorageLensState state)
         {
-            _uiData = uiData;
+            _state = state;
         }
 
         public void Execute()
         {
-            if (_uiData == null || !_uiData.IsValid)
+            if (_state == null || !_state.HasStorageTabUIData)
                 return;
 
-            _uiData.QuickSearchTextProperty.SetValue(_uiData.QuickSearchFilter, "");
+            _state.QuickSearchTextProperty.SetValue(_state.QuickSearchFilter, "");
         }
     }
 }

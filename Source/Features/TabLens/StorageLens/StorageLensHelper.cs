@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using PressR.Features.TabLens.StorageLens.Commands;
-using PressR.Features.TabLens.StorageLens.Core;
 using PressR.Utils;
 using RimWorld;
 using UnityEngine;
@@ -62,83 +61,6 @@ namespace PressR.Features.TabLens.StorageLens
                 }
             }
             return allowanceStates;
-        }
-
-        public static (UIStateSnapshot snapshot, StorageTabUIData uiData) FetchUIData()
-        {
-            var selector = Find.Selector;
-            if (selector is null)
-                return (null, null);
-            var inspector = MainButtonDefOf.Inspect.TabWindow as MainTabWindow_Inspect;
-            if (inspector is null)
-                return (null, null);
-            object selectedObject = selector.SingleSelectedObject;
-            Type openTabType = inspector.OpenTabType;
-
-            string storageSearchText = null;
-            Vector2 scrollPosition = Vector2.zero;
-            StorageTabUIData uiData = null;
-
-            UIStateSnapshot CreateSnapshot() =>
-                new UIStateSnapshot(
-                    selectedObject,
-                    openTabType,
-                    storageSearchText,
-                    scrollPosition,
-                    inspector,
-                    selector
-                );
-
-            ITab_Storage storageTabInstance = inspector
-                .CurTabs?.OfType<ITab_Storage>()
-                .FirstOrDefault();
-            if (storageTabInstance is null)
-                return (CreateSnapshot(), null);
-
-            object thingFilterState = ReflectionUtils.GetFieldValue<object>(
-                storageTabInstance,
-                "thingFilterState"
-            );
-            if (thingFilterState is null)
-                return (CreateSnapshot(), null);
-
-            object quickSearchWidget = ReflectionUtils.GetFieldValue<object>(
-                thingFilterState,
-                "quickSearch"
-            );
-            if (quickSearchWidget is null)
-                return (CreateSnapshot(), null);
-
-            object quickSearchFilter = ReflectionUtils.GetFieldValue<object>(
-                quickSearchWidget,
-                "filter"
-            );
-            if (quickSearchFilter is null)
-                return (CreateSnapshot(), null);
-
-            PropertyInfo quickSearchTextProperty = ReflectionUtils.GetPropertyInfo(
-                quickSearchFilter,
-                "Text"
-            );
-            if (quickSearchTextProperty is null)
-                return (CreateSnapshot(), null);
-
-            scrollPosition = ReflectionUtils.GetFieldValue<Vector2>(
-                thingFilterState,
-                "scrollPosition"
-            );
-            storageSearchText = ReflectionUtils.GetPropertyValue<string>(quickSearchFilter, "Text");
-
-            uiData = new StorageTabUIData(
-                quickSearchWidget,
-                quickSearchFilter,
-                quickSearchTextProperty,
-                inspector,
-                selector,
-                thingFilterState
-            );
-
-            return (CreateSnapshot(), uiData);
         }
 
         public static (
