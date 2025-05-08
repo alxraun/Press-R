@@ -175,10 +175,7 @@ namespace PressR.Features.TabLens.StorageLens.Graphics
                     bool allowed = state.GetAllowanceState(thing);
                     Color color = GraphicsUtils.GetColorForState(allowed);
 
-                    var graphicObject = new TabLensThingOverlayGraphicObject(
-                        thing,
-                        ShaderManager.HSVColorizeCutoutShader
-                    );
+                    var graphicObject = new TabLensThingOverlayGraphicObject(thing);
                     graphicObject.Alpha = 0f;
 
                     var registeredObject = graphicsManager.RegisterGraphicObject(graphicObject);
