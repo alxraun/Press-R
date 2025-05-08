@@ -1,20 +1,20 @@
-using PressR.Features.TabLens.StorageLens.Core;
+using PressR.Features.TabLens.StorageLens;
 using RimWorld;
 using Verse;
 
 namespace PressR.Features.TabLens.StorageLens.Commands
 {
-    public class SetSelectionCommand(object targetSelection, StorageTabUIData uiData) : ICommand
+    public class SetSelectionCommand(object targetSelection, StorageLensState state) : ICommand
     {
         private readonly object _targetSelection = targetSelection;
-        private readonly StorageTabUIData _uiData = uiData;
+        private readonly StorageLensState _state = state;
 
         public void Execute()
         {
-            if (_uiData == null || _uiData.Selector == null)
+            if (_state == null || _state.Selector == null)
                 return;
 
-            var selector = _uiData.Selector;
+            var selector = _state.Selector;
 
             object currentSelection = selector.SingleSelectedObject;
 
@@ -30,7 +30,7 @@ namespace PressR.Features.TabLens.StorageLens.Commands
             }
 
             bool canSelect = true;
-            if (_targetSelection is Thing thing && !thing.Spawned)
+            if (_targetSelection is Thing thing && (thing.Destroyed || !thing.Spawned))
             {
                 canSelect = false;
             }

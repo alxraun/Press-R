@@ -7,9 +7,14 @@ alwaysApply: false
 
 1. **Use recognizable terms and domain names**
 
-- Important to use standard, established and understandable terms that correspond to `POLS`.
+- Important to use standard, established and recognizable terms that correspond to `POLS`.
 
-2. **Avoid mental mapping**
+2.  **Prefer Widely Understood and Standard Vocabulary Over Obscure Synonyms**
+
+- For clarity, predictability, and adherence to `POLS` (Principle of Least Surprise), always opt for common, widely understood words in programming. Avoid rare or overly complex synonyms when a simpler, more standard alternative exists. Aim for a lean, consistent vocabulary.
+
+- **Bad:** `Utilize`, `Procedure`, `Terminate`, `Commence`, `Fabricate`, `Initiate`, `Obliterate`, `Consolidate`, `Facilitate`, `Augment`, `Actualize`.
+- **Good:** `Get`, `Fetch`, `Find`, `Read`, `Query`, `Search`, `Select`; `Create`, `New`, `Build`, `Generate`, `Configure`, `Install`; `Add`, `Append`, `Insert`, `Write`, `Edit`, `Change`, `Patch`, `Apply`, `Compare`; `Delete`, `Clear`, `Clean`, `Cancel`; `Start`, `Run`, `Execute`, `Stop`, `Pause`, `Exit`, `Close`, `Interrupt`; `Check`, `Has (prefix)`, `Can (prefix)`, `Should (prefix)`, `Match`; `Calculate`, `Count`, `Decrement`, `Increment`; `Convert`, `Parse`, `Format`, `Encode`, `Normalize`; `Combine`, `Group`, `Filter`, `Map`, `Choose`, `Extract`, `Fill`; `Copy`; `Call`, `Notify`; `Draw`, `Render`, `Hide`; `Open`, `Record`, `Reload`, `Export`; `Enable`, `Disable`; `Use`, `Complete`, `Continue`, `Expand`, `Force`, `Ignore`, `Mark`, `Override`, `Pass`, `Queue`, `Route`.
 
 ### Functions and Methods
 
@@ -25,6 +30,10 @@ alwaysApply: false
 - Good: `KillTween`, `KillAllTweens`, `KillAllTweensForTarget`.
 
 3. **For functions returning `bool`, use the prefixes `is` or `has`**
+
+4. **Some examples of good names**
+
+- Good: `GetVisibleItemsInViewRect`, `GetThingOrZoneAtMouseCell`
 
 ### Variables
 

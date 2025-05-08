@@ -1,4 +1,4 @@
-using PressR.Features.TabLens.StorageLens.Core;
+using PressR.Features.TabLens.StorageLens;
 using RimWorld;
 using Verse;
 using Verse.Sound;
@@ -16,26 +16,23 @@ namespace PressR.Features.TabLens.StorageLens.Commands
         }
 
         private readonly Thing _thing;
-        private readonly StorageSettings _settings;
-        private readonly TrackedThingsData _trackedThingsData;
+        private readonly StorageLensState _state;
         private readonly AllowanceToggleType _toggleType;
 
         public ToggleAllowanceCommand(
             Thing thing,
-            StorageSettings settings,
-            TrackedThingsData trackedThingsData,
+            StorageLensState state,
             AllowanceToggleType toggleType
         )
         {
             _thing = thing;
-            _settings = settings;
-            _trackedThingsData = trackedThingsData;
+            _state = state;
             _toggleType = toggleType;
         }
 
         public void Execute()
         {
-            if (_settings == null || _thing == null || _trackedThingsData == null)
+            if (_state == null || _state.CurrentStorageSettings == null || _thing == null)
                 return;
 
             switch (_toggleType)
@@ -60,13 +57,14 @@ namespace PressR.Features.TabLens.StorageLens.Commands
             if (_thing?.def == null)
                 return;
 
-            ThingFilter filter = _settings.filter;
+            ThingFilter filter = _state.CurrentStorageSettings.filter;
             ThingDef def = _thing.def;
 
-            bool isAllowedBasedOnDTO = _trackedThingsData.GetAllowanceState(_thing);
-            bool newState = !isAllowedBasedOnDTO;
+            bool isAllowedBasedOnState = _state.GetAllowanceState(_thing);
+            bool newState = !isAllowedBasedOnState;
 
             filter.SetAllow(def, newState);
+            _state.AllowanceStates[_thing] = newState;
 
             NotifySettingsChanged();
             PlayToggleSound(newState);
@@ -81,9 +79,9 @@ namespace PressR.Features.TabLens.StorageLens.Commands
                 return;
             }
 
-            ThingFilter filter = _settings.filter;
-            bool isThingAllowedBasedOnDTO = _trackedThingsData.GetAllowanceState(_thing);
-            bool newState = !isThingAllowedBasedOnDTO;
+            ThingFilter filter = _state.CurrentStorageSettings.filter;
+            bool isThingAllowedBasedOnState = _state.GetAllowanceState(_thing);
+            bool newState = !isThingAllowedBasedOnState;
 
             filter.SetAllow(category, newState);
 
@@ -106,9 +104,9 @@ namespace PressR.Features.TabLens.StorageLens.Commands
                 categoryToToggle = firstLevelCategory;
             }
 
-            ThingFilter filter = _settings.filter;
-            bool isThingAllowedBasedOnDTO = _trackedThingsData.GetAllowanceState(_thing);
-            bool newState = !isThingAllowedBasedOnDTO;
+            ThingFilter filter = _state.CurrentStorageSettings.filter;
+            bool isThingAllowedBasedOnState = _state.GetAllowanceState(_thing);
+            bool newState = !isThingAllowedBasedOnState;
 
             filter.SetAllow(categoryToToggle, newState);
 
@@ -118,14 +116,14 @@ namespace PressR.Features.TabLens.StorageLens.Commands
 
         private void ToggleAll()
         {
-            ThingFilter filter = _settings.filter;
+            ThingFilter filter = _state.CurrentStorageSettings.filter;
 
-            bool isAllowedBasedOnDTO = _trackedThingsData.GetAllowanceState(_thing);
-            bool newState = !isAllowedBasedOnDTO;
+            bool isAllowedBasedOnState = _state.GetAllowanceState(_thing);
+            bool newState = !isAllowedBasedOnState;
 
             if (newState)
             {
-                ThingFilter parentFilter = _settings.owner?.GetParentStoreSettings()?.filter;
+                ThingFilter parentFilter = _state.SelectedStorage?.GetParentStoreSettings()?.filter;
                 filter.SetAllowAll(parentFilter);
             }
             else
@@ -151,7 +149,7 @@ namespace PressR.Features.TabLens.StorageLens.Commands
 
         private void NotifySettingsChanged()
         {
-            if (_settings.owner is IStoreSettingsParent parent)
+            if (_state.SelectedStorage is IStoreSettingsParent parent)
             {
                 parent.Notify_SettingsChanged();
             }
