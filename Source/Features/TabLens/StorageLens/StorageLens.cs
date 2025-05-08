@@ -7,6 +7,7 @@ using PressR.Features.TabLens.StorageLens.Graphics;
 using PressR.Graphics;
 using PressR.Graphics.Controllers;
 using PressR.Utils;
+using PressR.Utils.Throttler;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -23,8 +24,12 @@ namespace PressR.Features.TabLens.StorageLens
         private readonly StorageLensState _state;
         private readonly StorageLensThingsProvider _thingsProvider;
         private readonly StorageLensUIManager _storageLensUIManager;
+        private readonly List<IGraphicsController> _lensActiveControllers;
+        private readonly Throttler _graphicsControllersUpdateThrottler;
 
         public bool IsActive { get; private set; }
+
+        private const int GraphicsControllersUpdateIntervalTicks = 1;
 
         public StorageLens(IGraphicsManager graphicsManager)
         {
@@ -37,6 +42,12 @@ namespace PressR.Features.TabLens.StorageLens
             );
             _thingsProvider = new StorageLensThingsProvider();
             _storageLensUIManager = new StorageLensUIManager();
+            _graphicsControllersUpdateThrottler = new Throttler(
+                GraphicsControllersUpdateIntervalTicks
+            );
+
+            _lensActiveControllers = new List<IGraphicsController> { _graphicsController };
+            _lensActiveControllers.RemoveAll(item => item == null);
         }
 
         public bool TryActivate()
@@ -61,7 +72,10 @@ namespace PressR.Features.TabLens.StorageLens
             {
                 _storageLensUIManager.RestorePreviousUIState(_state);
             }
-            _graphicsController.Clear();
+            foreach (var controller in _lensActiveControllers)
+            {
+                controller.Clear();
+            }
             ClearState();
             IsActive = false;
         }
@@ -71,7 +85,10 @@ namespace PressR.Features.TabLens.StorageLens
             if (!IsValidStateForUpdate())
             {
                 IsActive = false;
-                _graphicsController.Clear();
+                foreach (var controller in _lensActiveControllers)
+                {
+                    controller.Clear();
+                }
                 return;
             }
 
@@ -82,7 +99,13 @@ namespace PressR.Features.TabLens.StorageLens
                 HandleMouseHover();
             }
 
-            _graphicsController.Update();
+            if (_graphicsControllersUpdateThrottler.ShouldExecute())
+            {
+                foreach (var controller in _lensActiveControllers)
+                {
+                    controller.Update();
+                }
+            }
 
             HandleMouseInput();
         }
