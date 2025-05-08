@@ -1,27 +1,45 @@
 using System;
+using UnityEngine;
 using Verse;
 
 namespace PressR.Utils.Throttler
 {
     public class Throttler
     {
-        private readonly int _intervalInTicks;
-        private int _lastExecutionTick;
+        private readonly float _intervalInSeconds;
+        private float _lastExecutionTime;
 
-        public Throttler(int intervalInTicks, bool executeImmediatelyFirstTime = true)
+        private const float TicksPerSecond = 60f;
+
+        public Throttler(int intervalTicks, bool executeImmediatelyFirstTime = true)
         {
-            _intervalInTicks = intervalInTicks > 0 ? intervalInTicks : 1;
-            _lastExecutionTick = executeImmediatelyFirstTime
-                ? GenTicks.TicksGame - _intervalInTicks
-                : GenTicks.TicksGame;
+            _intervalInSeconds = intervalTicks / TicksPerSecond;
+            if (executeImmediatelyFirstTime)
+            {
+                _lastExecutionTime = -_intervalInSeconds;
+            }
+            else
+            {
+                _lastExecutionTime = 0f;
+            }
         }
 
         public bool ShouldExecute()
         {
-            int currentTick = GenTicks.TicksGame;
-            if (currentTick >= _lastExecutionTick + _intervalInTicks)
+            float currentTime = Time.realtimeSinceStartup;
+
+            if (_lastExecutionTime == 0f && _intervalInSeconds > 0)
             {
-                _lastExecutionTick = currentTick;
+                _lastExecutionTime = currentTime;
+            }
+            else if (_lastExecutionTime < 0f)
+            {
+                _lastExecutionTime = currentTime + _lastExecutionTime;
+            }
+
+            if (currentTime >= _lastExecutionTime + _intervalInSeconds)
+            {
+                _lastExecutionTime = currentTime;
                 return true;
             }
             return false;
@@ -29,12 +47,12 @@ namespace PressR.Utils.Throttler
 
         public void ResetExecutionTime()
         {
-            _lastExecutionTick = GenTicks.TicksGame;
+            _lastExecutionTime = Time.realtimeSinceStartup;
         }
 
         public void ForceNextExecutionAndResetInterval()
         {
-            _lastExecutionTick = GenTicks.TicksGame - _intervalInTicks;
+            _lastExecutionTime = Time.realtimeSinceStartup - _intervalInSeconds;
         }
     }
 }
