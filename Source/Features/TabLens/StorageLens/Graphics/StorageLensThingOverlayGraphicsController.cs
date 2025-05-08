@@ -18,6 +18,8 @@ namespace PressR.Features.TabLens.StorageLens.Graphics
         private readonly StorageLensState _state;
         private const float FadeInDuration = 0.05f;
         private const float FadeOutDuration = 0.05f;
+        private const float SubsequentFadeInDuration = 0.2f;
+        private bool _isInitialActivation = true;
 
         public StorageLensThingOverlayGraphicsController(
             IGraphicsManager graphicsManager,
@@ -31,13 +33,10 @@ namespace PressR.Features.TabLens.StorageLens.Graphics
 
         public void Update()
         {
-            if (_state?.CurrentThings == null)
-            {
-                ClearInternal(_graphicsManager);
-                return;
-            }
-
-            if (!PressRMod.Settings.tabLensSettings.enableStorageLensOverlays)
+            if (
+                _state?.CurrentThings == null
+                || !PressRMod.Settings.tabLensSettings.enableStorageLensOverlays
+            )
             {
                 ClearInternal(_graphicsManager);
                 return;
@@ -61,10 +60,32 @@ namespace PressR.Features.TabLens.StorageLens.Graphics
             var keysToRemove = registeredKeys.Except(desiredKeys).ToList();
             var keysToAdd = desiredKeys.Except(registeredKeys).ToList();
             var keysToUpdate = desiredKeys.Intersect(registeredKeys).ToList();
+            var keysToReactivate = keysToUpdate
+                .Where(k =>
+                    registeredObjects.TryGetValue(k, out var obj)
+                    && obj.State == GraphicObjectState.PendingRemoval
+                )
+                .ToList();
 
             RemoveObsoleteOverlays(_graphicsManager, keysToRemove);
-            AddNewOverlays(_graphicsManager, keysToAdd, _state);
-            UpdateExistingOverlays(_graphicsManager, keysToUpdate, registeredObjects, _state);
+
+            float currentFadeInDuration = _isInitialActivation
+                ? FadeInDuration
+                : SubsequentFadeInDuration;
+
+            AddNewOverlays(_graphicsManager, keysToAdd, _state, currentFadeInDuration);
+            UpdateExistingOverlays(
+                _graphicsManager,
+                keysToUpdate,
+                registeredObjects,
+                _state,
+                currentFadeInDuration
+            );
+
+            if (_isInitialActivation && (keysToAdd.Any() || keysToReactivate.Any()))
+            {
+                _isInitialActivation = false;
+            }
         }
 
         public void Clear()
@@ -76,6 +97,8 @@ namespace PressR.Features.TabLens.StorageLens.Graphics
         {
             if (graphicsManager == null)
                 return;
+
+            _isInitialActivation = true;
 
             var allObjects = graphicsManager.GetAllGraphicObjects();
 
@@ -105,7 +128,8 @@ namespace PressR.Features.TabLens.StorageLens.Graphics
         private void AddNewOverlays(
             IGraphicsManager graphicsManager,
             IEnumerable<object> keysToAdd,
-            StorageLensState state
+            StorageLensState state,
+            float fadeInDuration
         )
         {
             keysToAdd
@@ -132,7 +156,7 @@ namespace PressR.Features.TabLens.StorageLens.Graphics
 
                         if (registeredObject is IHasAlpha alphaTarget)
                         {
-                            ApplyFadeInEffect(graphicsManager, key, alphaTarget);
+                            ApplyFadeInEffect(graphicsManager, key, alphaTarget, fadeInDuration);
                         }
                     }
                 });
@@ -142,7 +166,8 @@ namespace PressR.Features.TabLens.StorageLens.Graphics
             IGraphicsManager graphicsManager,
             IEnumerable<object> keysToUpdate,
             IReadOnlyDictionary<object, IGraphicObject> registeredObjects,
-            StorageLensState state
+            StorageLensState state,
+            float fadeInDuration
         )
         {
             keysToUpdate
@@ -171,7 +196,12 @@ namespace PressR.Features.TabLens.StorageLens.Graphics
                                     && reactivatedObject is IHasAlpha alphaTarget
                                 )
                                 {
-                                    ApplyFadeInEffect(graphicsManager, key, alphaTarget);
+                                    ApplyFadeInEffect(
+                                        graphicsManager,
+                                        key,
+                                        alphaTarget,
+                                        fadeInDuration
+                                    );
                                 }
                             }
                         }
@@ -182,7 +212,8 @@ namespace PressR.Features.TabLens.StorageLens.Graphics
         private static void ApplyFadeInEffect(
             IGraphicsManager graphicsManager,
             object key,
-            IHasAlpha alphaTarget
+            IHasAlpha alphaTarget,
+            float duration
         )
         {
             if (alphaTarget == null)
@@ -193,7 +224,7 @@ namespace PressR.Features.TabLens.StorageLens.Graphics
                 getter: () => alphaTarget.Alpha,
                 setter: value => alphaTarget.Alpha = value,
                 endValue: 1.0f,
-                duration: FadeInDuration,
+                duration: duration,
                 propertyId: nameof(IHasAlpha.Alpha),
                 easing: Equations.Linear
             );
