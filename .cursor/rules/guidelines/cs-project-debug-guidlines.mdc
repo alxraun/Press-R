@@ -1,0 +1,21 @@
+---
+description: C# Project Debug Guidelines
+globs: **/*.cs
+alwaysApply: false
+---
+**All debug code is concentrated in the `Source/Debug/` directory**
+
+- `Source/Debug/` - is excluded from the build in `Release` mode via csproj, so there is no need to use `#if DEBUG`.
+- `Source/Debug/Patches/` - we use Harmony patches for any debug code, including logging.
+- `Source/Debug/ValueMonitor/` - we use `ValueMonitor` to track field values during program execution.
+
+**Patches**
+
+- For Debug patches, use `[HarmonyPatchCategory("Debug")]`.
+- You can add an unlimited number of prefix, postfix, transpiler patches for:
+    - `Log.Message`, `Log.Warning`, `Log.Error` for any method from the main code.
+
+**ValueMonitor**
+
+- Fields for tracking are declared in `Source/Debug/ValueMonitor/Configs/AdvancedConfig.cs`.
+- Add fields according to the template: `TrackValue("PressR.PressRMain.Debug_DirectHaulFeatureInstance._state.Mode", "Mode")`, `TrackCollectionCount("PressR.PressRMain.Debug_DirectHaulFeatureInstance._state.AllSelectedThings", "AllSelectedThings")`.
