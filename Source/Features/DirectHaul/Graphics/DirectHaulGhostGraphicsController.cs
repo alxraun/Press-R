@@ -20,13 +20,14 @@ namespace PressR.Features.DirectHaul.Graphics
         private readonly DirectHaulState _state;
         private readonly DirectHaulPreview _preview = new();
 
+        private readonly HashSet<object> _reusableDesiredKeysSet = new HashSet<object>();
+        private readonly HashSet<object> _reusableRegisteredKeysSet = new HashSet<object>();
+
         private const float FadeInDuration = 0.05f;
         private const float FadeOutDuration = 0.05f;
 
         private const float GhostFillAlpha = 0.1f;
         private const float GhostEdgeSensitivity = 0.25f;
-
-        private static readonly Shader GhostShader = ShaderManager.SobelEdgeDetectShader;
 
         private static readonly Color PreviewOutlineColor = Color.white;
         private static readonly Color PreviewFillColor = new Color(1f, 1f, 1f, GhostFillAlpha);
@@ -90,20 +91,30 @@ namespace PressR.Features.DirectHaul.Graphics
                 .Where(kvp => kvp.Value.IsValid && viewRect.Contains(kvp.Value))
                 .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
-            ProcessGhostUpdates<DirectHaulPreviewGhostGraphicObject>(
+            ProcessGhostUpdates(
                 visiblePreviewPositions,
                 CreatePreviewGhostKey,
                 (thing, cell) =>
-                    CreatePreviewGhostObject(thing, cell.ToVector3Shifted(), GhostShader, 0f)
+                    CreateGhostObject(thing, cell.ToVector3Shifted(), 0f, GhostType.Preview),
+                GhostType.Preview
             );
 
             var visiblePendingTargets = GetVisiblePendingTargets(directHaulData, viewRect);
 
-            ProcessGhostUpdates<DirectHaulPendingGhostGraphicObject>(
-                visiblePendingTargets.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.Cell),
+            var pendingTargetPositions = new Dictionary<Thing, IntVec3>(
+                visiblePendingTargets.Count
+            );
+            foreach (var kvp in visiblePendingTargets)
+            {
+                pendingTargetPositions.Add(kvp.Key, kvp.Value.Cell);
+            }
+
+            ProcessGhostUpdates(
+                pendingTargetPositions,
                 CreatePendingGhostKey,
                 (thing, cell) =>
-                    CreatePendingGhostObject(thing, cell.ToVector3Shifted(), GhostShader, 0f)
+                    CreateGhostObject(thing, cell.ToVector3Shifted(), 0f, GhostType.Pending),
+                GhostType.Pending
             );
         }
 
@@ -114,8 +125,8 @@ namespace PressR.Features.DirectHaul.Graphics
 
         private void ClearInternal()
         {
-            ClearGraphicObjectsOfType<DirectHaulPreviewGhostGraphicObject>();
-            ClearGraphicObjectsOfType<DirectHaulPendingGhostGraphicObject>();
+            ClearGraphicObjectsOfGhostType(GhostType.Preview);
+            ClearGraphicObjectsOfGhostType(GhostType.Pending);
             _lastPreviewPositions.Clear();
         }
 
@@ -181,45 +192,46 @@ namespace PressR.Features.DirectHaul.Graphics
                 .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
         }
 
-        private void ProcessGhostUpdates<T>(
+        private void ProcessGhostUpdates(
             Dictionary<Thing, IntVec3> desiredPositions,
             Func<Thing, object> keyFactory,
-            Func<Thing, IntVec3, T> ghostFactory
+            Func<Thing, IntVec3, DirectHaulGhostGraphicObject> ghostFactory,
+            GhostType currentGhostType
         )
-            where T : class, IGraphicObject, IHasPosition
         {
+            _reusableDesiredKeysSet.Clear();
+            _reusableRegisteredKeysSet.Clear();
+
             if (desiredPositions.Count == 0)
             {
-                ClearGraphicObjectsOfType<T>();
+                ClearGraphicObjectsOfGhostType(currentGhostType);
                 return;
             }
 
-            var desiredKeys = desiredPositions.Keys.Select(keyFactory).ToHashSet();
-            var registeredKeys = _graphicsManager
-                .GetAllGraphicObjects()
-                .Keys.Where(k => k is ValueTuple<Thing, Type> tuple && tuple.Item2 == typeof(T))
-                .ToHashSet();
-
-            var keysToRemove = registeredKeys.Except(desiredKeys).ToList();
-            var keysToAdd = desiredKeys.Except(registeredKeys).ToHashSet();
-            var keysToUpdate = desiredKeys.Intersect(registeredKeys).ToHashSet();
-
-            foreach (var keyToRemove in keysToRemove)
+            foreach (var kvp in _graphicsManager.GetAllGraphicObjects())
             {
-                RemoveGraphicObjectWithFadeOut(keyToRemove);
+                if (
+                    kvp.Key is ValueTuple<Thing, GhostType> tupleKey
+                    && tupleKey.Item2 == currentGhostType
+                )
+                {
+                    _reusableRegisteredKeysSet.Add(kvp.Key);
+                }
             }
 
-            foreach (var kvp in desiredPositions)
+            foreach (var kvpThingCell in desiredPositions)
             {
-                Thing thing = kvp.Key;
-                IntVec3 targetCell = kvp.Value;
+                Thing thing = kvpThingCell.Key;
+                IntVec3 targetCell = kvpThingCell.Value;
                 object key = keyFactory(thing);
 
-                if (keysToUpdate.Contains(key))
+                _reusableDesiredKeysSet.Add(key);
+
+                if (_reusableRegisteredKeysSet.Contains(key))
                 {
                     if (
                         _graphicsManager.TryGetGraphicObject(key, out var existingObject)
-                        && existingObject is T existingGhost
+                        && existingObject is DirectHaulGhostGraphicObject existingGhost
                     )
                     {
                         if (existingObject.State == GraphicObjectState.PendingRemoval)
@@ -230,72 +242,74 @@ namespace PressR.Features.DirectHaul.Graphics
                         existingGhost.Position = targetCell.ToVector3Shifted();
                     }
                 }
-                else if (keysToAdd.Contains(key))
+                else
                 {
                     var newGhostObject = ghostFactory(thing, targetCell);
                     if (
-                        _graphicsManager.RegisterGraphicObject(newGhostObject) is T registeredGhost
+                        _graphicsManager.RegisterGraphicObject(newGhostObject)
+                            is DirectHaulGhostGraphicObject registeredGhost
                         && registeredGhost != null
                     )
                     {
                         ApplyFadeInEffect(registeredGhost);
-                        registeredGhost.Position = targetCell.ToVector3Shifted();
                     }
+                }
+            }
+
+            foreach (var registeredKey in _reusableRegisteredKeysSet)
+            {
+                if (!_reusableDesiredKeysSet.Contains(registeredKey))
+                {
+                    RemoveGraphicObjectWithFadeOut(registeredKey);
                 }
             }
         }
 
         private static object CreatePreviewGhostKey(Thing thing) =>
-            (object)(thing, typeof(DirectHaulPreviewGhostGraphicObject));
+            (object)(thing, GhostType.Preview);
 
         private static object CreatePendingGhostKey(Thing thing) =>
-            (object)(thing, typeof(DirectHaulPendingGhostGraphicObject));
+            (object)(thing, GhostType.Pending);
 
-        private static DirectHaulPreviewGhostGraphicObject CreatePreviewGhostObject(
+        private static DirectHaulGhostGraphicObject CreateGhostObject(
             Thing thing,
             Vector3 position,
-            Shader shader,
-            float alpha
+            float alpha,
+            GhostType ghostType
         )
         {
-            return new DirectHaulPreviewGhostGraphicObject(thing, position, shader)
+            Color outlineColor =
+                ghostType == GhostType.Preview ? PreviewOutlineColor : PendingOutlineColor;
+            Color fillColor = ghostType == GhostType.Preview ? PreviewFillColor : PendingFillColor;
+
+            return new DirectHaulGhostGraphicObject(thing, ghostType, position)
             {
-                OutlineColor = PreviewOutlineColor,
-                Color = PreviewFillColor,
+                OutlineColor = outlineColor,
+                Color = fillColor,
                 Alpha = alpha,
                 EdgeSensitivity = GhostEdgeSensitivity,
             };
         }
 
-        private static DirectHaulPendingGhostGraphicObject CreatePendingGhostObject(
-            Thing thing,
-            Vector3 position,
-            Shader shader,
-            float alpha
-        )
-        {
-            return new DirectHaulPendingGhostGraphicObject(thing, position, shader)
-            {
-                OutlineColor = PendingOutlineColor,
-                Color = PendingFillColor,
-                Alpha = alpha,
-                EdgeSensitivity = GhostEdgeSensitivity,
-            };
-        }
-
-        private void ClearGraphicObjectsOfType<T>()
-            where T : IGraphicObject
+        private void ClearGraphicObjectsOfGhostType(GhostType ghostType)
         {
             if (_graphicsManager == null)
                 return;
 
-            var keysToClear = _graphicsManager
-                .GetAllGraphicObjects()
-                .Where(kvp => kvp.Value is T && kvp.Value.State == GraphicObjectState.Active)
-                .Select(kvp => kvp.Key)
-                .ToList();
+            List<object> keysToClearList = new List<object>();
+            foreach (var kvp in _graphicsManager.GetAllGraphicObjects())
+            {
+                if (
+                    kvp.Key is ValueTuple<Thing, GhostType> tupleKey
+                    && tupleKey.Item2 == ghostType
+                    && kvp.Value.State == GraphicObjectState.Active
+                )
+                {
+                    keysToClearList.Add(kvp.Key);
+                }
+            }
 
-            foreach (var key in keysToClear)
+            foreach (var key in keysToClearList)
             {
                 RemoveGraphicObjectWithFadeOut(key);
             }
