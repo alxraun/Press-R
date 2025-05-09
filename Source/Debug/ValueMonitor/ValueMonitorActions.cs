@@ -6,7 +6,6 @@ namespace PressR.Debug.ValueMonitor
 {
     public static class ValueMonitorActions
     {
-#if DEBUG
         [DebugAction(
             "Press-R",
             "ValueMonitor Window",
@@ -17,6 +16,5 @@ namespace PressR.Debug.ValueMonitor
         {
             ValueMonitorWindow.ToggleWindow();
         }
-#endif
     }
 }

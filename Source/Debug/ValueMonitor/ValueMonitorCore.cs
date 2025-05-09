@@ -18,6 +18,8 @@ namespace PressR.Debug.ValueMonitor
         private static float _lastUiRefreshRealTime = -1f;
         private static float _uiRefreshInterval = 1.0f;
 
+        private static bool _isFullyInitialized = false;
+
         public static IEnumerable<IValueMonitorConfig> AvailableConfigs =>
             _configManager?.AvailableConfigs;
         public static IValueMonitorConfig CurrentConfig => _configManager?.CurrentConfig;
@@ -39,6 +41,14 @@ namespace PressR.Debug.ValueMonitor
 
         public static void Initialize()
         {
+            if (_isFullyInitialized)
+                return;
+
+            if (Current.ProgramState != ProgramState.Playing || Find.World == null)
+            {
+                return;
+            }
+
             _valueResolver = new ValueResolver(new MemoryResolverCache(), new ExpressionCompiler());
             _configManager = new ValueMonitorConfigManager();
             _stateManager = new ValueMonitorStateManager();
@@ -50,10 +60,14 @@ namespace PressR.Debug.ValueMonitor
             _stateManager.SetOnRecordingStartedAction(HandleRecordingStarted);
 
             UpdateUiRefreshInterval();
+
+            _isFullyInitialized = true;
         }
 
         public static void LoadConfig(IValueMonitorConfig config)
         {
+            if (!_isFullyInitialized)
+                return;
             if (_configManager == null || _stateManager == null || _snapshotManager == null)
                 return;
 
@@ -85,6 +99,8 @@ namespace PressR.Debug.ValueMonitor
 
         public static void StartRecording()
         {
+            if (!_isFullyInitialized)
+                return;
             if (_configManager == null || _stateManager == null || _snapshotManager == null)
                 return;
 
@@ -107,6 +123,8 @@ namespace PressR.Debug.ValueMonitor
 
         public static void StopRecording()
         {
+            if (!_isFullyInitialized)
+                return;
             _stateManager?.StopRecording();
             _snapshotManager?.TakeSnapshot();
         }
@@ -115,6 +133,8 @@ namespace PressR.Debug.ValueMonitor
 
         private static void HandleRecordingStarted(RecordingStartInfo startInfo)
         {
+            if (!_isFullyInitialized)
+                return;
             if (_snapshotManager != null)
             {
                 _snapshotManager.SetRecordingStartInfo(startInfo);
@@ -126,6 +146,13 @@ namespace PressR.Debug.ValueMonitor
 
         public static void Tick(float deltaTime)
         {
+            if (!_isFullyInitialized)
+            {
+                Initialize();
+                if (!_isFullyInitialized)
+                    return;
+            }
+
             if (_stateManager == null || _snapshotManager == null)
                 return;
 
@@ -158,9 +185,11 @@ namespace PressR.Debug.ValueMonitor
 
         public static string GetHistoryAsCsv()
         {
+            if (!_isFullyInitialized)
+                return "ValueMonitor not initialized.";
             if (_snapshotManager == null || _configManager == null || CurrentConfig == null)
             {
-                return "ValueMonitor not initialized or no configuration loaded.";
+                return "ValueMonitor not fully initialized or no configuration loaded.";
             }
             return ValueMonitorCsvExporter.GetHistoryAsCsv(
                 SnapshotsHistory,
