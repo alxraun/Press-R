@@ -6,6 +6,7 @@ using Verse.AI;
 
 namespace PressR.Features.DirectHaul.Patches
 {
+    [HarmonyPatchCategory("PressR")]
     [HarmonyPatch(typeof(Thing), nameof(Thing.TryAbsorbStack))]
     public static class Patch_Thing_TryAbsorbStack
     {

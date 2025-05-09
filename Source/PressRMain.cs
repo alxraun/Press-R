@@ -7,9 +7,6 @@ using PressR.Graphics;
 using UnityEngine;
 using Verse;
 using static PressR.PressRInput;
-#if DEBUG
-using PressR.Debug.ValueMonitor;
-#endif
 
 namespace PressR
 {
@@ -30,7 +27,6 @@ namespace PressR
         public static IEnumerable<IPressRFeature> Features => _features;
 
 #if DEBUG
-
         public static DirectHaulFeature Debug_DirectHaulFeatureInstance =>
             _features.OfType<DirectHaulFeature>().FirstOrDefault();
 
@@ -50,14 +46,6 @@ namespace PressR
 
         public static void MainUpdateLoop()
         {
-#if DEBUG
-
-            if (Current.ProgramState == ProgramState.Playing && ValueMonitorWindow.IsWindowOpen)
-            {
-                ValueMonitorCore.Tick(Time.deltaTime);
-            }
-#endif
-
             if (Current.ProgramState == ProgramState.Playing)
             {
                 foreach (var feature in Features)

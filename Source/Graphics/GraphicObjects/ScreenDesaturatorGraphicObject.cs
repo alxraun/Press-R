@@ -3,7 +3,7 @@ using PressR.Graphics;
 using UnityEngine;
 using Verse;
 
-namespace PressR.Graphics.GraphicObjects.GraphicObjects
+namespace PressR.Graphics.GraphicObjects
 {
     public class ScreenDesaturatorGraphicObject : IGraphicObject, IHasSaturation, IHasAlpha
     {
