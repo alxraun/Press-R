@@ -1,0 +1,52 @@
+---
+description: Principles for optimizing performance-critical code sections, inspired by a "John Carmack style" approach, focusing on minimizing overhead and maximizing efficiency.
+globs:
+alwaysApply: false
+---
+
+### Performance-Critical Code Optimization Guidelines
+
+#### 1. Minimize Allocations (Zero-Allocation Focus)
+- **Avoid dynamic memory allocations in hot paths**.
+- **Utilize pre-allocated, reusable collections** (Lists, Dictionaries, HashSets, arrays). Clear and repopulate them instead of creating new instances.
+- **Pool objects** where appropriate, especially for short-lived objects created frequently.
+- **Prefer `structs` (value types) over `classes` (reference types)** for small, short-lived data containers to avoid heap allocations and garbage collection pressure, where appropriate (e.g., not for large structures or when reference semantics are needed).
+
+#### 2. Cache Aggressively
+- **Cache results of expensive computations**. If a value is costly to compute and doesn't change often, compute it once and store it.
+- **Cache frequently accessed, unchanging values**.
+
+#### 3. Do Less Work (Reduce Computational Load)
+- **Early Exits:** Return from functions as early as possible if further computation is unnecessary.
+- **Conditional Logic:** Use flags or state checks to skip blocks of code that don't need to run.
+- **Precision in Processing:** Only process or update data that has actually changed or is currently relevant. Avoid iterating over or updating entire datasets if only a subset is affected.
+- **Lazy Evaluation:** Defer computation until the result is actually needed, if applicable.
+
+#### 4. Straight-Line Code Over Complex Abstractions in Hot Paths
+- **Inline critical logic:** In performance-sensitive sections, direct method calls or inlined logic can be preferable to indirections like virtual calls, interface dispatches, or delegate invocations if these add measurable overhead.
+- **Simplify data access:** Prefer direct field access or simple property getters/setters over complex data retrieval mechanisms in tight loops.
+- **Minimize branching:** Complex conditional logic and frequent unpredictable branches can lead to pipeline stalls. Consider branchless techniques (e.g., using bitwise operations, conditional moves if available/transpiled, or lookup tables) if profiling shows branches are a bottleneck.
+- **Balance with Readability:** This principle should be applied judiciously. Sacrificing all abstraction for marginal gains can harm maintainability.
+
+#### 5. Specialization Over Generalization for Critical Paths
+- If a generic solution proves to be a bottleneck, consider implementing a **specialized, highly optimized version for the most common or performance-critical use case.**
+- Remove unused flexibility or features from critical components if they incur runtime costs.
+
+#### 6. Control Update Frequency and Granularity
+- **Throttle Updates:** Not all systems need to update every frame. Reduce the update frequency of expensive operations if possible (e.g., update every N frames, or on specific events).
+- **Event-Driven Updates:** Where feasible, update systems in response to specific events rather than polling for changes.
+- **Incremental Updates:** If processing a large task, break it down into smaller chunks that can be processed over multiple frames to avoid performance spikes.
+
+#### 7. Data Considerations
+- **Data Structures:** Choose data structures that are optimal for the access patterns in your critical code (e.g., `Array` vs. `List<T>` vs. `Dictionary<TKey, TValue>`, `Span<T>`, `Memory<T>`).
+- **Data Proximity & Data-Oriented Design (DOD) Principles:**
+    - Keep data that is processed together close in memory to improve cache locality (e.g., an array of structs).
+    - Consider organizing data based on how it's accessed (Data-Oriented Design). For example, for a set of entities with positions and velocities, Structure of Arrays (SoA) (e.g., `float[] xPositions`, `float[] yPositions`) can sometimes be more cache-friendly for certain operations than Array of Structures (AoS) (e.g., `Vector2[] positions`), especially when SIMD can be leveraged or only a subset of components is processed.
+
+#### 8. Algorithmic Optimization Before Micro-Optimizations
+- Before fine-tuning low-level details (like manual inlining or complex bit-twiddling), ensure the core algorithm itself is efficient (e.g., O(N log N) instead of O(N^2) where possible). A change in algorithm often yields orders of magnitude more improvement than micro-optimizations. This is a prerequisite to "Do Less Work" at a higher level.
+
+#### 9. Assist the Compiler
+- **Utilize `readonly` fields and `readonly struct`s:** This signals immutability, which can help the JIT compiler make better optimization choices (e.g., eliding defensive copies for `readonly struct` method calls).
+- **Use `static readonly`** for constants known at runtime initialization.
+- Be mindful of how language features translate to runtime behavior. Simpler constructs often give the JIT compiler more room for optimization. (While C# doesn't have a direct `restrict` keyword like C/C++, understanding aliasing and its impact can still be beneficial).
