@@ -4,13 +4,13 @@ using System.Runtime.ExceptionServices;
 using System.Text.RegularExpressions;
 using Verse;
 
-namespace PressR.Debugger.Resolver
+namespace PressR.Debug.ValueMonitor.Resolver
 {
     public class ValueResolver
     {
         private readonly MemoryResolverCache _cache;
         private readonly ExpressionCompiler _compiler;
-        private const string LogPrefix = "[Debugger] ";
+        private const string LogPrefix = "[ValueMonitor] ";
 
         public ValueResolver(MemoryResolverCache cache, ExpressionCompiler compiler)
         {
@@ -89,7 +89,7 @@ namespace PressR.Debugger.Resolver
                 errorMessage = $"Runtime Error: {ex.GetType().Name} - {ex.Message}";
             }
 
-            DebuggerLog.Warning($"{LogPrefix}{errorMessage}");
+            ValueMonitorLog.Warning($"{LogPrefix}{errorMessage}");
             return ValueResolutionResult.Failure(errorMessage);
         }
 

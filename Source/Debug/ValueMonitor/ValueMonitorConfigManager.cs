@@ -3,47 +3,47 @@ using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
-namespace PressR.Debugger
+namespace PressR.Debug.ValueMonitor
 {
-    public class DebuggerConfigManager
+    public class ValueMonitorConfigManager
     {
-        private const string LogPrefix = "[Debugger] ";
+        private const string LogPrefix = "[ValueMonitor] ";
 
-        public IEnumerable<IDebuggerConfig> AvailableConfigs { get; private set; }
-        public IDebuggerConfig CurrentConfig { get; private set; }
+        public IEnumerable<IValueMonitorConfig> AvailableConfigs { get; private set; }
+        public IValueMonitorConfig CurrentConfig { get; private set; }
         public string ConfigLoadingError { get; private set; }
-        public List<DebuggerTrackedValueInfo> CurrentTrackedValues { get; private set; } =
-            new List<DebuggerTrackedValueInfo>();
+        public List<ValueMonitorTrackedValueInfo> CurrentTrackedValues { get; private set; } =
+            new List<ValueMonitorTrackedValueInfo>();
 
         public void Initialize()
         {
-            var configTypes = typeof(IDebuggerConfig)
+            var configTypes = typeof(IValueMonitorConfig)
                 .Assembly.GetTypes()
                 .Where(t =>
-                    typeof(IDebuggerConfig).IsAssignableFrom(t)
+                    typeof(IValueMonitorConfig).IsAssignableFrom(t)
                     && !t.IsInterface
                     && !t.IsAbstract
                     && t.GetConstructor(Type.EmptyTypes) != null
                 );
 
-            var configs = new List<IDebuggerConfig>();
+            var configs = new List<IValueMonitorConfig>();
             foreach (var type in configTypes)
             {
                 try
                 {
-                    var configInstance = (IDebuggerConfig)Activator.CreateInstance(type);
+                    var configInstance = (IValueMonitorConfig)Activator.CreateInstance(type);
                     configs.Add(configInstance);
                 }
                 catch (Exception ex)
                 {
-                    DebuggerLog.Warning(
-                        $"{LogPrefix}Failed to instantiate IDebuggerConfig type '{type.FullName}': {ex.Message}"
+                    ValueMonitorLog.Warning(
+                        $"{LogPrefix}Failed to instantiate IValueMonitorConfig type '{type.FullName}': {ex.Message}"
                     );
                 }
             }
 
             AvailableConfigs = configs.OrderBy(c => c.Name).ToList();
-            DebuggerLog.Info($"{LogPrefix}Found {AvailableConfigs.Count()} configurations.");
+            ValueMonitorLog.Info($"{LogPrefix}Found {AvailableConfigs.Count()} configurations.");
 
             if (AvailableConfigs.Any())
             {
@@ -55,7 +55,7 @@ namespace PressR.Debugger
             }
         }
 
-        public void LoadConfig(IDebuggerConfig config)
+        public void LoadConfig(IValueMonitorConfig config)
         {
             CurrentConfig = config;
             CurrentTrackedValues.Clear();
@@ -66,11 +66,12 @@ namespace PressR.Debugger
                 try
                 {
                     CurrentTrackedValues =
-                        config.GetTrackedValues()?.ToList() ?? new List<DebuggerTrackedValueInfo>();
+                        config.GetTrackedValues()?.ToList()
+                        ?? new List<ValueMonitorTrackedValueInfo>();
                 }
                 catch (Exception ex)
                 {
-                    DebuggerLog.Warning(
+                    ValueMonitorLog.Warning(
                         $"{LogPrefix}Error getting tracked values from config '{config.Name}': {ex.Message}"
                     );
                     CurrentTrackedValues.Clear();
@@ -87,7 +88,7 @@ namespace PressR.Debugger
                 ConfigLoadingError = "No configurations available.";
             }
 
-            DebuggerLog.Info(
+            ValueMonitorLog.Info(
                 $"{LogPrefix}Config loaded: {config?.Name ?? "None"}. Tracking {CurrentTrackedValues.Count} values."
             );
         }

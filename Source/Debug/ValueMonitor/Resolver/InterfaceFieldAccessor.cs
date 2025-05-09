@@ -3,11 +3,11 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Verse;
 
-namespace PressR.Debugger.Resolver
+namespace PressR.Debug.ValueMonitor.Resolver
 {
     public class InterfaceFieldAccessor
     {
-        private const string LogPrefix = "[Debugger] ";
+        private const string LogPrefix = "[ValueMonitor] ";
 
         private const BindingFlags AllInstanceOrStatic =
             BindingFlags.Public
@@ -63,7 +63,7 @@ namespace PressR.Debugger.Resolver
             }
             catch (Exception ex)
             {
-                DebuggerLog.Warning(
+                ValueMonitorLog.Warning(
                     $"{LogPrefix}Exception compiling interface field accessor for '{fieldName}' at '{fullPathSegmentForError}': {ex.Message}"
                 );
                 return (

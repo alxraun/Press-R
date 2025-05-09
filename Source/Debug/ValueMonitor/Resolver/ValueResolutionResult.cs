@@ -1,4 +1,4 @@
-namespace PressR.Debugger.Resolver
+namespace PressR.Debug.ValueMonitor.Resolver
 {
     public class ValueResolutionResult
     {

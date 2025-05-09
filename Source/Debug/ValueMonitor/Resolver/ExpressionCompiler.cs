@@ -2,14 +2,14 @@ using System;
 using System.Linq.Expressions;
 using Verse;
 
-namespace PressR.Debugger.Resolver
+namespace PressR.Debug.ValueMonitor.Resolver
 {
     public class ExpressionCompiler
     {
         private readonly PathParser _pathParser;
         private readonly MemberAccessor _memberAccessor;
         private readonly InterfaceFieldAccessor _interfaceFieldAccessor;
-        private const string LogPrefix = "[Debugger] ";
+        private const string LogPrefix = "[ValueMonitor] ";
 
         public ExpressionCompiler()
         {
@@ -160,7 +160,7 @@ namespace PressR.Debugger.Resolver
             }
             catch (Exception ex)
             {
-                DebuggerLog.Warning(
+                ValueMonitorLog.Warning(
                     $"{LogPrefix}Exception compiling getter for path '{expressionPath}': {ex.Message}\n{ex.StackTrace}"
                 );
                 error = $"Compilation error: {ex.GetType().Name} - {ex.Message}";

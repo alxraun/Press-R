@@ -1,7 +1,7 @@
 using UnityEngine;
 using Verse;
 
-namespace PressR.Debugger
+namespace PressR.Debug.ValueMonitor
 {
     public enum RecordingState
     {
@@ -23,19 +23,19 @@ namespace PressR.Debugger
         }
     }
 
-    public class DebuggerStateManager
+    public class ValueMonitorStateManager
     {
-        private const string LogPrefix = "[Debugger] ";
+        private const string LogPrefix = "[ValueMonitor] ";
 
         public RecordingState CurrentRecordingState { get; private set; } = RecordingState.Stopped;
         private float _startDelayTimer;
         private float _lastSnapshotRealTime = -1f;
 
-        private IDebuggerConfig _currentConfig;
+        private IValueMonitorConfig _currentConfig;
         private System.Action<RecordingStartInfo> _onRecordingStarted;
         private RecordingStartInfo _currentRecordingInfo;
 
-        public void SetConfig(IDebuggerConfig config) => _currentConfig = config;
+        public void SetConfig(IValueMonitorConfig config) => _currentConfig = config;
 
         public void SetOnRecordingStartedAction(System.Action<RecordingStartInfo> action) =>
             _onRecordingStarted = action;
@@ -44,7 +44,9 @@ namespace PressR.Debugger
         {
             if (_currentConfig == null)
             {
-                DebuggerLog.Warning($"{LogPrefix}Cannot start recording: No configuration loaded.");
+                ValueMonitorLog.Warning(
+                    $"{LogPrefix}Cannot start recording: No configuration loaded."
+                );
                 return;
             }
 
@@ -54,7 +56,7 @@ namespace PressR.Debugger
             _startDelayTimer = _currentConfig.StartDelaySeconds;
             _lastSnapshotRealTime = -1f;
 
-            DebuggerLog.Info($"{LogPrefix}Recording starting in {_startDelayTimer:F1}s...");
+            ValueMonitorLog.Info($"{LogPrefix}Recording starting in {_startDelayTimer:F1}s...");
             if (_startDelayTimer <= 0f)
             {
                 CompleteStart();
@@ -67,7 +69,7 @@ namespace PressR.Debugger
             {
                 CurrentRecordingState = RecordingState.Paused;
                 _lastSnapshotRealTime = Time.time;
-                DebuggerLog.Info($"{LogPrefix}Recording paused.");
+                ValueMonitorLog.Info($"{LogPrefix}Recording paused.");
             }
         }
 
@@ -77,7 +79,7 @@ namespace PressR.Debugger
             {
                 CurrentRecordingState = RecordingState.Recording;
                 _lastSnapshotRealTime = Time.time;
-                DebuggerLog.Info($"{LogPrefix}Recording resumed.");
+                ValueMonitorLog.Info($"{LogPrefix}Recording resumed.");
             }
         }
 
@@ -89,7 +91,7 @@ namespace PressR.Debugger
                 _startDelayTimer = 0f;
                 _lastSnapshotRealTime = -1f;
                 _currentRecordingInfo = null;
-                DebuggerLog.Info($"{LogPrefix}Recording stopped.");
+                ValueMonitorLog.Info($"{LogPrefix}Recording stopped.");
             }
         }
 
@@ -128,7 +130,7 @@ namespace PressR.Debugger
 
             _currentRecordingInfo = new RecordingStartInfo(Time.time, Time.frameCount);
 
-            DebuggerLog.Info(
+            ValueMonitorLog.Info(
                 $"{LogPrefix}Recording started at time={_currentRecordingInfo.StartTime:F2}s, frame={_currentRecordingInfo.StartFrame}."
             );
 

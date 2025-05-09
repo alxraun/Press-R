@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 
-namespace PressR.Debugger
+namespace PressR.Debug.ValueMonitor
 {
-    public interface IDebuggerConfig
+    public interface IValueMonitorConfig
     {
         string Name { get; }
 
@@ -10,6 +10,6 @@ namespace PressR.Debugger
 
         float StartDelaySeconds { get; }
 
-        IEnumerable<DebuggerTrackedValueInfo> GetTrackedValues();
+        IEnumerable<ValueMonitorTrackedValueInfo> GetTrackedValues();
     }
 }
