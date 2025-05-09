@@ -4,22 +4,22 @@ using System.Text;
 using UnityEngine;
 using Verse;
 
-namespace PressR.Debugger
+namespace PressR.Debug.ValueMonitor
 {
-    public enum DebuggerLogLevel
+    public enum ValueMonitorLogLevel
     {
         Info,
         Warning,
         Error,
     }
 
-    public struct DebuggerLogEntry
+    public struct ValueMonitorLogEntry
     {
         public float Timestamp { get; }
-        public DebuggerLogLevel Level { get; }
+        public ValueMonitorLogLevel Level { get; }
         public string Message { get; }
 
-        public DebuggerLogEntry(float timestamp, DebuggerLogLevel level, string message)
+        public ValueMonitorLogEntry(float timestamp, ValueMonitorLogLevel level, string message)
         {
             Timestamp = timestamp;
             Level = level;
@@ -33,35 +33,36 @@ namespace PressR.Debugger
         }
     }
 
-    public static class DebuggerLog
+    public static class ValueMonitorLog
     {
-        private static readonly List<DebuggerLogEntry> _logEntries = new List<DebuggerLogEntry>();
+        private static readonly List<ValueMonitorLogEntry> _logEntries =
+            new List<ValueMonitorLogEntry>();
         private static readonly int MaxLogEntries = 500;
 
-        public static IEnumerable<DebuggerLogEntry> GetLogs()
+        public static IEnumerable<ValueMonitorLogEntry> GetLogs()
         {
             lock (_logEntries)
             {
-                return new List<DebuggerLogEntry>(_logEntries);
+                return new List<ValueMonitorLogEntry>(_logEntries);
             }
         }
 
         public static void Info(string message)
         {
-            AddEntry(DebuggerLogLevel.Info, message);
+            AddEntry(ValueMonitorLogLevel.Info, message);
         }
 
         public static void Warning(string message)
         {
-            AddEntry(DebuggerLogLevel.Warning, message);
+            AddEntry(ValueMonitorLogLevel.Warning, message);
         }
 
         public static void Error(string message)
         {
-            AddEntry(DebuggerLogLevel.Error, message);
+            AddEntry(ValueMonitorLogLevel.Error, message);
         }
 
-        private static void AddEntry(DebuggerLogLevel level, string message)
+        private static void AddEntry(ValueMonitorLogLevel level, string message)
         {
             lock (_logEntries)
             {
@@ -70,7 +71,7 @@ namespace PressR.Debugger
                     _logEntries.RemoveAt(0);
                 }
                 float timestamp = UnityData.IsInMainThread ? Time.time : -1f;
-                _logEntries.Add(new DebuggerLogEntry(timestamp, level, message));
+                _logEntries.Add(new ValueMonitorLogEntry(timestamp, level, message));
             }
         }
 

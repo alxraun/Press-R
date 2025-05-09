@@ -1,12 +1,12 @@
 using System.Collections.Generic;
-using PressR.Debugger;
+using PressR.Debug.ValueMonitor;
 using PressR.Graphics;
 using Verse;
-using static PressR.Debugger.DebuggerTrackedValueInfo;
+using static PressR.Debug.ValueMonitor.ValueMonitorTrackedValueInfo;
 
-namespace PressR.Debugger.Configs
+namespace PressR.Debug.ValueMonitor.Configs
 {
-    public class PressRConfig : IDebuggerConfig
+    public class PressRConfig : IValueMonitorConfig
     {
         public string Name => "PressR Config";
 
@@ -14,9 +14,9 @@ namespace PressR.Debugger.Configs
 
         public float StartDelaySeconds => 3f;
 
-        public IEnumerable<DebuggerTrackedValueInfo> GetTrackedValues()
+        public IEnumerable<ValueMonitorTrackedValueInfo> GetTrackedValues()
         {
-            return new List<DebuggerTrackedValueInfo>
+            return new List<ValueMonitorTrackedValueInfo>
             {
                 TrackValue(
                     "PressR.PressRInput.IsPressRModifierKeyPressed",

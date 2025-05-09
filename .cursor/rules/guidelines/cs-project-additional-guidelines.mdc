@@ -5,5 +5,4 @@ alwaysApply: false
 ---
 - Use Guard Clause and Early Return.
 - Use Pattern Matching (`is`, `switch`).
-- Do not use Log.Warning, Log.Error, Log.Message. Even in debug purposes.
 - Do not use `//` and `///` comments, code should be self-documenting.

@@ -1,26 +1,28 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using PressR.Debugger.Resolver;
+using PressR.Debug.ValueMonitor.Resolver;
 using UnityEngine;
 using Verse;
 
-namespace PressR.Debugger
+namespace PressR.Debug.ValueMonitor
 {
-    public static class DebuggerCore
+    public static class ValueMonitorCore
     {
-        private static DebuggerConfigManager _configManager;
-        private static DebuggerStateManager _stateManager;
-        private static DebuggerSnapshotManager _snapshotManager;
+        private static ValueMonitorConfigManager _configManager;
+        private static ValueMonitorStateManager _stateManager;
+        private static ValueMonitorSnapshotManager _snapshotManager;
         private static ValueResolver _valueResolver;
-        private const string LogPrefix = "[Debugger] ";
+        private const string LogPrefix = "[ValueMonitor] ";
 
         private static float _lastUiRefreshRealTime = -1f;
         private static float _uiRefreshInterval = 1.0f;
 
-        public static IEnumerable<IDebuggerConfig> AvailableConfigs =>
+        private static bool _isFullyInitialized = false;
+
+        public static IEnumerable<IValueMonitorConfig> AvailableConfigs =>
             _configManager?.AvailableConfigs;
-        public static IDebuggerConfig CurrentConfig => _configManager?.CurrentConfig;
+        public static IValueMonitorConfig CurrentConfig => _configManager?.CurrentConfig;
         public static string ConfigLoadingError => _configManager?.ConfigLoadingError;
         public static RecordingState CurrentRecordingState =>
             _stateManager?.CurrentRecordingState ?? RecordingState.Stopped;
@@ -39,10 +41,18 @@ namespace PressR.Debugger
 
         public static void Initialize()
         {
+            if (_isFullyInitialized)
+                return;
+
+            if (Current.ProgramState != ProgramState.Playing || Find.World == null)
+            {
+                return;
+            }
+
             _valueResolver = new ValueResolver(new MemoryResolverCache(), new ExpressionCompiler());
-            _configManager = new DebuggerConfigManager();
-            _stateManager = new DebuggerStateManager();
-            _snapshotManager = new DebuggerSnapshotManager(_valueResolver);
+            _configManager = new ValueMonitorConfigManager();
+            _stateManager = new ValueMonitorStateManager();
+            _snapshotManager = new ValueMonitorSnapshotManager(_valueResolver);
 
             _configManager.Initialize();
 
@@ -50,10 +60,14 @@ namespace PressR.Debugger
             _stateManager.SetOnRecordingStartedAction(HandleRecordingStarted);
 
             UpdateUiRefreshInterval();
+
+            _isFullyInitialized = true;
         }
 
-        public static void LoadConfig(IDebuggerConfig config)
+        public static void LoadConfig(IValueMonitorConfig config)
         {
+            if (!_isFullyInitialized)
+                return;
             if (_configManager == null || _stateManager == null || _snapshotManager == null)
                 return;
 
@@ -65,7 +79,7 @@ namespace PressR.Debugger
             _snapshotManager.TakeSnapshot();
         }
 
-        private static void SyncConfigAcrossManagers(IDebuggerConfig config)
+        private static void SyncConfigAcrossManagers(IValueMonitorConfig config)
         {
             if (_configManager == null || _stateManager == null || _snapshotManager == null)
                 return;
@@ -85,12 +99,14 @@ namespace PressR.Debugger
 
         public static void StartRecording()
         {
+            if (!_isFullyInitialized)
+                return;
             if (_configManager == null || _stateManager == null || _snapshotManager == null)
                 return;
 
             if (_configManager.CurrentConfig == null || !_configManager.CurrentTrackedValues.Any())
             {
-                DebuggerLog.Warning(
+                ValueMonitorLog.Warning(
                     $"{LogPrefix}Cannot start recording: Configuration '{_configManager.CurrentConfig?.Name ?? "None"}' has no valid values to track or is not loaded."
                 );
                 return;
@@ -107,6 +123,8 @@ namespace PressR.Debugger
 
         public static void StopRecording()
         {
+            if (!_isFullyInitialized)
+                return;
             _stateManager?.StopRecording();
             _snapshotManager?.TakeSnapshot();
         }
@@ -115,6 +133,8 @@ namespace PressR.Debugger
 
         private static void HandleRecordingStarted(RecordingStartInfo startInfo)
         {
+            if (!_isFullyInitialized)
+                return;
             if (_snapshotManager != null)
             {
                 _snapshotManager.SetRecordingStartInfo(startInfo);
@@ -126,6 +146,13 @@ namespace PressR.Debugger
 
         public static void Tick(float deltaTime)
         {
+            if (!_isFullyInitialized)
+            {
+                Initialize();
+                if (!_isFullyInitialized)
+                    return;
+            }
+
             if (_stateManager == null || _snapshotManager == null)
                 return;
 
@@ -151,18 +178,20 @@ namespace PressR.Debugger
             }
             catch (Exception ex)
             {
-                DebuggerLog.Error($"{LogPrefix}Error during Tick: {ex}");
+                ValueMonitorLog.Error($"{LogPrefix}Error during Tick: {ex}");
                 StopRecording();
             }
         }
 
         public static string GetHistoryAsCsv()
         {
+            if (!_isFullyInitialized)
+                return "ValueMonitor not initialized.";
             if (_snapshotManager == null || _configManager == null || CurrentConfig == null)
             {
-                return "Debugger not initialized or no configuration loaded.";
+                return "ValueMonitor not fully initialized or no configuration loaded.";
             }
-            return DebuggerCsvExporter.GetHistoryAsCsv(
+            return ValueMonitorCsvExporter.GetHistoryAsCsv(
                 SnapshotsHistory,
                 _configManager.CurrentTrackedValues
             );

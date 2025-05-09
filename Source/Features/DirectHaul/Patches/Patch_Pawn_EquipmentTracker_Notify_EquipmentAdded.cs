@@ -6,6 +6,7 @@ using Verse.AI;
 
 namespace PressR.Features.DirectHaul.Patches
 {
+    [HarmonyPatchCategory("PressR")]
     [HarmonyPatch(
         typeof(Pawn_EquipmentTracker),
         nameof(Pawn_EquipmentTracker.Notify_EquipmentAdded)

@@ -7,6 +7,7 @@ using Verse;
 
 namespace PressR.Features.DirectHaul.Patches
 {
+    [HarmonyPatchCategory("PressR")]
     [HarmonyPatch(typeof(StoreUtility), nameof(StoreUtility.TryFindBestBetterStoreCellFor))]
     public static class Patch_StoreUtility_TryFindBestBetterStoreCellFor
     {

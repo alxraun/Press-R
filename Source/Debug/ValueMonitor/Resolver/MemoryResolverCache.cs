@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace PressR.Debugger.Resolver
+namespace PressR.Debug.ValueMonitor.Resolver
 {
     public class MemoryResolverCache
     {

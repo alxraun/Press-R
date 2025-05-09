@@ -2,9 +2,6 @@ using HarmonyLib;
 using PressR.Settings;
 using UnityEngine;
 using Verse;
-#if DEBUG
-using PressR.Debugger;
-#endif
 
 namespace PressR
 {
@@ -21,11 +18,14 @@ namespace PressR
 
             var harmony = new Harmony("Alx.PressR");
 
-#if DEBUG
-            DebuggerCore.Initialize();
-#endif
+            harmony.PatchCategory(typeof(PressRMod).Assembly, "PressR");
 
-            harmony.PatchAll();
+#if DEBUG
+            LongEventHandler.ExecuteWhenFinished(() =>
+            {
+                harmony.PatchCategory(typeof(PressRMod).Assembly, "Debug");
+            });
+#endif
         }
 
         public override string SettingsCategory() => "Press-R Alpha";
