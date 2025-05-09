@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Verse;
 
-namespace PressR.Debugger.Resolver
+namespace PressR.Debug.ValueMonitor.Resolver
 {
     public class MemberAccessor
     {

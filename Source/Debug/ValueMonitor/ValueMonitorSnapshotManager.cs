@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
-using PressR.Debugger.Resolver;
+using PressR.Debug.ValueMonitor.Resolver;
 using UnityEngine;
 using Verse;
 
-namespace PressR.Debugger
+namespace PressR.Debug.ValueMonitor
 {
-    public class DebuggerSnapshotManager
+    public class ValueMonitorSnapshotManager
     {
         public int MaxHistorySize { get; set; } = 1000;
         public List<Dictionary<string, object>> SnapshotsHistory { get; private set; } =
@@ -15,20 +15,20 @@ namespace PressR.Debugger
             new Dictionary<string, object>();
 
         private readonly ValueResolver _valueResolver;
-        private List<DebuggerTrackedValueInfo> _currentTrackedValues =
-            new List<DebuggerTrackedValueInfo>();
+        private List<ValueMonitorTrackedValueInfo> _currentTrackedValues =
+            new List<ValueMonitorTrackedValueInfo>();
 
         private RecordingStartInfo _recordingStartInfo;
 
-        public DebuggerSnapshotManager(ValueResolver valueResolver)
+        public ValueMonitorSnapshotManager(ValueResolver valueResolver)
         {
             _valueResolver =
                 valueResolver ?? throw new System.ArgumentNullException(nameof(valueResolver));
         }
 
-        public void SetTrackedValues(List<DebuggerTrackedValueInfo> trackedValues)
+        public void SetTrackedValues(List<ValueMonitorTrackedValueInfo> trackedValues)
         {
-            _currentTrackedValues = trackedValues ?? new List<DebuggerTrackedValueInfo>();
+            _currentTrackedValues = trackedValues ?? new List<ValueMonitorTrackedValueInfo>();
 
             LastSnapshot = _currentTrackedValues.ToDictionary(
                 tvi => tvi.DisplayName,
@@ -91,7 +91,10 @@ namespace PressR.Debugger
 
                 if (resolutionResult.IsSuccess)
                 {
-                    snapshotValue = DebuggerValueFormatter.FormatValue(resolutionResult.Value, tvi);
+                    snapshotValue = ValueMonitorValueFormatter.FormatValue(
+                        resolutionResult.Value,
+                        tvi
+                    );
                 }
                 else
                 {

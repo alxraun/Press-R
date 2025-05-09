@@ -3,7 +3,7 @@ using PressR.Settings;
 using UnityEngine;
 using Verse;
 #if DEBUG
-using PressR.Debugger;
+using PressR.Debug.ValueMonitor;
 #endif
 
 namespace PressR
@@ -22,7 +22,7 @@ namespace PressR
             var harmony = new Harmony("Alx.PressR");
 
 #if DEBUG
-            DebuggerCore.Initialize();
+            ValueMonitorCore.Initialize();
 #endif
 
             harmony.PatchAll();

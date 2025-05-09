@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Verse;
 
-namespace PressR.Debugger.Resolver
+namespace PressR.Debug.ValueMonitor.Resolver
 {
     public class InitialParseResult
     {

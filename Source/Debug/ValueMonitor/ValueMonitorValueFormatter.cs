@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.Text;
 using Verse;
 
-namespace PressR.Debugger
+namespace PressR.Debug.ValueMonitor
 {
-    public static class DebuggerValueFormatter
+    public static class ValueMonitorValueFormatter
     {
-        private const string LogPrefix = "[Debugger] ";
+        private const string LogPrefix = "[ValueMonitor] ";
 
-        public static string FormatValue(object rawValue, DebuggerTrackedValueInfo tvi)
+        public static string FormatValue(object rawValue, ValueMonitorTrackedValueInfo tvi)
         {
             if (rawValue == null)
             {
@@ -67,7 +67,7 @@ namespace PressR.Debugger
                 catch (Exception ex)
                 {
                     sb.Append("?Err?");
-                    DebuggerLog.Warning(
+                    ValueMonitorLog.Warning(
                         $"{LogPrefix}Error formatting dictionary key: {ex.Message}"
                     );
                 }
@@ -101,7 +101,7 @@ namespace PressR.Debugger
                 catch (Exception ex)
                 {
                     sb.Append("?Err?");
-                    DebuggerLog.Warning(
+                    ValueMonitorLog.Warning(
                         $"{LogPrefix}Error formatting collection item: {ex.Message}"
                     );
                 }
