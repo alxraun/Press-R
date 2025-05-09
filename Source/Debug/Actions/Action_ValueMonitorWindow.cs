@@ -1,14 +1,13 @@
 using LudeonTK;
-using RimWorld;
-using Verse;
+using PressR.Debug.ValueMonitor;
 
-namespace PressR.Debug.ValueMonitor
+namespace PressR.Debug.Actions
 {
     public static class ValueMonitorActions
     {
         [DebugAction(
             "Press-R",
-            "ValueMonitor Window",
+            "Value Monitor",
             actionType = DebugActionType.Action,
             allowedGameStates = AllowedGameStates.Playing
         )]
