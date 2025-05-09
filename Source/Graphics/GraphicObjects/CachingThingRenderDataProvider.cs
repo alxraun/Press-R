@@ -27,7 +27,7 @@ namespace PressR.Graphics.GraphicObjects
     {
         private readonly Thing _trackedThing;
         private readonly TrackedStateParts _partsToTrack;
-        private readonly bool _provideClientWithCopy;
+        private readonly bool _copyMaterialForClient;
 
         private ThingRenderData _cachedRenderData;
         private Material _actualOriginalMaterialFromReplicator;
@@ -51,12 +51,12 @@ namespace PressR.Graphics.GraphicObjects
         public CachingThingRenderDataProvider(
             Thing thingToTrack,
             TrackedStateParts partsToTrack,
-            bool provideClientWithCopy = false
+            bool copyMaterialForClient = false
         )
         {
             _trackedThing = thingToTrack ?? throw new ArgumentNullException(nameof(thingToTrack));
             _partsToTrack = partsToTrack;
-            _provideClientWithCopy = provideClientWithCopy;
+            _copyMaterialForClient = copyMaterialForClient;
 
             RefreshData();
         }
@@ -95,7 +95,7 @@ namespace PressR.Graphics.GraphicObjects
             }
 
             Material materialToProvideToClient;
-            if (_provideClientWithCopy)
+            if (_copyMaterialForClient)
             {
                 if (
                     _actualOriginalMaterialFromReplicator != null

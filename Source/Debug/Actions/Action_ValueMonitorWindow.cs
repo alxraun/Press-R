@@ -3,7 +3,7 @@ using PressR.Debug.ValueMonitor;
 
 namespace PressR.Debug.Actions
 {
-    public static class ValueMonitorActions
+    public static class Action_ValueMonitorWindow
     {
         [DebugAction(
             "Press-R",

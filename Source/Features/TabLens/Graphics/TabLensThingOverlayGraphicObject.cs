@@ -61,7 +61,7 @@ namespace PressR.Features.TabLens.Graphics
             _renderDataProvider = new CachingThingRenderDataProvider(
                 _targetThing,
                 partsForTabLens,
-                true
+                copyMaterialForClient: true
             );
 
             _propertyBlock.SetFloat(SaturationBlendFactorPropId, 0.5f);
