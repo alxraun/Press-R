@@ -60,18 +60,18 @@ namespace PressR.Features.TabLens.StorageLens
 
         public bool HasUISnapshotData => Inspector != null && Selector != null;
 
-        public void ClearTrackedThingsData()
-        {
-            CurrentThings.Clear();
-            AllowanceStates.Clear();
-            HoveredThing = null;
-        }
-
         public bool GetAllowanceState(Thing thing)
         {
             return AllowanceStates != null
                 && AllowanceStates.TryGetValue(thing, out bool isAllowed)
                 && isAllowed;
+        }
+
+        public void ClearTrackedThingsData()
+        {
+            CurrentThings.Clear();
+            AllowanceStates.Clear();
+            HoveredThing = null;
         }
 
         public void ClearAllState()

@@ -13,6 +13,7 @@ namespace PressR.Features.TabLens.StorageLens
         private readonly HashSet<Thing> _visibleItemsCache;
         private Dictionary<Thing, int> _lastListerSnapshotWithCounts;
         private Map _processedMap;
+        private IStoreSettingsParent _processedStorageParent;
         private int _lastHaulableEverHash;
 
         private readonly Throttler _fullRecalculationThrottler;
@@ -22,46 +23,63 @@ namespace PressR.Features.TabLens.StorageLens
             _visibleItemsCache = new HashSet<Thing>();
             _lastListerSnapshotWithCounts = new Dictionary<Thing, int>();
             _processedMap = null;
+            _processedStorageParent = null;
             _lastHaulableEverHash = 0;
 
             _fullRecalculationThrottler = new Throttler(FullRecalculationIntervalTicks, true);
         }
 
-        public HashSet<Thing> GetVisibleItemsInViewRect(Map map)
+        public void UpdateVisibleAllowedByParentHaulableThingsInSet(
+            HashSet<Thing> targetSet,
+            Map map,
+            IStoreSettingsParent storageParent
+        )
         {
             if (map == null)
             {
+                targetSet.Clear();
                 _visibleItemsCache.Clear();
                 _lastListerSnapshotWithCounts.Clear();
                 _processedMap = null;
+                _processedStorageParent = null;
                 _lastHaulableEverHash = 0;
-                return new HashSet<Thing>();
+                return;
             }
 
-            if (_processedMap != map)
+            if (_processedMap != map || _processedStorageParent != storageParent)
             {
                 _visibleItemsCache.Clear();
                 _lastListerSnapshotWithCounts.Clear();
                 _fullRecalculationThrottler.ForceNextExecutionAndResetInterval();
                 _processedMap = map;
+                _processedStorageParent = storageParent;
                 _lastHaulableEverHash = 0;
             }
 
             CellRect currentViewRect = Find.CameraDriver.CurrentViewRect;
+            ThingFilter parentSettingsFilter = storageParent?.GetParentStoreSettings()?.filter;
 
             if (_fullRecalculationThrottler.ShouldExecute())
             {
-                PerformFullRecalculation(map, currentViewRect);
+                PerformFullRecalculation(map, currentViewRect, parentSettingsFilter);
             }
             else
             {
-                PerformDeltaUpdate(map, currentViewRect);
+                PerformDeltaUpdate(map, currentViewRect, parentSettingsFilter);
             }
 
-            return new HashSet<Thing>(_visibleItemsCache);
+            targetSet.Clear();
+            foreach (var thing in _visibleItemsCache)
+            {
+                targetSet.Add(thing);
+            }
         }
 
-        private void PerformFullRecalculation(Map map, CellRect currentViewRect)
+        private void PerformFullRecalculation(
+            Map map,
+            CellRect currentViewRect,
+            ThingFilter parentSettingsFilter
+        )
         {
             _visibleItemsCache.Clear();
             _lastListerSnapshotWithCounts.Clear();
@@ -74,7 +92,10 @@ namespace PressR.Features.TabLens.StorageLens
             {
                 if (t.def.EverStorable(false))
                 {
-                    storableThingsOnGround.Add(t);
+                    if (parentSettingsFilter == null || parentSettingsFilter.Allows(t.def))
+                    {
+                        storableThingsOnGround.Add(t);
+                    }
                 }
             }
 
@@ -91,11 +112,21 @@ namespace PressR.Features.TabLens.StorageLens
             IReadOnlyList<Pawn> pawns = map.mapPawns.AllPawnsSpawned;
             for (int i = 0; i < pawns.Count; i++)
             {
-                TryProcessCarriedThingByPawn(pawns[i], currentViewRect, map, _visibleItemsCache);
+                TryProcessCarriedThingByPawn(
+                    pawns[i],
+                    currentViewRect,
+                    map,
+                    _visibleItemsCache,
+                    parentSettingsFilter
+                );
             }
         }
 
-        private void PerformDeltaUpdate(Map map, CellRect currentViewRect)
+        private void PerformDeltaUpdate(
+            Map map,
+            CellRect currentViewRect,
+            ThingFilter parentSettingsFilter
+        )
         {
             bool changed = false;
             int currentHaulableEverHash = map.listerThings.StateHashOfGroup(
@@ -110,7 +141,11 @@ namespace PressR.Features.TabLens.StorageLens
             {
                 foreach (KeyValuePair<Thing, int> entry in _lastListerSnapshotWithCounts)
                 {
-                    if (entry.Key.stackCount != entry.Value)
+                    if (
+                        entry.Key == null
+                        || entry.Key.Destroyed
+                        || entry.Key.stackCount != entry.Value
+                    )
                     {
                         changed = true;
                         break;
@@ -120,8 +155,7 @@ namespace PressR.Features.TabLens.StorageLens
 
             if (changed)
             {
-                PerformFullRecalculation(map, currentViewRect);
-                _fullRecalculationThrottler.ForceNextExecutionAndResetInterval();
+                PerformFullRecalculation(map, currentViewRect, parentSettingsFilter);
             }
         }
 
@@ -143,7 +177,8 @@ namespace PressR.Features.TabLens.StorageLens
             Pawn pawn,
             CellRect viewRect,
             Map map,
-            HashSet<Thing> targetSet
+            HashSet<Thing> targetSet,
+            ThingFilter parentSettingsFilter
         )
         {
             IntVec3 pawnPosition = pawn.PositionHeld;
@@ -154,9 +189,19 @@ namespace PressR.Features.TabLens.StorageLens
             )
             {
                 Thing carriedThing = pawn.carryTracker?.CarriedThing;
-                if (carriedThing != null && carriedThing.def.EverStorable(false))
+                if (
+                    carriedThing != null
+                    && carriedThing.def != null
+                    && carriedThing.def.EverStorable(false)
+                )
                 {
-                    targetSet.Add(carriedThing);
+                    if (
+                        parentSettingsFilter == null
+                        || parentSettingsFilter.Allows(carriedThing.def)
+                    )
+                    {
+                        targetSet.Add(carriedThing);
+                    }
                 }
             }
         }

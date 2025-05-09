@@ -20,10 +20,11 @@ namespace PressR.Features.TabLens.StorageLens
         public string Label => "Storage Lens";
 
         private readonly IGraphicsManager _graphicsManager;
-        private readonly StorageLensThingOverlayGraphicsController _graphicsController;
+        private readonly StorageLensThingOverlayGraphicsController _thingOverlayController;
         private readonly StorageLensState _state;
         private readonly StorageLensThingsProvider _thingsProvider;
         private readonly StorageLensUIManager _storageLensUIManager;
+        private readonly StorageLensInputHandler _inputHandler;
         private readonly List<IGraphicsController> _lensActiveControllers;
         private readonly Throttler _graphicsControllersUpdateThrottler;
 
@@ -36,17 +37,18 @@ namespace PressR.Features.TabLens.StorageLens
             _graphicsManager =
                 graphicsManager ?? throw new ArgumentNullException(nameof(graphicsManager));
             _state = new StorageLensState();
-            _graphicsController = new StorageLensThingOverlayGraphicsController(
+            _thingOverlayController = new StorageLensThingOverlayGraphicsController(
                 _graphicsManager,
                 _state
             );
             _thingsProvider = new StorageLensThingsProvider();
             _storageLensUIManager = new StorageLensUIManager();
+            _inputHandler = new StorageLensInputHandler(_state);
             _graphicsControllersUpdateThrottler = new Throttler(
                 GraphicsControllersUpdateIntervalTicks
             );
 
-            _lensActiveControllers = new List<IGraphicsController> { _graphicsController };
+            _lensActiveControllers = new List<IGraphicsController> { _thingOverlayController };
             _lensActiveControllers.RemoveAll(item => item == null);
         }
 
@@ -96,7 +98,7 @@ namespace PressR.Features.TabLens.StorageLens
 
             if (PressRMod.Settings.tabLensSettings.FocusItemInTabOnHover)
             {
-                HandleMouseHover();
+                _inputHandler.ProcessHoverEvent();
             }
 
             if (_graphicsControllersUpdateThrottler.ShouldExecute())
@@ -107,7 +109,11 @@ namespace PressR.Features.TabLens.StorageLens
                 }
             }
 
-            HandleMouseInput();
+            if (PressRInput.IsMouseButtonDown)
+            {
+                _inputHandler.ProcessClickEvent();
+                Event.current.Use();
+            }
         }
 
         private void UpdateTrackedThings()
@@ -122,137 +128,13 @@ namespace PressR.Features.TabLens.StorageLens
                 return;
             }
 
-            HashSet<Thing> initialVisibleThings = _thingsProvider.GetVisibleItemsInViewRect(
-                _state.CurrentMap
-            );
-
-            HashSet<Thing> thingsAllowedByParent = StorageLensHelper.FilterItemsByParentSettings(
-                initialVisibleThings,
+            _thingsProvider.UpdateVisibleAllowedByParentHaulableThingsInSet(
+                _state.CurrentThings,
+                _state.CurrentMap,
                 _state.SelectedStorage
             );
 
-            Dictionary<Thing, bool> newAllowanceStates =
-                StorageLensHelper.CalculateItemAllowanceStates(
-                    thingsAllowedByParent,
-                    _state.CurrentStorageSettings
-                );
-
-            _state.CurrentThings = thingsAllowedByParent;
-            _state.AllowanceStates = newAllowanceStates;
-        }
-
-        private void HandleMouseHover()
-        {
-            Thing currentHoveredThing = InputUtils.GetInteractableThingUnderMouse(
-                _state.CurrentMap,
-                thing => _state.CurrentThings != null && _state.CurrentThings.Contains(thing)
-            );
-            Thing previousHoveredThing = _state.HoveredThing;
-
-            if (currentHoveredThing == null && previousHoveredThing != null)
-            {
-                if (
-                    _state.HasStorageTabUIData
-                    && _state.HasUISnapshotData
-                    && _state.Inspector != null
-                    && Find.WindowStack.CurrentWindowGetsInput
-                )
-                {
-                    new ClearStorageTabSearchTextCommand(_state).Execute();
-                    new SetStorageTabScrollPositionCommand(
-                        _state,
-                        _state.UISnapshot_StorageTabScrollPosition
-                    ).Execute();
-                }
-                _state.LastHoverFocusType = null;
-            }
-            else if (currentHoveredThing != null)
-            {
-                var (currentFocusType, _) = StorageLensHelper.GetInteractionTypesFromModifiers();
-
-                bool needsCommandCall =
-                    (currentHoveredThing != previousHoveredThing)
-                    || (currentFocusType != _state.LastHoverFocusType);
-
-                if (needsCommandCall && _state.HasStorageTabUIData && _state.HasStorageSettings)
-                {
-                    if (PressRMod.Settings.tabLensSettings.openStorageTabAutomatically)
-                    {
-                        new OpenStorageTabCommand(
-                            _state.SelectedStorage,
-                            _state.Inspector,
-                            _state.Selector
-                        ).Execute();
-                    }
-
-                    new SetStorageQuickSearchFromThingCommand(
-                        currentHoveredThing,
-                        _state,
-                        currentFocusType
-                    ).Execute();
-
-                    _state.LastHoverFocusType = currentFocusType;
-                }
-            }
-
-            _state.HoveredThing = currentHoveredThing;
-        }
-
-        private void HandleMouseInput()
-        {
-            if (!IsActive || !PressRInput.IsMouseButtonDown)
-                return;
-
-            Thing clickedThing = InputUtils.GetInteractableThingUnderMouse(
-                _state.CurrentMap,
-                thing => _state.CurrentThings != null && _state.CurrentThings.Contains(thing)
-            );
-
-            Event.current.Use();
-
-            if (clickedThing != null)
-            {
-                ProcessThingClick(clickedThing);
-            }
-        }
-
-        private void ProcessThingClick(Thing clickedThing)
-        {
-            var (focusType, toggleType) = StorageLensHelper.GetInteractionTypesFromModifiers();
-
-            if (
-                PressRMod.Settings.tabLensSettings.openStorageTabAutomatically
-                && PressRMod.Settings.tabLensSettings.FocusItemInTabOnClick
-                && _state.HasStorageSettings
-                && _state.Inspector != null
-                && _state.Selector != null
-            )
-            {
-                new OpenStorageTabCommand(
-                    _state.SelectedStorage,
-                    _state.Inspector,
-                    _state.Selector
-                ).Execute();
-            }
-
-            if (
-                PressRMod.Settings.tabLensSettings.FocusItemInTabOnClick
-                && !PressRMod.Settings.tabLensSettings.FocusItemInTabOnHover
-                && _state.HasStorageSettings
-                && _state.HasStorageTabUIData
-            )
-            {
-                new SetStorageQuickSearchFromThingCommand(
-                    clickedThing,
-                    _state,
-                    focusType
-                ).Execute();
-            }
-
-            if (_state.HasStorageSettings)
-            {
-                new ToggleAllowanceCommand(clickedThing, _state, toggleType).Execute();
-            }
+            UpdateItemAllowanceStates(_state.CurrentThings, _state.CurrentStorageSettings);
         }
 
         private bool TryInitializeLensState()
@@ -315,6 +197,33 @@ namespace PressR.Features.TabLens.StorageLens
                 return false;
 
             return true;
+        }
+
+        private void UpdateItemAllowanceStates(
+            IEnumerable<Thing> things,
+            StorageSettings currentSettings
+        )
+        {
+            _state.AllowanceStates.Clear();
+            ThingFilter currentFilter = currentSettings?.filter;
+
+            if (currentFilter == null)
+            {
+                foreach (var thing in things)
+                {
+                    if (thing != null)
+                        _state.AllowanceStates[thing] = false;
+                }
+                return;
+            }
+
+            foreach (var thing in things)
+            {
+                if (thing?.def != null)
+                {
+                    _state.AllowanceStates[thing] = currentFilter.Allows(thing.def);
+                }
+            }
         }
 
         private void ClearState()
