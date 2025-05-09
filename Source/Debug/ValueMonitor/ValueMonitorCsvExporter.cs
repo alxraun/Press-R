@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace PressR.Debugger
+namespace PressR.Debug.ValueMonitor
 {
-    public static class DebuggerCsvExporter
+    public static class ValueMonitorCsvExporter
     {
         public static string GetHistoryAsCsv(
             List<Dictionary<string, object>> snapshotsHistory,
-            List<DebuggerTrackedValueInfo> trackedValues
+            List<ValueMonitorTrackedValueInfo> trackedValues
         )
         {
             if (snapshotsHistory == null || !snapshotsHistory.Any())

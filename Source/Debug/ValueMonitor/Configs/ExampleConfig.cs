@@ -1,32 +1,32 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
-using static PressR.Debugger.DebuggerTrackedValueInfo;
+using static PressR.Debug.ValueMonitor.ValueMonitorTrackedValueInfo;
 
-namespace PressR.Debugger.Configs
+namespace PressR.Debug.ValueMonitor.Configs
 {
     /*
-    This is an example configuration file for the debugger.
-    Implement the IDebuggerConfig interface and define the GetTrackedValues method
+    This is an example configuration file for the monitor.
+    Implement the IValueMonitorConfig interface and define the GetTrackedValues method
     to specify which game data you want to monitor.
     */
-    public class ExampleConfig : IDebuggerConfig
+    public class ExampleConfig : IValueMonitorConfig
     {
-        /* User-friendly name displayed in the debugger window's config dropdown. */
+        /* User-friendly name displayed in the monitor window's config dropdown. */
         public string Name => "Example Config";
 
-        /* How often (in seconds) the debugger updates the displayed values while recording. Lower values mean more frequent updates. */
+        /* How often (in seconds) the monitor updates the displayed values while recording. Lower values mean more frequent updates. */
         public float UpdateInterval => 0.05f;
 
         /* Delay (in seconds) after pressing 'Start Recording' before data capture actually begins. */
         public float StartDelaySeconds => 1.0f;
 
-        /* This method returns the list of values the debugger should track and display. */
-        public IEnumerable<DebuggerTrackedValueInfo> GetTrackedValues()
+        /* This method returns the list of values the monitor should track and display. */
+        public IEnumerable<ValueMonitorTrackedValueInfo> GetTrackedValues()
         {
-            return new List<DebuggerTrackedValueInfo>
+            return new List<ValueMonitorTrackedValueInfo>
             {
-                /* TrackValue: Tracks a single value. The debugger displays the result of value.ToString(). */
+                /* TrackValue: Tracks a single value. The monitor displays the result of value.ToString(). */
                 TrackValue("Find.CurrentMap.Biome.label", "Current Biome Label"),
                 /* TrackValue: Handles potentially null values gracefully, displaying "null". */
                 TrackValue("Find.Selector.SingleSelectedThing", "Selected Thing (if any)"),

@@ -2,20 +2,20 @@ using LudeonTK;
 using RimWorld;
 using Verse;
 
-namespace PressR.Debugger
+namespace PressR.Debug.ValueMonitor
 {
-    public static class DebuggerActions
+    public static class ValueMonitorActions
     {
 #if DEBUG
         [DebugAction(
             "Press-R",
-            "Debugger Window",
+            "ValueMonitor Window",
             actionType = DebugActionType.Action,
             allowedGameStates = AllowedGameStates.Playing
         )]
-        private static void ToggleDebuggerWindow()
+        private static void ToggleValueMonitorWindow()
         {
-            DebuggerWindow.ToggleWindow();
+            ValueMonitorWindow.ToggleWindow();
         }
 #endif
     }

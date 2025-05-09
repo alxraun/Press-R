@@ -5,11 +5,11 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace PressR.Debugger
+namespace PressR.Debug.ValueMonitor
 {
-    public class DebuggerWindow : Window
+    public class ValueMonitorWindow : Window
     {
-        private static DebuggerWindow _instance;
+        private static ValueMonitorWindow _instance;
 
         private Vector2 _snapshotScrollPosition = Vector2.zero;
         private Vector2 _logScrollPosition = Vector2.zero;
@@ -22,7 +22,7 @@ namespace PressR.Debugger
         private const float ElementSpacing = 8f;
         private const float BriefMessageDuration = 2.0f;
         private const float LogConsoleHeight = 150f;
-        private const string LogPrefix = "[Debugger] ";
+        private const string LogPrefix = "[ValueMonitor] ";
 
         private static readonly Color RowEvenColor = new Color(0.21f, 0.21f, 0.21f, 0.7f);
         private static readonly Color RowOddColor = new Color(0.25f, 0.25f, 0.25f, 0.7f);
@@ -40,7 +40,7 @@ namespace PressR.Debugger
 
         public static bool IsWindowOpen => _instance != null;
 
-        public DebuggerWindow()
+        public ValueMonitorWindow()
         {
             draggable = true;
             resizeable = true;
@@ -67,7 +67,7 @@ namespace PressR.Debugger
         {
             if (_instance == null)
             {
-                _instance = new DebuggerWindow();
+                _instance = new ValueMonitorWindow();
                 Find.WindowStack.Add(_instance);
             }
             else
@@ -88,7 +88,7 @@ namespace PressR.Debugger
         public override void PreClose()
         {
             base.PreClose();
-            DebuggerCore.StopRecording();
+            ValueMonitorCore.StopRecording();
             _instance = null;
         }
 
@@ -106,11 +106,11 @@ namespace PressR.Debugger
 
                 headerCalcListing.Gap(ElementSpacing * 0.5f);
                 headerCalcListing.GetRect(ButtonHeight);
-                if (!string.IsNullOrEmpty(DebuggerCore.ConfigLoadingError))
+                if (!string.IsNullOrEmpty(ValueMonitorCore.ConfigLoadingError))
                 {
                     headerCalcListing.Gap(ElementSpacing * 0.5f);
 
-                    headerCalcListing.Label(DebuggerCore.ConfigLoadingError);
+                    headerCalcListing.Label(ValueMonitorCore.ConfigLoadingError);
                 }
                 headerCalcListing.Gap(ElementSpacing);
                 float headerHeight = headerCalcListing.CurHeight;
@@ -127,11 +127,11 @@ namespace PressR.Debugger
                 DrawHelpButton(headerListing);
                 headerListing.Gap(ElementSpacing * 0.5f);
                 DrawConfigSelector(headerListing);
-                if (!string.IsNullOrEmpty(DebuggerCore.ConfigLoadingError))
+                if (!string.IsNullOrEmpty(ValueMonitorCore.ConfigLoadingError))
                 {
                     headerListing.Gap(ElementSpacing * 0.5f);
                     GUI.color = Color.red;
-                    headerListing.Label(DebuggerCore.ConfigLoadingError);
+                    headerListing.Label(ValueMonitorCore.ConfigLoadingError);
                     GUI.color = Color.white;
                 }
                 headerListing.End();
@@ -221,7 +221,7 @@ namespace PressR.Debugger
                     availableWidth,
                     toggleHeight
                 );
-                Widgets.CheckboxLabeled(toggleRect, "Show Debugger Log", ref _showLogConsole);
+                Widgets.CheckboxLabeled(toggleRect, "Show ValueMonitor Log", ref _showLogConsole);
                 currentY += toggleRect.height + ElementSpacing;
 
                 if (_showLogConsole)
@@ -275,7 +275,7 @@ namespace PressR.Debugger
                     }
                     if (Widgets.ButtonText(clearButtonRect, "Clear Log"))
                     {
-                        DebuggerLog.ClearLogs();
+                        ValueMonitorLog.ClearLogs();
                     }
                     logControlsListing.End();
 
@@ -284,7 +284,7 @@ namespace PressR.Debugger
             }
             catch (Exception ex)
             {
-                DebuggerLog.Error($"{LogPrefix}Error in DebuggerWindow: {ex}");
+                ValueMonitorLog.Error($"{LogPrefix}Error in ValueMonitorWindow: {ex}");
                 CloseWindow();
             }
             finally
@@ -300,13 +300,13 @@ namespace PressR.Debugger
             Rect helpRect = new Rect(listing.GetRect(0).width - 24f, 0f, 24f, 24f);
             TooltipHandler.TipRegion(
                 helpRect,
-                new TipSignal(DebuggerTrackedValueInfo.ValuePathSyntax.FormatExamplesForHelp())
+                new TipSignal(ValueMonitorTrackedValueInfo.ValuePathSyntax.FormatExamplesForHelp())
             );
             if (Widgets.ButtonImage(helpRect, TexButton.Info))
             {
                 Find.WindowStack.Add(
                     new Dialog_MessageBox(
-                        DebuggerTrackedValueInfo.ValuePathSyntax.FormatExamplesForHelp(),
+                        ValueMonitorTrackedValueInfo.ValuePathSyntax.FormatExamplesForHelp(),
                         "Close",
                         null,
                         null,
@@ -320,8 +320,9 @@ namespace PressR.Debugger
 
         private void DrawConfigSelector(Listing_Standard listing)
         {
-            var configs = DebuggerCore.AvailableConfigs?.ToList() ?? new List<IDebuggerConfig>();
-            string currentConfigName = DebuggerCore.CurrentConfig?.Name ?? "Select Config";
+            var configs =
+                ValueMonitorCore.AvailableConfigs?.ToList() ?? new List<IValueMonitorConfig>();
+            string currentConfigName = ValueMonitorCore.CurrentConfig?.Name ?? "Select Config";
             Rect buttonRect = listing.GetRect(ButtonHeight);
 
             if (Widgets.ButtonText(buttonRect, currentConfigName))
@@ -332,7 +333,10 @@ namespace PressR.Debugger
                     foreach (var config in configs)
                     {
                         options.Add(
-                            new FloatMenuOption(config.Name, () => DebuggerCore.LoadConfig(config))
+                            new FloatMenuOption(
+                                config.Name,
+                                () => ValueMonitorCore.LoadConfig(config)
+                            )
                         );
                     }
                     Find.WindowStack.Add(new FloatMenu(options));
@@ -340,17 +344,17 @@ namespace PressR.Debugger
                 else
                 {
                     Messages.Message(
-                        "No debugger configurations found.",
+                        "No monitor configurations found.",
                         MessageTypeDefOf.CautionInput
                     );
                 }
             }
 
-            if (!string.IsNullOrEmpty(DebuggerCore.ConfigLoadingError))
+            if (!string.IsNullOrEmpty(ValueMonitorCore.ConfigLoadingError))
             {
                 listing.Gap(ElementSpacing * 0.5f);
                 GUI.color = Color.red;
-                listing.Label(DebuggerCore.ConfigLoadingError);
+                listing.Label(ValueMonitorCore.ConfigLoadingError);
                 GUI.color = Color.white;
             }
         }
@@ -361,14 +365,14 @@ namespace PressR.Debugger
 
             Color statusColor = Color.white;
 
-            switch (DebuggerCore.CurrentRecordingState)
+            switch (ValueMonitorCore.CurrentRecordingState)
             {
                 case RecordingState.Stopped:
                     statusText += "Stopped";
                     statusColor = Color.gray;
                     break;
                 case RecordingState.Starting:
-                    statusText += $"Starting in {DebuggerCore.GetStartDelayTimer():F1}s...";
+                    statusText += $"Starting in {ValueMonitorCore.GetStartDelayTimer():F1}s...";
                     statusColor = new Color(1f, 0.8f, 0.2f);
                     break;
                 case RecordingState.Recording:
@@ -408,7 +412,7 @@ namespace PressR.Debugger
             Widgets.DrawBoxSolid(contentRect, new Color(0.15f, 0.15f, 0.15f, 0.4f));
             Widgets.DrawBox(contentRect);
 
-            var lastSnapshot = DebuggerCore.LastSnapshot;
+            var lastSnapshot = ValueMonitorCore.LastSnapshot;
             if (lastSnapshot == null || !lastSnapshot.Any())
             {
                 Widgets.Label(contentRect.ContractedBy(10f), "No snapshot data available");
@@ -560,8 +564,8 @@ namespace PressR.Debugger
 
         private void DrawControlButtons(Listing_Standard listing)
         {
-            bool canControl = DebuggerCore.CurrentConfig != null;
-            bool historyAvailable = DebuggerCore.SnapshotsHistory?.Any() ?? false;
+            bool canControl = ValueMonitorCore.CurrentConfig != null;
+            bool historyAvailable = ValueMonitorCore.SnapshotsHistory?.Any() ?? false;
 
             Rect controlRect = listing.GetRect(ButtonHeight * 2 + ElementSpacing);
 
@@ -587,7 +591,7 @@ namespace PressR.Debugger
             Action startPauseResumeAction = GetActionButtonAction();
 
             Color buttonColor;
-            switch (DebuggerCore.CurrentRecordingState)
+            switch (ValueMonitorCore.CurrentRecordingState)
             {
                 case RecordingState.Stopped:
                     buttonColor = new Color(0.2f, 0.7f, 0.2f);
@@ -617,10 +621,10 @@ namespace PressR.Debugger
             GUI.color = new Color(0.7f, 0.3f, 0.3f);
 
             bool canStop =
-                canControl && DebuggerCore.CurrentRecordingState != RecordingState.Stopped;
+                canControl && ValueMonitorCore.CurrentRecordingState != RecordingState.Stopped;
             if (Widgets.ButtonText(stopRect, "Stop", active: canStop))
             {
-                DebuggerCore.StopRecording();
+                ValueMonitorCore.StopRecording();
             }
 
             GUI.color = new Color(0.3f, 0.5f, 0.7f);
@@ -635,7 +639,7 @@ namespace PressR.Debugger
 
         private string GetActionButtonLabel()
         {
-            switch (DebuggerCore.CurrentRecordingState)
+            switch (ValueMonitorCore.CurrentRecordingState)
             {
                 case RecordingState.Stopped:
                     return "Start Recording";
@@ -652,16 +656,16 @@ namespace PressR.Debugger
 
         private Action GetActionButtonAction()
         {
-            switch (DebuggerCore.CurrentRecordingState)
+            switch (ValueMonitorCore.CurrentRecordingState)
             {
                 case RecordingState.Stopped:
-                    return DebuggerCore.StartRecording;
+                    return ValueMonitorCore.StartRecording;
                 case RecordingState.Starting:
-                    return DebuggerCore.StopRecording;
+                    return ValueMonitorCore.StopRecording;
                 case RecordingState.Recording:
-                    return DebuggerCore.PauseRecording;
+                    return ValueMonitorCore.PauseRecording;
                 case RecordingState.Paused:
-                    return DebuggerCore.ResumeRecording;
+                    return ValueMonitorCore.ResumeRecording;
                 default:
                     return null;
             }
@@ -693,14 +697,14 @@ namespace PressR.Debugger
         {
             try
             {
-                string csvData = DebuggerCore.GetHistoryAsCsv();
+                string csvData = ValueMonitorCore.GetHistoryAsCsv();
                 GUIUtility.systemCopyBuffer = csvData;
                 _briefMessage = "History Copied!";
                 _briefMessageUntil = Time.time + BriefMessageDuration;
             }
             catch (Exception ex)
             {
-                DebuggerLog.Error($"{LogPrefix}Failed to copy history to clipboard: {ex}");
+                ValueMonitorLog.Error($"{LogPrefix}Failed to copy history to clipboard: {ex}");
                 _briefMessage = "Copy Failed!";
                 _briefMessageUntil = Time.time + BriefMessageDuration;
             }
@@ -711,7 +715,7 @@ namespace PressR.Debugger
             Widgets.DrawBoxSolid(logScrollViewOuterRect, new Color(0.12f, 0.12f, 0.12f, 0.7f));
             Widgets.DrawBox(logScrollViewOuterRect);
 
-            var logEntries = DebuggerLog.GetLogs().ToList();
+            var logEntries = ValueMonitorLog.GetLogs().ToList();
 
             float logContentHeight = CalculateLogContentHeight(logEntries);
             Rect logScrollViewInnerRect = new Rect(0f, 0f, viewWidth - 16f, logContentHeight);
@@ -741,10 +745,10 @@ namespace PressR.Debugger
                 Color textColor;
                 switch (entry.Level)
                 {
-                    case DebuggerLogLevel.Warning:
+                    case ValueMonitorLogLevel.Warning:
                         textColor = new Color(1f, 0.85f, 0.4f);
                         break;
-                    case DebuggerLogLevel.Error:
+                    case ValueMonitorLogLevel.Error:
                         textColor = new Color(1f, 0.4f, 0.4f);
                         break;
                     default:
@@ -763,7 +767,7 @@ namespace PressR.Debugger
             Widgets.EndScrollView();
         }
 
-        private float CalculateLogContentHeight(List<DebuggerLogEntry> logEntries)
+        private float CalculateLogContentHeight(List<ValueMonitorLogEntry> logEntries)
         {
             if (!logEntries.Any())
                 return Text.LineHeight;
@@ -785,14 +789,14 @@ namespace PressR.Debugger
         {
             try
             {
-                string logData = DebuggerLog.GetLogsAsString();
+                string logData = ValueMonitorLog.GetLogsAsString();
                 GUIUtility.systemCopyBuffer = logData;
                 _briefMessage = "Log Copied!";
                 _briefMessageUntil = Time.time + BriefMessageDuration;
             }
             catch (Exception ex)
             {
-                DebuggerLog.Error($"{LogPrefix}Failed to copy log to clipboard: {ex}");
+                ValueMonitorLog.Error($"{LogPrefix}Failed to copy log to clipboard: {ex}");
                 _briefMessage = "Log Copy Failed!";
                 _briefMessageUntil = Time.time + BriefMessageDuration;
             }
@@ -800,7 +804,7 @@ namespace PressR.Debugger
     }
 
     /*
-    public static class DebuggerCore
+    public static class ValueMonitorCore
     {
         public static float GetStartDelayTimer() => _startDelayTimer;
     }

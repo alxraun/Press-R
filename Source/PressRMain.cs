@@ -8,7 +8,7 @@ using UnityEngine;
 using Verse;
 using static PressR.PressRInput;
 #if DEBUG
-using PressR.Debugger;
+using PressR.Debug.ValueMonitor;
 #endif
 
 namespace PressR
@@ -52,9 +52,9 @@ namespace PressR
         {
 #if DEBUG
 
-            if (Current.ProgramState == ProgramState.Playing && DebuggerWindow.IsWindowOpen)
+            if (Current.ProgramState == ProgramState.Playing && ValueMonitorWindow.IsWindowOpen)
             {
-                DebuggerCore.Tick(Time.deltaTime);
+                ValueMonitorCore.Tick(Time.deltaTime);
             }
 #endif
 

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace PressR.Debugger
+namespace PressR.Debug.ValueMonitor
 {
     public enum CollectionDisplayMode
     {
@@ -11,7 +11,7 @@ namespace PressR.Debugger
         ShowKeys,
     }
 
-    public class DebuggerTrackedValueInfo
+    public class ValueMonitorTrackedValueInfo
     {
         private const int DefaultItemLimit = 3;
 
@@ -20,7 +20,7 @@ namespace PressR.Debugger
         public CollectionDisplayMode CollectionDisplay { get; }
         public int? ItemLimit { get; }
 
-        private DebuggerTrackedValueInfo(
+        private ValueMonitorTrackedValueInfo(
             string path,
             string displayName,
             CollectionDisplayMode collectionDisplay,
@@ -33,9 +33,12 @@ namespace PressR.Debugger
             ItemLimit = itemLimit;
         }
 
-        public static DebuggerTrackedValueInfo TrackValue(string path, string displayName = null)
+        public static ValueMonitorTrackedValueInfo TrackValue(
+            string path,
+            string displayName = null
+        )
         {
-            return new DebuggerTrackedValueInfo(
+            return new ValueMonitorTrackedValueInfo(
                 path,
                 displayName,
                 CollectionDisplayMode.ValueToString,
@@ -43,12 +46,12 @@ namespace PressR.Debugger
             );
         }
 
-        public static DebuggerTrackedValueInfo TrackCollectionCount(
+        public static ValueMonitorTrackedValueInfo TrackCollectionCount(
             string path,
             string displayName = null
         )
         {
-            return new DebuggerTrackedValueInfo(
+            return new ValueMonitorTrackedValueInfo(
                 path,
                 displayName,
                 CollectionDisplayMode.CountOnly,
@@ -132,11 +135,11 @@ namespace PressR.Debugger
                 );
             }
 
-            public static implicit operator DebuggerTrackedValueInfo(
+            public static implicit operator ValueMonitorTrackedValueInfo(
                 CollectionTrackingConfigurator configurator
             )
             {
-                return new DebuggerTrackedValueInfo(
+                return new ValueMonitorTrackedValueInfo(
                     configurator._path,
                     configurator._displayName,
                     configurator._collectionDisplay,
