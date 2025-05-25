@@ -6,6 +6,7 @@ using PressR.Graphics;
 using PressR.Graphics.Controllers;
 using PressR.Graphics.GraphicObjects;
 using PressR.Graphics.Tween;
+using PressR.Utils.Throttler;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -16,6 +17,7 @@ namespace PressR.Features.DirectHaul.Graphics
     {
         private readonly IGraphicsManager _graphicsManager;
         private readonly DirectHaulState _state;
+        private ThrottledValue<bool> _isCurrentMouseCellFoggedThrottled;
 
         private bool _isTemporarilyHidden = false;
 
@@ -23,6 +25,7 @@ namespace PressR.Features.DirectHaul.Graphics
         private const float RadiusPadding = 1.25f;
         private const float FadeInDuration = 0.2f;
         private const float FadeOutDuration = 0.2f;
+        private const int FogCheckIntervalTicks = 1;
 
         private float _lastAppliedTargetRadius;
 
@@ -43,6 +46,11 @@ namespace PressR.Features.DirectHaul.Graphics
             _graphicsManager =
                 graphicsManager ?? throw new ArgumentNullException(nameof(graphicsManager));
             _state = state ?? throw new ArgumentNullException(nameof(state));
+            _isCurrentMouseCellFoggedThrottled = new ThrottledValue<bool>(
+                FogCheckIntervalTicks,
+                () => _state.CurrentMouseCell.Fogged(_state.Map),
+                populateInitialValueOnConstruction: false
+            );
         }
 
         public void Update()
@@ -130,18 +138,23 @@ namespace PressR.Features.DirectHaul.Graphics
             if (!hasAnySelected)
                 return false;
 
-            bool hasNonPending = _state.NonPendingSelectedThings.Any();
+            bool hasNonPending = _state.HasAnyNonPendingSelected;
 
             if (!hasNonPending)
             {
                 return false;
             }
 
-            bool canShowBasedOnCell =
-                _state.CurrentMouseCell.IsValid
-                && _state.CurrentMouseCell.InBounds(_state.Map)
-                && !_state.CurrentMouseCell.Impassable(_state.Map);
-            if (!canShowBasedOnCell)
+            if (!_state.CurrentMouseCell.IsValid)
+                return false;
+
+            if (!_state.CurrentMouseCell.InBounds(_state.Map))
+                return false;
+
+            if (_isCurrentMouseCellFoggedThrottled.GetValue())
+                return false;
+
+            if (_state.CurrentMouseCell.Impassable(_state.Map))
                 return false;
 
             int nonPendingCount = _state.NonPendingSelectedThings.Count;
@@ -161,10 +174,16 @@ namespace PressR.Features.DirectHaul.Graphics
             var thingsToConsider = _state.HasAnyNonPendingSelected
                 ? _state.NonPendingSelectedThings
                 : _state.AllSelectedThings;
-            return previewPositionsList
-                .Select((cell, index) => new { Cell = cell, Index = index })
-                .Where(pair => pair.Index < thingsToConsider.Count)
-                .ToDictionary(pair => thingsToConsider[pair.Index], pair => pair.Cell);
+
+            var result = new Dictionary<Thing, IntVec3>();
+            int count = Math.Min(previewPositionsList.Count, thingsToConsider.Count);
+
+            for (int i = 0; i < count; i++)
+            {
+                result[thingsToConsider[i]] = previewPositionsList[i];
+            }
+
+            return result;
         }
 
         private Color GetColorForMode(bool isPending)
@@ -257,14 +276,25 @@ namespace PressR.Features.DirectHaul.Graphics
             Dictionary<Thing, IntVec3> previewPositions
         )
         {
-            if (previewPositions?.Any() != true)
+            if (previewPositions == null || previewPositions.Count == 0)
+            {
                 return RadiusPadding;
+            }
+
             Vector3 center = mouseCell.ToVector3Shifted();
-            float maxDistSq = previewPositions
-                .Values.Where(p => p.IsValid)
-                .Select(p => (p.ToVector3Shifted() - center).sqrMagnitude)
-                .DefaultIfEmpty(0f)
-                .Max();
+            float maxDistSq = 0f;
+
+            foreach (IntVec3 position in previewPositions.Values)
+            {
+                if (position.IsValid)
+                {
+                    float distSq = (position.ToVector3Shifted() - center).sqrMagnitude;
+                    if (distSq > maxDistSq)
+                    {
+                        maxDistSq = distSq;
+                    }
+                }
+            }
             return Mathf.Max(RadiusPadding, Mathf.Sqrt(maxDistSq) + RadiusPadding);
         }
 

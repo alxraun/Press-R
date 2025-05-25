@@ -15,6 +15,7 @@ namespace PressR.Features.DirectHaul.Graphics
         private const float DefaultAlpha = 0.3f;
         private static readonly Color DefaultColor = Color.white;
         private readonly Material _lineMaterialInstance;
+        private Color _cachedMaterialColor = Color.clear;
 
         public object Key => typeof(DirectHaulRadiusIndicatorGraphicObject);
         public GraphicObjectState State { get; set; } = GraphicObjectState.Active;
@@ -38,15 +39,19 @@ namespace PressR.Features.DirectHaul.Graphics
         {
             Position = MouseMapPosition();
             Position = new Vector3(Position.x, Altitude, Position.z);
+
+            Color finalColor = Color;
+            finalColor.a = Alpha;
+
+            if (finalColor != _cachedMaterialColor)
+            {
+                _lineMaterialInstance.color = finalColor;
+                _cachedMaterialColor = finalColor;
+            }
         }
 
         public void Render()
         {
-            Color finalColor = Color;
-            finalColor.a = Alpha;
-
-            _lineMaterialInstance.color = finalColor;
-
             GenDraw.DrawCircleOutline(Position, Radius, _lineMaterialInstance);
         }
 
