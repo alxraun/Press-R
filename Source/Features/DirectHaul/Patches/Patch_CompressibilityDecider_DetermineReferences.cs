@@ -6,6 +6,7 @@ using Verse;
 
 namespace PressR.Features.DirectHaul.Patches
 {
+    [HarmonyPatchCategory("PressR")]
     [HarmonyPatch(typeof(CompressibilityDecider), "DetermineReferences")]
     public static class Patch_CompressibilityDecider_DetermineReferences
     {

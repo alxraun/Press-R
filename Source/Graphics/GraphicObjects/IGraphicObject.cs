@@ -13,6 +13,8 @@ namespace PressR.Graphics.GraphicObjects
     {
         GraphicObjectState State { get; set; }
 
+        void OnRegistered();
+
         void Update();
 
         void Render();

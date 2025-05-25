@@ -25,32 +25,6 @@ namespace PressR.Utils
             return state ? AllowedColor : DisallowedColor;
         }
 
-        public static Material CreateColorBlendedMaterial(
-            Material originalMat,
-            Color blendColor,
-            float blendFactor
-        )
-        {
-            if (originalMat == null)
-                return null;
-
-            Material newMaterial = new Material(originalMat);
-
-            float originalAlpha = originalMat.color.a;
-
-            Color blendedColor = Color.Lerp(
-                originalMat.color,
-                blendColor,
-                Mathf.Clamp01(blendFactor)
-            );
-
-            blendedColor.a = originalAlpha;
-
-            newMaterial.color = blendedColor;
-
-            return newMaterial;
-        }
-
         public static void DrawThinFieldEdges(
             List<IntVec3> cells,
             Material lineMaterial,

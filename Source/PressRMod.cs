@@ -18,11 +18,14 @@ namespace PressR
 
             var harmony = new Harmony("Alx.PressR");
 
-#if DEBUG
-            Harmony.DEBUG = true;
-#endif
+            harmony.PatchCategory(typeof(PressRMod).Assembly, "PressR");
 
-            harmony.PatchAll();
+#if DEBUG
+            LongEventHandler.ExecuteWhenFinished(() =>
+            {
+                harmony.PatchCategory(typeof(PressRMod).Assembly, "Debug");
+            });
+#endif
         }
 
         public override string SettingsCategory() => "Press-R Alpha";

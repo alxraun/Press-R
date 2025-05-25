@@ -3,18 +3,16 @@ using PressR.Graphics;
 using UnityEngine;
 using Verse;
 
-namespace PressR.Graphics.GraphicObjects.GraphicObjects
+namespace PressR.Graphics.GraphicObjects
 {
-    public class ScreenDesaturatorGraphicObject
-        : IGraphicObject,
-            IEffectTarget,
-            IHasSaturation,
-            IHasAlpha
+    public class ScreenDesaturatorGraphicObject : IGraphicObject, IHasSaturation, IHasAlpha
     {
         public GraphicObjectState State { get; set; } = GraphicObjectState.Active;
         public float Saturation { get; set; }
         public float Alpha { get; set; }
         public object Key => "ScreenDesaturator";
+
+        public void OnRegistered() { }
 
         public void Update() { }
 
