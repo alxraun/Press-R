@@ -3,7 +3,7 @@
         <TargetFramework>net48</TargetFramework>
         <AssemblyName>Press-R</AssemblyName>
         <RootNamespace>PressR</RootNamespace>
-        <OutputPath>..\Mods\Press-R\Assemblies</OutputPath>
+        <OutputPath>..\Mods\Press-R\1.6\Assemblies</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <Configurations>Debug;Release</Configurations>
         <Platforms>AnyCPU</Platforms>
@@ -46,7 +46,7 @@
             <Private>False</Private>
         </Reference>
         <Reference Include="UnityEngine.TextCoreModule.dll">
-            <HintPath>..\lib\UnityEngine.TextCoreModule.dll</HintPath>
+            <HintPath>..\lib\UnityEngine.TextCoreTextEngineModule.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="UnityEngine.TextRenderingModule.dll">

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+  <!-- Settings Reset Button -->
+  <PressR.Settings.ResetButton.Label>Obnovit výchozí</PressR.Settings.ResetButton.Label>
+  <PressR.Settings.ResetButton.Tooltip>Obnovit všechna nastavení Press-R na výchozí hodnoty.</PressR.Settings.ResetButton.Tooltip>
+  <PressR.Settings.ResetButton.Message>Nastavení Press-R obnovena na výchozí.</PressR.Settings.ResetButton.Message>
+
+  <!-- Mod Settings Container -->
+  <!-- Tab Lens Feature Section -->
+  <PressR.Settings.TabLens.Feature.Label>Funkce Tab Lens</PressR.Settings.TabLens.Feature.Label>
+  <PressR.Settings.TabLens.Feature.Description>Spravujte nastavení věcí pomocí interakce na mapě, když jsou otevřené relevantní záložky.</PressR.Settings.TabLens.Feature.Description>
+  <PressR.Settings.TabLens.StorageLens.Enable.Label>Povolit Storage Lens</PressR.Settings.TabLens.StorageLens.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.Enable.Description>Použijte Tab Lens se záložkou 'Sklad' pro přepínání povolení předmětů kliknutím na mapě.</PressR.Settings.TabLens.StorageLens.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.Overlays.Enable.Label>Zobrazit překryvy předmětů</PressR.Settings.TabLens.StorageLens.Overlays.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.Overlays.Enable.Description>Zobrazit barevné překryvy na předmětech indikující jejich povolený/zakázaný stav ve skladu.</PressR.Settings.TabLens.StorageLens.Overlays.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>Obnovit stav UI při ukončení</PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>Obnovit předchozí stav uživatelského rozhraní (záložka, vyhledávání, posun), když se Storage Lens deaktivuje.</PressR.Settings.TabLens.StorageLens.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>Automaticky otevřít záložku 'Sklad'</PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>Automaticky otevřít záložku 'Sklad' při zaměření na předmět.</PressR.Settings.TabLens.StorageLens.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>Zaměřit předmět v záložce po kliknutí</PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>Filtrovat seznam záložky na kliknutý předmět/kategorii.</PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>Zaměřit předmět v záložce po najetí myší</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>Filtrovat seznam záložky na předmět/kategorii pod kurzorem.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>
+  <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>Vyžaduje povolení 'Zaměřit předmět v záložce po kliknutí'.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>
+
+  <!-- Direct Haul Feature Section -->
+  <PressR.Settings.DirectHaul.Feature.Label>Funkce Direct Haul</PressR.Settings.DirectHaul.Feature.Label>
+  <PressR.Settings.DirectHaul.Feature.Description>Přímo nařizujte kolonistům přenášet vybrané předměty na konkrétní místo.</PressR.Settings.DirectHaul.Feature.Description>
+  <PressR.Settings.DirectHaul.PlacementGhosts.Enable.Label>Zobrazit duchy umístění</PressR.Settings.DirectHaul.PlacementGhosts.Enable.Label>
+  <PressR.Settings.DirectHaul.PlacementGhosts.Enable.Description>Zobrazit duchy ukazující, kam budou předměty umístěny.</PressR.Settings.DirectHaul.PlacementGhosts.Enable.Description>
+  <PressR.Settings.DirectHaul.StatusOverlays.Enable.Label>Zobrazit překryvy stavu</PressR.Settings.DirectHaul.StatusOverlays.Enable.Label>
+  <PressR.Settings.DirectHaul.StatusOverlays.Enable.Description>Zobrazit překryvy na předmětech indikující jejich stav 'Čekající' nebo 'Držený' pro Direct Haul.</PressR.Settings.DirectHaul.StatusOverlays.Enable.Description>
+  <PressR.Settings.DirectHaul.RadiusIndicator.Enable.Label>Zobrazit indikátor poloměru</PressR.Settings.DirectHaul.RadiusIndicator.Enable.Label>
+  <PressR.Settings.DirectHaul.RadiusIndicator.Enable.Description>Zobrazit kruh zahrnující všechna místa umístění.</PressR.Settings.DirectHaul.RadiusIndicator.Enable.Description>
+  <PressR.Settings.DirectHaul.StorageCreationPreview.Enable.Label>Zobrazit náhled vytvoření skladu</PressR.Settings.DirectHaul.StorageCreationPreview.Enable.Label>
+  <PressR.Settings.DirectHaul.StorageCreationPreview.Enable.Description>Zobrazit náhled obdélníku při vytváření/rozšiřování skladovacích zón přetažením.</PressR.Settings.DirectHaul.StorageCreationPreview.Enable.Description>
+  <PressR.Settings.DirectHaul.StorageHighlight.Enable.Label>Zvýraznit sklad po najetí myší</PressR.Settings.DirectHaul.StorageHighlight.Enable.Label>
+  <PressR.Settings.DirectHaul.StorageHighlight.Enable.Description>Zvýraznit existující skladovací zóny/budovy při najetí myší v režimu Sklad.</PressR.Settings.DirectHaul.StorageHighlight.Enable.Description>
+  <PressR.Settings.DirectHaul.InvertKeys.Enable.Label>Invertovat klávesy Standard/Sklad</PressR.Settings.DirectHaul.InvertKeys.Enable.Label>
+  <PressR.Settings.DirectHaul.InvertKeys.Enable.Description>Vyměnit modifikační klávesy používané pro Standardní přenášení a režim Sklad.</PressR.Settings.DirectHaul.InvertKeys.Enable.Description>
+
+  <!-- Direct Haul Gizmos -->
+  <PressR.DirectHaul.CancelHeldStatusGizmo.Label>Zrušit stav 'Držený'</PressR.DirectHaul.CancelHeldStatusGizmo.Label>
+  <PressR.DirectHaul.CancelHeldStatusGizmo.Desc>Zrušit stav 'Držený' pro tento předmět v Direct Haul.</PressR.DirectHaul.CancelHeldStatusGizmo.Desc>
+  <PressR.DirectHaul.CancelPendingStatusGizmo.Label>Zrušit stav 'Čekající'</PressR.DirectHaul.CancelPendingStatusGizmo.Label>
+  <PressR.DirectHaul.CancelPendingStatusGizmo.Desc>Zrušit stav 'Čekající' pro tento předmět v Direct Haul.</PressR.Settings.DirectHaul.CancelPendingStatusGizmo.Desc>
+
+</LanguageData>

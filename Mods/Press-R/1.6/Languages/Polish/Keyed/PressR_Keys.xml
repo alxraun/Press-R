@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+  <!-- Settings Reset Button -->
+  <PressR.Settings.ResetButton.Label>Resetuj do domyślnych</PressR.Settings.ResetButton.Label>
+  <PressR.Settings.ResetButton.Tooltip>Resetuj wszystkie ustawienia Press-R do wartości domyślnych.</PressR.Settings.ResetButton.Tooltip>
+  <PressR.Settings.ResetButton.Message>Ustawienia Press-R zresetowane do domyślnych.</PressR.Settings.ResetButton.Message>
+
+  <!-- Mod Settings Container -->
+  <!-- Tab Lens Feature Section -->
+  <PressR.Settings.TabLens.Feature.Label>Funkcja Tab Lens</PressR.Settings.TabLens.Feature.Label>
+  <PressR.Settings.TabLens.Feature.Description>Zarządzaj ustawieniami rzeczy poprzez interakcję na mapie, gdy odpowiednie karty są otwarte.</PressR.Settings.TabLens.Feature.Description>
+  <PressR.Settings.TabLens.StorageLens.Enable.Label>Włącz Storage Lens</PressR.Settings.TabLens.StorageLens.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.Enable.Description>Użyj Tab Lens z kartą 'Magazyn', aby przełączać zezwolenie na przedmioty, klikając na mapie.</PressR.Settings.TabLens.StorageLens.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.Overlays.Enable.Label>Pokaż nakładki przedmiotów</PressR.Settings.TabLens.StorageLens.Overlays.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.Overlays.Enable.Description>Pokazuj kolorowe nakładki na przedmiotach wskazujące ich status dozwolony/zabroniony w magazynie.</PressR.Settings.TabLens.StorageLens.Overlays.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>Przywróć stan interfejsu przy wyjściu</PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>Przywróć poprzedni stan interfejsu użytkownika (karta, wyszukiwanie, przewijanie), gdy Storage Lens zostanie dezaktywowany.</PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>Automatycznie otwórz kartę 'Magazyn'</PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>Automatycznie otwórz kartę 'Magazyn' po skupieniu się na przedmiocie.</PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>Skup przedmiot w karcie po kliknięciu</PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>Filtruj listę karty do klikniętego przedmiotu/kategorii.</PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>Skup przedmiot w karcie po najechaniu myszą</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>Filtruj listę karty do przedmiotu/kategorii pod kursorem.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>
+  <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>Wymaga włączenia opcji 'Skup przedmiot w karcie po kliknięciu'.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>
+
+  <!-- Direct Haul Feature Section -->
+  <PressR.Settings.DirectHaul.Feature.Label>Funkcja Direct Haul</PressR.Settings.DirectHaul.Feature.Label>
+  <PressR.Settings.DirectHaul.Feature.Description>Bezpośrednio nakazuj kolonistom transport wybranych przedmiotów do określonej lokalizacji.</PressR.Settings.DirectHaul.Feature.Description>
+  <PressR.Settings.DirectHaul.PlacementGhosts.Enable.Label>Pokaż duchy rozmieszczenia</PressR.Settings.DirectHaul.PlacementGhosts.Enable.Label>
+  <PressR.Settings.DirectHaul.PlacementGhosts.Enable.Description>Wyświetlaj duchy pokazujące, gdzie zostaną umieszczone przedmioty.</PressR.Settings.DirectHaul.PlacementGhosts.Enable.Description>
+  <PressR.Settings.DirectHaul.StatusOverlays.Enable.Label>Pokaż nakładki statusu</PressR.Settings.DirectHaul.StatusOverlays.Enable.Label>
+  <PressR.Settings.DirectHaul.StatusOverlays.Enable.Description>Pokazuj nakładki na przedmiotach wskazujące ich status 'Oczekujący' lub 'Trzymany' dla Direct Haul.</PressR.Settings.DirectHaul.StatusOverlays.Enable.Description>
+  <PressR.Settings.DirectHaul.RadiusIndicator.Enable.Label>Pokaż wskaźnik promienia</PressR.Settings.DirectHaul.RadiusIndicator.Enable.Label>
+  <PressR.Settings.DirectHaul.RadiusIndicator.Enable.Description>Pokaż okrąg obejmujący wszystkie lokalizacje rozmieszczenia.</PressR.Settings.DirectHaul.RadiusIndicator.Enable.Description>
+  <PressR.Settings.DirectHaul.StorageCreationPreview.Enable.Label>Pokaż podgląd tworzenia magazynu</PressR.Settings.DirectHaul.StorageCreationPreview.Enable.Label>
+  <PressR.Settings.DirectHaul.StorageCreationPreview.Enable.Description>Pokaż podgląd prostokąta podczas tworzenia/rozszerzania stref magazynowych przez przeciąganie.</PressR.Settings.DirectHaul.StorageCreationPreview.Enable.Description>
+  <PressR.Settings.DirectHaul.StorageHighlight.Enable.Label>Podświetl magazyn po najechaniu myszą</PressR.Settings.DirectHaul.StorageHighlight.Enable.Label>
+  <PressR.Settings.DirectHaul.StorageHighlight.Enable.Description>Podświetl istniejące strefy/budynki magazynowe podczas najechania myszą w trybie Magazyn.</PressR.Settings.DirectHaul.StorageHighlight.Enable.Description>
+  <PressR.Settings.DirectHaul.InvertKeys.Enable.Label>Odwróć klawisze Standard/Magazyn</PressR.Settings.DirectHaul.InvertKeys.Enable.Label>
+  <PressR.Settings.DirectHaul.InvertKeys.Enable.Description>Zamień klawisze modyfikujące używane do transportu Standardowego i trybu Magazyn.</PressR.Settings.DirectHaul.InvertKeys.Enable.Description>
+
+  <!-- Direct Haul Gizmos -->
+  <PressR.DirectHaul.CancelHeldStatusGizmo.Label>Anuluj status 'Trzymany'</PressR.DirectHaul.CancelHeldStatusGizmo.Label>
+  <PressR.DirectHaul.CancelHeldStatusGizmo.Desc>Anuluj status 'Trzymany' dla tego przedmiotu w Direct Haul.</PressR.DirectHaul.CancelHeldStatusGizmo.Desc>
+  <PressR.DirectHaul.CancelPendingStatusGizmo.Label>Anuluj status 'Oczekujący'</PressR.DirectHaul.CancelPendingStatusGizmo.Label>
+  <PressR.DirectHaul.CancelPendingStatusGizmo.Desc>Anuluj status 'Oczekujący' dla tego przedmiotu w Direct Haul.</PressR.DirectHaul.CancelPendingStatusGizmo.Desc>
+
+</LanguageData>
