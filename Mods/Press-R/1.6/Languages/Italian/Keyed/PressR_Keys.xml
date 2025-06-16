@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+  <!-- Settings Reset Button -->
+  <PressR.Settings.ResetButton.Label>Ripristina predefiniti</PressR.Settings.ResetButton.Label>
+  <PressR.Settings.ResetButton.Tooltip>Ripristina tutte le impostazioni di Press-R ai valori predefiniti.</PressR.Settings.ResetButton.Tooltip>
+  <PressR.Settings.ResetButton.Message>Impostazioni di Press-R ripristinate ai valori predefiniti.</PressR.Settings.ResetButton.Message>
+
+  <!-- Mod Settings Container -->
+  <!-- Tab Lens Feature Section -->
+  <PressR.Settings.TabLens.Feature.Label>Funzionalità Tab Lens</PressR.Settings.TabLens.Feature.Label>
+  <PressR.Settings.TabLens.Feature.Description>Gestisci le impostazioni degli oggetti tramite interazione sulla mappa quando le schede pertinenti sono aperte.</PressR.Settings.TabLens.Feature.Description>
+  <PressR.Settings.TabLens.StorageLens.Enable.Label>Abilita Storage Lens</PressR.Settings.TabLens.StorageLens.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.Enable.Description>Usa Tab Lens con la scheda 'Magazzino' per attivare/disattivare il permesso degli oggetti cliccando sulla mappa.</PressR.Settings.TabLens.StorageLens.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.Overlays.Enable.Label>Mostra sovrapposizioni oggetti</PressR.Settings.TabLens.StorageLens.Overlays.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.Overlays.Enable.Description>Mostra sovrapposizioni colorate sugli oggetti che indicano il loro stato (permesso/vietato) nel magazzino.</PressR.Settings.TabLens.StorageLens.Overlays.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>Ripristina stato UI all'uscita</PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>Ripristina lo stato precedente dell'interfaccia utente (scheda, ricerca, scorrimento) quando Storage Lens si disattiva.</PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>Apri automaticamente la scheda 'Magazzino'</PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>Apri automaticamente la scheda 'Magazzino' quando si mette a fuoco un oggetto.</PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>Evidenzia oggetto nella scheda al clic</PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>Filtra l'elenco della scheda sull'oggetto/categoria cliccato.</PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>Evidenzia oggetto nella scheda al passaggio del mouse</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>Filtra l'elenco della scheda sull'oggetto/categoria su cui si passa il mouse.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>
+  <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>Richiede che 'Evidenzia oggetto nella scheda al clic' sia abilitato.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>
+
+  <!-- Direct Haul Feature Section -->
+  <PressR.Settings.DirectHaul.Feature.Label>Funzionalità Direct Haul</PressR.Settings.DirectHaul.Feature.Label>
+  <PressR.Settings.DirectHaul.Feature.Description>Comanda direttamente ai coloni di trasportare gli oggetti selezionati in una posizione specifica.</PressR.Settings.DirectHaul.Feature.Description>
+  <PressR.Settings.DirectHaul.RadiusIndicator.Enable.Label>Mostra indicatore di raggio</PressR.Settings.DirectHaul.RadiusIndicator.Enable.Label>
+  <PressR.Settings.DirectHaul.RadiusIndicator.Enable.Description>Mostra un cerchio che comprende tutte le posizioni di piazzamento.</PressR.Settings.DirectHaul.RadiusIndicator.Enable.Description>
+  <PressR.Settings.DirectHaul.InvertKeys.Enable.Label>Inverti tasti Standard/Magazzino</PressR.Settings.DirectHaul.InvertKeys.Enable.Label>
+  <PressR.Settings.DirectHaul.InvertKeys.Enable.Description>Scambia i tasti modificatori usati per il trasporto Standard e la modalità Magazzino in Direct Haul.</PressR.Settings.DirectHaul.InvertKeys.Enable.Description>
+
+  <!-- Direct Haul Gizmos -->
+  <PressR.DirectHaul.CancelHeldStatusGizmo.Label>Annulla stato 'Trattenuto'</PressR.DirectHaul.CancelHeldStatusGizmo.Label>
+  <PressR.DirectHaul.CancelHeldStatusGizmo.Desc>Annulla lo stato 'Trattenuto' per questo oggetto in Direct Haul.</PressR.DirectHaul.CancelHeldStatusGizmo.Desc>
+  <PressR.DirectHaul.CancelPendingStatusGizmo.Label>Annulla stato 'In attesa'</PressR.DirectHaul.CancelPendingStatusGizmo.Label>
+  <PressR.DirectHaul.CancelPendingStatusGizmo.Desc>Annulla lo stato 'In attesa' per questo oggetto in Direct Haul.</PressR.DirectHaul.CancelPendingStatusGizmo.Desc>
+
+</LanguageData>

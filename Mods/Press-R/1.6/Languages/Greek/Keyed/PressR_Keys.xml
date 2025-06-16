@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+  <!-- Settings Reset Button -->
+  <PressR.Settings.ResetButton.Label>Επαναφορά στις προεπιλογές</PressR.Settings.ResetButton.Label>
+  <PressR.Settings.ResetButton.Tooltip>Επαναφορά όλων των ρυθμίσεων Press-R στις προεπιλεγμένες τους τιμές.</PressR.Settings.ResetButton.Tooltip>
+  <PressR.Settings.ResetButton.Message>Οι ρυθμίσεις Press-R επανήλθαν στις προεπιλογές.</PressR.Settings.ResetButton.Message>
+
+  <!-- Mod Settings Container -->
+  <!-- Tab Lens Feature Section -->
+  <PressR.Settings.TabLens.Feature.Label>Λειτουργία Tab Lens</PressR.Settings.TabLens.Feature.Label>
+  <PressR.Settings.TabLens.Feature.Description>Διαχειριστείτε τις ρυθμίσεις αντικειμένων μέσω αλληλεπίδρασης χάρτη όταν οι σχετικές καρτέλες είναι ανοιχτές.</PressR.Settings.TabLens.Feature.Description>
+  <PressR.Settings.TabLens.StorageLens.Enable.Label>Ενεργοποίηση Storage Lens</PressR.Settings.TabLens.StorageLens.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.Enable.Description>Χρησιμοποιήστε το Tab Lens με την καρτέλα 'Αποθήκευση' για να εναλλάξετε την άδεια αντικειμένων κάνοντας κλικ στον χάρτη.</PressR.Settings.TabLens.StorageLens.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.Overlays.Enable.Label>Εμφάνιση επικαλύψεων αντικειμένων</PressR.Settings.TabLens.StorageLens.Overlays.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.Overlays.Enable.Description>Εμφάνιση χρωματιστών επικαλύψεων σε αντικείμενα που υποδεικνύουν την επιτρεπόμενη/απαγορευμένη κατάστασή τους στην αποθήκευση.</PressR.Settings.TabLens.StorageLens.Overlays.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>Επαναφορά κατάστασης UI κατά την έξοδο</PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>Επαναφορά της προηγούμενης κατάστασης διεπαφής χρήστη (καρτέλα, αναζήτηση, κύλιση) όταν το Storage Lens απενεργοποιείται.</PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>Αυτόματο άνοιγμα καρτέλας 'Αποθήκευση'</PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>Αυτόματο άνοιγμα της καρτέλας 'Αποθήκευση' κατά την εστίαση σε ένα αντικείμενο.</PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>Εστίαση αντικειμένου στην καρτέλα με κλικ</PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>Φιλτράρισμα της λίστας καρτελών στο αντικείμενο/κατηγορία που κάνατε κλικ.</PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>Εστίαση αντικειμένου στην καρτέλα κατά την αιώρηση</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>Φιλτράρισμα της λίστας καρτελών στο αντικείμενο/κατηγορία πάνω από το οποίο αιωρείται ο κέρσορας.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>
+  <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>Απαιτεί να είναι ενεργοποιημένη η επιλογή 'Εστίαση αντικειμένου στην καρτέλα με κλικ'.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>
+
+  <!-- Direct Haul Feature Section -->
+  <PressR.Settings.DirectHaul.Feature.Label>Λειτουργία Direct Haul</PressR.Settings.DirectHaul.Feature.Label>
+  <PressR.Settings.DirectHaul.Feature.Description>Δώστε απευθείας εντολή στους αποίκους να μεταφέρουν επιλεγμένα αντικείμενα σε μια συγκεκριμένη τοποθεσία.</PressR.Settings.DirectHaul.Feature.Description>
+  <PressR.Settings.DirectHaul.PlacementGhosts.Enable.Label>Εμφάνιση φαντασμάτων τοποθέτησης</PressR.Settings.DirectHaul.PlacementGhosts.Enable.Label>
+  <PressR.Settings.DirectHaul.PlacementGhosts.Enable.Description>Εμφάνιση φαντασμάτων που δείχνουν πού θα τοποθετηθούν τα αντικείμενα.</PressR.Settings.DirectHaul.PlacementGhosts.Enable.Description>
+  <PressR.Settings.DirectHaul.StatusOverlays.Enable.Label>Εμφάνιση επικαλύψεων κατάστασης</PressR.Settings.DirectHaul.StatusOverlays.Enable.Label>
+  <PressR.Settings.DirectHaul.StatusOverlays.Enable.Description>Εμφάνιση επικαλύψεων σε αντικείμενα που υποδεικνύουν την κατάστασή τους 'Εκκρεμεί' ή 'Κρατείται' για το Direct Haul.</PressR.Settings.DirectHaul.StatusOverlays.Enable.Description>
+  <PressR.Settings.DirectHaul.RadiusIndicator.Enable.Label>Εμφάνιση ένδειξης ακτίνας</PressR.Settings.DirectHaul.RadiusIndicator.Enable.Label>
+  <PressR.Settings.DirectHaul.RadiusIndicator.Enable.Description>Εμφάνιση ενός κύκλου που περιλαμβάνει όλες τις τοποθεσίες τοποθέτησης.</PressR.Settings.DirectHaul.RadiusIndicator.Enable.Description>
+  <PressR.Settings.DirectHaul.StorageCreationPreview.Enable.Label>Εμφάνιση προεπισκόπησης δημιουργίας αποθήκευσης</PressR.Settings.DirectHaul.StorageCreationPreview.Enable.Label>
+  <PressR.Settings.DirectHaul.StorageCreationPreview.Enable.Description>Εμφάνιση μιας ορθογώνιας προεπισκόπησης κατά τη δημιουργία/επέκταση ζωνών αποθήκευσης μέσω μεταφοράς.</PressR.Settings.DirectHaul.StorageCreationPreview.Enable.Description>
+  <PressR.Settings.DirectHaul.StorageHighlight.Enable.Label>Επισήμανση αποθήκευσης κατά την αιώρηση</PressR.Settings.DirectHaul.StorageHighlight.Enable.Label>
+  <PressR.Settings.DirectHaul.StorageHighlight.Enable.Description>Επισήμανση υπαρχουσών ζωνών/κτιρίων αποθήκευσης κατά την αιώρηση σε λειτουργία Αποθήκευσης.</PressR.Settings.DirectHaul.StorageHighlight.Enable.Description>
+  <PressR.Settings.DirectHaul.InvertKeys.Enable.Label>Αντιστροφή πλήκτρων Κανονική/Αποθήκευση</PressR.Settings.DirectHaul.InvertKeys.Enable.Label>
+  <PressR.Settings.DirectHaul.InvertKeys.Enable.Description>Ανταλλάξτε τα πλήκτρα τροποποίησης που χρησιμοποιούνται για την Κανονική μεταφορά και τη λειτουργία Αποθήκευσης στο Direct Haul.</PressR.Settings.DirectHaul.InvertKeys.Enable.Description>
+
+  <!-- Direct Haul Gizmos -->
+  <PressR.DirectHaul.CancelHeldStatusGizmo.Label>Ακύρωση κατάστασης 'Κρατείται'</PressR.DirectHaul.CancelHeldStatusGizmo.Label>
+  <PressR.DirectHaul.CancelHeldStatusGizmo.Desc>Ακύρωση της κατάστασης 'Κρατείται' για αυτό το αντικείμενο στο Direct Haul.</PressR.DirectHaul.CancelHeldStatusGizmo.Desc>
+  <PressR.DirectHaul.CancelPendingStatusGizmo.Label>Ακύρωση κατάστασης 'Εκκρεμεί'</PressR.DirectHaul.CancelPendingStatusGizmo.Label>
+  <PressR.DirectHaul.CancelPendingStatusGizmo.Desc>Ακύρωση της κατάστασης 'Εκκρεμεί' για αυτό το αντικείμενο στο Direct Haul.</PressR.DirectHaul.CancelPendingStatusGizmo.Desc>
+  
+</LanguageData>

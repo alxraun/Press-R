@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+  <!-- Settings Reset Button -->
+  <PressR.Settings.ResetButton.Label>Tilbakestill til standard</PressR.Settings.ResetButton.Label>
+  <PressR.Settings.ResetButton.Tooltip>Tilbakestill alle Press-R-innstillinger til standardverdiene.</PressR.Settings.ResetButton.Tooltip>
+  <PressR.Settings.ResetButton.Message>Press-R-innstillingene er tilbakestilt til standard.</PressR.Settings.ResetButton.Message>
+
+  <!-- Mod Settings Container -->
+  <!-- Tab Lens Feature Section -->
+  <PressR.Settings.TabLens.Feature.Label>Tab Lens-funksjon</PressR.Settings.TabLens.Feature.Label>
+  <PressR.Settings.TabLens.Feature.Description>Administrer tingsinnstillinger via kartinteraksjon når relevante faner er åpne.</PressR.Settings.TabLens.Feature.Description>
+  <PressR.Settings.TabLens.StorageLens.Enable.Label>Aktiver Storage Lens</PressR.Settings.TabLens.StorageLens.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.Enable.Description>Bruk Tab Lens med 'Lager'-fanen for å veksle varetillatelse ved å klikke på kartet.</PressR.Settings.TabLens.StorageLens.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.Overlays.Enable.Label>Vis vareoverlegg</PressR.Settings.TabLens.StorageLens.Overlays.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.Overlays.Enable.Description>Vis fargede overlegg på varer som indikerer deres tillatte/ikke tillatte status i lageret.</PressR.Settings.TabLens.StorageLens.Overlays.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>Gjenopprett UI-tilstand ved avslutning</PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>Gjenopprett tidligere brukergrensesnitttilstand (fane, søk, rulling) når Storage Lens deaktiveres.</PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>Auto-åpne 'Lager'-fanen</PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>Åpne 'Lager'-fanen automatisk når du fokuserer på en vare.</PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>Fokuser vare i fanen ved klikk</PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>Filtrer fanelisten til den klikkede varen/kategorien.</PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>Fokuser vare i fanen ved sveving</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>Filtrer fanelisten til varen/kategorien som er under musepekeren.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>
+  <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>Krever at 'Fokuser vare i fanen ved klikk' er aktivert.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>
+
+  <!-- Direct Haul Feature Section -->
+  <PressR.Settings.DirectHaul.Feature.Label>Direct Haul-funksjon</PressR.Settings.DirectHaul.Feature.Label>
+  <PressR.Settings.DirectHaul.Feature.Description>Kommander kolonister direkte til å bære valgte gjenstander til et bestemt sted.</PressR.Settings.DirectHaul.Feature.Description>
+  <PressR.Settings.DirectHaul.RadiusIndicator.Enable.Label>Vis radiusindikator</PressR.Settings.DirectHaul.RadiusIndicator.Enable.Label>
+  <PressR.Settings.DirectHaul.RadiusIndicator.Enable.Description>Vis en sirkel som omfatter alle plasseringssteder.</PressR.Settings.DirectHaul.RadiusIndicator.Enable.Description>
+  <PressR.Settings.DirectHaul.InvertKeys.Enable.Label>Inverter Standard/Lager-taster</PressR.Settings.DirectHaul.InvertKeys.Enable.Label>
+  <PressR.Settings.DirectHaul.InvertKeys.Enable.Description>Bytt om modifikatortastene som brukes for Standard bæring og Lagermodus.</PressR.Settings.DirectHaul.InvertKeys.Enable.Description>
+
+  <!-- Direct Haul Gizmos -->
+  <PressR.DirectHaul.CancelHeldStatusGizmo.Label>Avbryt holdt status</PressR.DirectHaul.CancelHeldStatusGizmo.Label>
+  <PressR.DirectHaul.CancelHeldStatusGizmo.Desc>Avbryt holdt status for denne gjenstanden i Direct Haul.</PressR.DirectHaul.CancelHeldStatusGizmo.Desc>
+  <PressR.DirectHaul.CancelPendingStatusGizmo.Label>Avbryt ventende status</PressR.DirectHaul.CancelPendingStatusGizmo.Label>
+  <PressR.DirectHaul.CancelPendingStatusGizmo.Desc>Avbryt ventende status for denne gjenstanden i Direct Haul.</PressR.DirectHaul.CancelPendingStatusGizmo.Desc>
+  
+</LanguageData>

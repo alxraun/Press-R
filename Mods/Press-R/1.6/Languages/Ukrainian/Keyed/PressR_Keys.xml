@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+  <!-- Settings Reset Button -->
+  <PressR.Settings.ResetButton.Label>Скинути налаштування</PressR.Settings.ResetButton.Label>
+  <PressR.Settings.ResetButton.Tooltip>Скинути всі налаштування моду Press-R до значень за замовчуванням.</PressR.Settings.ResetButton.Tooltip>
+  <PressR.Settings.ResetButton.Message>Налаштування Press-R скинуто до значень за замовчуванням.</PressR.Settings.ResetButton.Message>
+
+  <!-- Mod Settings Container -->
+  <!-- Tab Lens Feature Section -->
+  <PressR.Settings.TabLens.Feature.Label>Функція Tab Lens</PressR.Settings.TabLens.Feature.Label>
+  <PressR.Settings.TabLens.Feature.Description>Керування налаштуваннями об'єктів через взаємодію на мапі, коли відкриті відповідні вкладки.</PressR.Settings.TabLens.Feature.Description>
+  <PressR.Settings.TabLens.StorageLens.Enable.Label>Увімкнути Storage Lens</PressR.Settings.TabLens.StorageLens.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.Enable.Description>Використовувати Tab Lens із вкладкою 'Сховище' для перемикання дозволу предметів кліком на мапі.</PressR.Settings.TabLens.StorageLens.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.Overlays.Enable.Label>Показувати оверлеї предметів</PressR.Settings.TabLens.StorageLens.Overlays.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.Overlays.Enable.Description>Показувати кольорові оверлеї на предметах, що вказують їхній статус (дозволено/заборонено) у сховищі.</PressR.Settings.TabLens.StorageLens.Overlays.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>Відновлювати інтерфейс при виході</PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>Відновлювати попередній стан інтерфейсу (вкладка, пошук, прокручування) при деактивації Storage Lens.</PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>Автоматично відкривати вкладку 'Сховище'</PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>Автоматично відкривати вкладку 'Сховище' при фокусуванні на предметі.</PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>Фокусуватися на предметі у вкладці за кліком</PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>Фільтрувати список у вкладці сховища за натиснутим предметом/категорією.</PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>
+  <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>Фокусуватися на предметі у вкладці при наведенні</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>
+  <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>Фільтрувати список у вкладці сховища за предметом/категорією під курсором.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>
+  <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>Потребує увімкнення опції 'Фокусуватися на предметі у вкладці за кліком'.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>
+
+  <!-- Direct Haul Feature Section -->
+  <PressR.Settings.DirectHaul.Feature.Label>Функція Direct Haul</PressR.Settings.DirectHaul.Feature.Label>
+  <PressR.Settings.DirectHaul.Feature.Description>Напряму наказати колоністам перенести вибрані предмети у вказане місце.</PressR.Settings.DirectHaul.Feature.Description>
+  <PressR.Settings.DirectHaul.RadiusIndicator.Enable.Label>Показувати індикатор радіуса</PressR.Settings.DirectHaul.RadiusIndicator.Enable.Label>
+  <PressR.Settings.DirectHaul.RadiusIndicator.Enable.Description>Показувати коло, що охоплює всі місця розміщення.</PressR.Settings.DirectHaul.RadiusIndicator.Enable.Description>
+  <PressR.Settings.DirectHaul.InvertKeys.Enable.Label>Інвертувати клавіші Стандарт/Сховище</PressR.Settings.DirectHaul.InvertKeys.Enable.Label>
+  <PressR.Settings.DirectHaul.InvertKeys.Enable.Description>Поміняти місцями клавіші-модифікатори, що використовуються для режиму 'Стандарт' та режиму 'Сховище' в Direct Haul.</PressR.Settings.DirectHaul.InvertKeys.Enable.Description>
+
+  <!-- Direct Haul Gizmos -->
+  <PressR.DirectHaul.CancelHeldStatusGizmo.Label>Скасувати статус 'Утримується'</PressR.DirectHaul.CancelHeldStatusGizmo.Label>
+  <PressR.DirectHaul.CancelHeldStatusGizmo.Desc>Скасувати статус 'Утримується' для цього предмета в Direct Haul.</PressR.DirectHaul.CancelHeldStatusGizmo.Desc>
+  <PressR.DirectHaul.CancelPendingStatusGizmo.Label>Скасувати статус 'В очікуванні'</PressR.DirectHaul.CancelPendingStatusGizmo.Label>
+  <PressR.DirectHaul.CancelPendingStatusGizmo.Desc>Скасувати статус 'В очікуванні' для цього предмета в Direct Haul.</PressR.DirectHaul.CancelPendingStatusGizmo.Desc>
+
+</LanguageData>
