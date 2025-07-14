@@ -32,10 +32,17 @@ namespace PressR.Features.DirectHaul.Graphics
 
         private const float HoverDistanceSquared = HoverDistance * HoverDistance;
 
+        private readonly Dictionary<Thing, DirectHaulStatus> _visibleThingsWithStatus = new();
+        private readonly Dictionary<IntVec3, int> _targetCellPendingCount = new();
+        private readonly HashSet<IntVec3> _heldThingCells = new();
+        private readonly List<Thing> _thingsToRemove = new();
+        private readonly List<Thing> _thingsToAdd = new();
+        private readonly PressR.Utils.Throttler.Throttler _throttler = new(1);
+
         public DirectHaulStatusOverlayGraphicsController(IGraphicsManager graphicsManager)
         {
             _graphicsManager =
-                graphicsManager ?? throw new ArgumentNullException(nameof(graphicsManager));
+                graphicsManager ?? throw new System.ArgumentNullException(nameof(graphicsManager));
         }
 
         public void ConstantUpdate(Map map, bool isEnabled)
@@ -46,80 +53,46 @@ namespace PressR.Features.DirectHaul.Graphics
                 return;
             }
 
-            if (
-                !TryPrepareOverlayData(
-                    map,
-                    out var exposableData,
-                    out var visibleThingsWithStatus,
-                    out var targetCellPendingCount,
-                    out var heldThingCells
-                )
-            )
+            _visibleThingsWithStatus.Clear();
+            _targetCellPendingCount.Clear();
+            _heldThingCells.Clear();
+
+            if (!TryPrepareOverlayData(map, out var exposableData))
             {
                 ClearInternal(true);
                 return;
             }
 
-            if (!visibleThingsWithStatus.Any())
+            if (!_visibleThingsWithStatus.Any())
             {
                 ClearInternal(true);
                 return;
             }
 
-            SynchronizeManagedOverlays(
-                visibleThingsWithStatus,
-                exposableData,
-                targetCellPendingCount,
-                heldThingCells
-            );
-            UpdateActiveOverlays(
-                visibleThingsWithStatus,
-                exposableData,
-                targetCellPendingCount,
-                heldThingCells
-            );
-            UpdateProximityEffects(map);
+            SynchronizeManagedOverlays(exposableData);
+            UpdateActiveOverlays(exposableData);
+            if (_throttler.ShouldExecute())
+            {
+                UpdateProximityEffects(map);
+            }
         }
 
-        private bool TryPrepareOverlayData(
-            Map map,
-            out DirectHaulExposableData exposableData,
-            out Dictionary<Thing, DirectHaulStatus> visibleThingsWithStatus,
-            out Dictionary<IntVec3, int> targetCellPendingCount,
-            out HashSet<IntVec3> heldThingCells
-        )
+        private bool TryPrepareOverlayData(Map map, out DirectHaulExposableData exposableData)
         {
-            visibleThingsWithStatus = new Dictionary<Thing, DirectHaulStatus>();
-            targetCellPendingCount = new Dictionary<IntVec3, int>();
-            heldThingCells = new HashSet<IntVec3>();
-
             exposableData = map?.GetComponent<PressRMapComponent>()?.DirectHaulExposableData;
             if (exposableData == null)
                 return false;
 
-            PrepareOverlayDataInternal(
-                exposableData,
-                map,
-                visibleThingsWithStatus,
-                targetCellPendingCount,
-                heldThingCells
-            );
+            PrepareOverlayDataInternal(exposableData, map);
             return true;
         }
 
-        private void PrepareOverlayDataInternal(
-            DirectHaulExposableData exposableData,
-            Map map,
-            Dictionary<Thing, DirectHaulStatus> visibleThingsWithStatus,
-            Dictionary<IntVec3, int> targetCellPendingCount,
-            HashSet<IntVec3> heldThingCells
-        )
+        private void PrepareOverlayDataInternal(DirectHaulExposableData exposableData, Map map)
         {
             if (map == null)
                 return;
 
             var viewRect = Find.CameraDriver.CurrentViewRect;
-            var fogGrid = map.fogGrid;
 
             var trackedThings = exposableData.GetAllTrackedThings();
 
@@ -144,8 +117,8 @@ namespace PressR.Features.DirectHaul.Graphics
                     )
                     {
                         IntVec3 cell = targetInfo.Cell;
-                        targetCellPendingCount.TryGetValue(cell, out int count);
-                        targetCellPendingCount[cell] = count + 1;
+                        _targetCellPendingCount.TryGetValue(cell, out int count);
+                        _targetCellPendingCount[cell] = count + 1;
                     }
 
                     if (IsThingCarriedByVisiblePawn(thing, map, out var carrierPawn))
@@ -162,7 +135,7 @@ namespace PressR.Features.DirectHaul.Graphics
                     positionToCheck = GetRelevantPosition(thing, status);
                     if (positionToCheck.IsValid)
                     {
-                        heldThingCells.Add(positionToCheck);
+                        _heldThingCells.Add(positionToCheck);
                     }
                 }
 
@@ -170,19 +143,14 @@ namespace PressR.Features.DirectHaul.Graphics
 
                 if (isVisible)
                 {
-                    visibleThingsWithStatus[thing] = status;
+                    _visibleThingsWithStatus[thing] = status;
                 }
             }
         }
 
-        private void SynchronizeManagedOverlays(
-            IReadOnlyDictionary<Thing, DirectHaulStatus> visibleThingsWithStatus,
-            DirectHaulExposableData exposableData,
-            Dictionary<IntVec3, int> targetCellPendingCount,
-            HashSet<IntVec3> heldThingCells
-        )
+        private void SynchronizeManagedOverlays(DirectHaulExposableData exposableData)
         {
-            List<Thing> thingsToRemove = null;
+            _thingsToRemove.Clear();
             foreach (object managedKey in _managedOverlayKeys)
             {
                 if (
@@ -190,21 +158,20 @@ namespace PressR.Features.DirectHaul.Graphics
                     && keyTuple.Item1 is Thing thingInManagedKey
                 )
                 {
-                    if (!visibleThingsWithStatus.ContainsKey(thingInManagedKey))
+                    if (!_visibleThingsWithStatus.ContainsKey(thingInManagedKey))
                     {
-                        thingsToRemove ??= new List<Thing>();
-                        thingsToRemove.Add(thingInManagedKey);
+                        _thingsToRemove.Add(thingInManagedKey);
                     }
                 }
             }
 
-            if (thingsToRemove != null && thingsToRemove.Any())
+            if (_thingsToRemove.Any())
             {
-                HandleRemovingOverlays(thingsToRemove);
+                HandleRemovingOverlays(_thingsToRemove);
             }
 
-            List<Thing> thingsToAdd = null;
-            foreach (Thing thingInVisible in visibleThingsWithStatus.Keys)
+            _thingsToAdd.Clear();
+            foreach (Thing thingInVisible in _visibleThingsWithStatus.Keys)
             {
                 object potentialOverlayKey = (
                     thingInVisible,
@@ -212,20 +179,13 @@ namespace PressR.Features.DirectHaul.Graphics
                 );
                 if (!_managedOverlayKeys.Contains(potentialOverlayKey))
                 {
-                    thingsToAdd ??= new List<Thing>();
-                    thingsToAdd.Add(thingInVisible);
+                    _thingsToAdd.Add(thingInVisible);
                 }
             }
 
-            if (thingsToAdd != null && thingsToAdd.Any())
+            if (_thingsToAdd.Any())
             {
-                HandleAddingOverlays(
-                    thingsToAdd,
-                    visibleThingsWithStatus,
-                    exposableData,
-                    targetCellPendingCount,
-                    heldThingCells
-                );
+                HandleAddingOverlays(_thingsToAdd, exposableData);
             }
         }
 
@@ -252,10 +212,7 @@ namespace PressR.Features.DirectHaul.Graphics
 
         private void HandleAddingOverlays(
             IEnumerable<Thing> thingsToAdd,
-            IReadOnlyDictionary<Thing, DirectHaulStatus> visibleThingsWithStatus,
-            DirectHaulExposableData exposableData,
-            Dictionary<IntVec3, int> targetCellPendingCount,
-            HashSet<IntVec3> heldThingCells
+            DirectHaulExposableData exposableData
         )
         {
             if (!PressRMod.Settings.directHaulSettings.enableStatusOverlays)
@@ -271,22 +228,15 @@ namespace PressR.Features.DirectHaul.Graphics
                     _managedOverlayKeys.Add(newOverlayKey);
                     UpdateOverlayVisualState(
                         newOverlay,
-                        visibleThingsWithStatus[thingToAdd],
-                        exposableData,
-                        targetCellPendingCount,
-                        heldThingCells
+                        _visibleThingsWithStatus[thingToAdd],
+                        exposableData
                     );
                     ApplyFadeIn(newOverlay);
                 }
             }
         }
 
-        private void UpdateActiveOverlays(
-            IReadOnlyDictionary<Thing, DirectHaulStatus> visibleThingsWithStatus,
-            DirectHaulExposableData exposableData,
-            Dictionary<IntVec3, int> targetCellPendingCount,
-            HashSet<IntVec3> heldThingCells
-        )
+        private void UpdateActiveOverlays(DirectHaulExposableData exposableData)
         {
             foreach (var currentOverlayKey in _managedOverlayKeys.ToList())
             {
@@ -308,15 +258,9 @@ namespace PressR.Features.DirectHaul.Graphics
                     continue;
                 }
 
-                if (visibleThingsWithStatus.TryGetValue(currentThing, out var status))
+                if (_visibleThingsWithStatus.TryGetValue(currentThing, out var status))
                 {
-                    UpdateOverlayVisualState(
-                        overlay,
-                        status,
-                        exposableData,
-                        targetCellPendingCount,
-                        heldThingCells
-                    );
+                    UpdateOverlayVisualState(overlay, status, exposableData);
                 }
                 else
                 {
@@ -328,9 +272,7 @@ namespace PressR.Features.DirectHaul.Graphics
         private void UpdateOverlayVisualState(
             DirectHaulStatusOverlayGraphicObject overlay,
             DirectHaulStatus status,
-            DirectHaulExposableData exposableData,
-            Dictionary<IntVec3, int> targetCellPendingCount,
-            HashSet<IntVec3> heldThingCells
+            DirectHaulExposableData exposableData
         )
         {
             if (overlay?.Key == null)
@@ -342,13 +284,7 @@ namespace PressR.Features.DirectHaul.Graphics
             )
                 return;
 
-            bool isPartial = ShouldUsePartialTexture(
-                currentThing,
-                status,
-                exposableData,
-                targetCellPendingCount,
-                heldThingCells
-            );
+            bool isPartial = ShouldUsePartialTexture(currentThing, status, exposableData);
             string texturePath = GetOverlayTexturePath(status, isPartial);
 
             if (string.IsNullOrEmpty(texturePath))
@@ -425,9 +361,7 @@ namespace PressR.Features.DirectHaul.Graphics
         private bool ShouldUsePartialTexture(
             Thing thing,
             DirectHaulStatus status,
-            DirectHaulExposableData exposableData,
-            Dictionary<IntVec3, int> targetCellPendingCount,
-            HashSet<IntVec3> heldThingCells
+            DirectHaulExposableData exposableData
         )
         {
             if (status == DirectHaulStatus.Pending)
@@ -442,8 +376,8 @@ namespace PressR.Features.DirectHaul.Graphics
                 {
                     IntVec3 targetCell = targetInfo.Cell;
                     bool isMultiPendingTarget =
-                        targetCellPendingCount.TryGetValue(targetCell, out int count) && count > 1;
-                    bool isTargetCellHeld = heldThingCells.Contains(targetCell);
+                        _targetCellPendingCount.TryGetValue(targetCell, out int count) && count > 1;
+                    bool isTargetCellHeld = _heldThingCells.Contains(targetCell);
                     return isMultiPendingTarget || isTargetCellHeld;
                 }
             }
@@ -451,8 +385,8 @@ namespace PressR.Features.DirectHaul.Graphics
             {
                 IntVec3 currentCell = thing.PositionHeld;
 
-                return targetCellPendingCount.ContainsKey(currentCell)
-                    && targetCellPendingCount[currentCell] > 0;
+                return _targetCellPendingCount.ContainsKey(currentCell)
+                    && _targetCellPendingCount[currentCell] > 0;
             }
 
             return false;

@@ -4,7 +4,11 @@ using Verse;
 
 namespace PressR.Features.DirectHaul.Graphics
 {
-    public class DirectHaulStatusOverlayGraphicObject : IGraphicObject, IHasAlpha, IHasPosition
+    public class DirectHaulStatusOverlayGraphicObject
+        : IGraphicObject,
+            IHasAlpha,
+            IHasPosition,
+            System.IDisposable
     {
         private readonly Thing _targetThing;
         private string _currentTexturePath;
@@ -25,19 +29,20 @@ namespace PressR.Features.DirectHaul.Graphics
         private Material _cachedMaterial;
         private string _materialTexturePathUsedForCache;
         private Vector2 _cachedThingDrawSize;
+        private readonly MaterialPropertyBlock _propertyBlock = new MaterialPropertyBlock();
+        private float _lastAppliedAlpha = -1f;
+        private bool _disposed = false;
+
+        private bool IsValid =>
+            _targetThing != null
+            && !_targetThing.Destroyed
+            && _targetThing.SpawnedOrAnyParentSpawned;
 
         public DirectHaulStatusOverlayGraphicObject(Thing targetThing)
         {
             _targetThing =
                 targetThing ?? throw new System.ArgumentNullException(nameof(targetThing));
-            if (_targetThing.Graphic != null)
-            {
-                _cachedThingDrawSize = _targetThing.Graphic.drawSize;
-            }
-            else
-            {
-                _cachedThingDrawSize = Vector2.one;
-            }
+            _cachedThingDrawSize = _targetThing.Graphic?.drawSize ?? Vector2.one;
         }
 
         public void OnRegistered() { }
@@ -49,12 +54,23 @@ namespace PressR.Features.DirectHaul.Graphics
 
         public void Update()
         {
-            if (!IsValid(_targetThing))
+            if (_disposed)
+            {
+                return;
+            }
+
+            if (!IsValid)
             {
                 State = GraphicObjectState.PendingRemoval;
                 Position = Vector3.zero;
                 return;
             }
+
+            if (_targetThing.Graphic != null)
+            {
+                _cachedThingDrawSize = _targetThing.Graphic.drawSize;
+            }
+
             CalculatePosition();
         }
 
@@ -167,7 +183,7 @@ namespace PressR.Features.DirectHaul.Graphics
 
         public void Render()
         {
-            if (State != GraphicObjectState.Active || Position == Vector3.zero)
+            if (_disposed || State != GraphicObjectState.Active || Position == Vector3.zero)
             {
                 return;
             }
@@ -202,23 +218,35 @@ namespace PressR.Features.DirectHaul.Graphics
 
             Vector3 finalDrawPos = Position;
 
-            MaterialPropertyBlock mpb = new MaterialPropertyBlock();
-            Color color = Color.white;
-            color.a = Alpha;
-            mpb.SetColor(ShaderPropertyIDs.Color, color);
+            if (Alpha != _lastAppliedAlpha)
+            {
+                Color color = Color.white;
+                color.a = Alpha;
+                _propertyBlock.SetColor(ShaderPropertyIDs.Color, color);
+                _lastAppliedAlpha = Alpha;
+            }
 
             Matrix4x4 matrix = Matrix4x4.TRS(finalDrawPos, rotation, scale);
 
-            UnityEngine.Graphics.DrawMesh(mesh, matrix, _cachedMaterial, 0, null, 0, mpb);
+            UnityEngine.Graphics.DrawMesh(
+                mesh,
+                matrix,
+                _cachedMaterial,
+                0,
+                null,
+                0,
+                _propertyBlock
+            );
         }
-
-        private static bool IsValid(Thing thing) =>
-            thing != null && !thing.Destroyed && thing.SpawnedOrAnyParentSpawned;
 
         public void Dispose()
         {
+            if (_disposed)
+                return;
+            _disposed = true;
             _cachedMaterial = null;
             _materialTexturePathUsedForCache = null;
+            System.GC.SuppressFinalize(this);
         }
     }
 }

@@ -8,7 +8,7 @@
 
 ## Role of AI
 
-All code is written by Gemini 2.0 Flash, Gemini 2.5 Flash, Gemini 2.5 Pro, and Claude 3.7 Sonnet. The author handles the design and ongoing development.
+All code is written by Gemini 2.0 Flash, Gemini 2.5 Flash, Gemini 2.5 Pro, and Claude 3.7 Sonnet. The author can't create without AI, AI can't create without the author.
 
 ## About the Author
 

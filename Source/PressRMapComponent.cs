@@ -1,4 +1,7 @@
+using System;
 using PressR.Features.DirectHaul.Core;
+using PressR.Utils.Throttler;
+using RimWorld;
 using Verse;
 
 namespace PressR
@@ -6,6 +9,7 @@ namespace PressR
     public class PressRMapComponent : MapComponent
     {
         private DirectHaulExposableData _directHaulExposableData;
+        private readonly ThrottledValue<bool> _drawingMapCache;
 
         public DirectHaulExposableData DirectHaulExposableData => _directHaulExposableData;
 
@@ -13,6 +17,10 @@ namespace PressR
             : base(map)
         {
             _directHaulExposableData = new DirectHaulExposableData(map);
+            _drawingMapCache = new ThrottledValue<bool>(
+                1,
+                () => RimWorld.Planet.WorldRendererUtility.DrawingMap
+            );
             PressRMain.GraphicsManager?.Clear();
         }
 
@@ -23,6 +31,11 @@ namespace PressR
 
         public override void MapComponentUpdate()
         {
+            if (!_drawingMapCache.GetValue())
+            {
+                return;
+            }
+
             PressRMain.GraphicsManager?.UpdateTweens();
             PressRMain.GraphicsManager?.UpdateGraphicObjects();
             PressRMain.GraphicsManager?.RenderGraphicObjects();

@@ -15,34 +15,25 @@ namespace PressR.Features.DirectHaul.Patches
             Thing __instance
         )
         {
-            foreach (var gizmo in __result)
-            {
-                yield return gizmo;
-            }
+            var list = __result is List<Gizmo> l ? l : new List<Gizmo>(__result);
 
             if (__instance == null || !__instance.Spawned || __instance.Destroyed)
-            {
-                yield break;
-            }
+                return list;
 
             PressRMapComponent mapComponent = __instance.Map?.GetComponent<PressRMapComponent>();
             DirectHaulExposableData directHaulData = mapComponent?.DirectHaulExposableData;
 
             if (directHaulData == null)
-            {
-                yield break;
-            }
+                return list;
 
             DirectHaulStatus status = directHaulData.GetStatusForThing(__instance);
 
             if (status == DirectHaulStatus.Held)
-            {
-                yield return new CancelHeldStatusGizmo(__instance, directHaulData);
-            }
+                list.Add(new CancelHeldStatusGizmo(__instance, directHaulData));
             else if (status == DirectHaulStatus.Pending)
-            {
-                yield return new CancelPendingStatusGizmo(__instance, directHaulData);
-            }
+                list.Add(new CancelPendingStatusGizmo(__instance, directHaulData));
+
+            return list;
         }
     }
 }

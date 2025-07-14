@@ -21,6 +21,7 @@ namespace PressR.Features.DirectHaul.Gizmos
 
             icon = ContentFinder<Texture2D>.Get("DirectHaul/cancel_held_status_gizmo", true);
             Order = -100f;
+            hotKey = KeyBindingDefOf.Designator_Cancel;
 
             action = () =>
             {
