@@ -1,11 +1,9 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-
   <!-- Settings Reset Button -->
   <PressR.Settings.ResetButton.Label>Återställ till standard</PressR.Settings.ResetButton.Label>
   <PressR.Settings.ResetButton.Tooltip>Återställ alla Press-R-inställningar till sina standardvärden.</PressR.Settings.ResetButton.Tooltip>
   <PressR.Settings.ResetButton.Message>Press-R-inställningar återställda till standard.</PressR.Settings.ResetButton.Message>
-
   <!-- Mod Settings Container -->
   <!-- Tab Lens Feature Section -->
   <PressR.Settings.TabLens.Feature.Label>Tab Lens-funktion</PressR.Settings.TabLens.Feature.Label>
@@ -23,7 +21,6 @@
   <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>Fokusera på föremål i fliken vid hovring</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>
   <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>Filtrera fliklistan till det hovrade föremålet/kategorin.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>
   <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>Kräver att 'Fokusera på föremål i fliken vid klick' är aktiverat.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>
-
   <!-- Direct Haul Feature Section -->
   <PressR.Settings.DirectHaul.Feature.Label>Direkt hämtning-funktion</PressR.Settings.DirectHaul.Feature.Label>
   <PressR.Settings.DirectHaul.Feature.Description>Kommendera direkt kolonister att hämta valda föremål till en specifik plats.</PressR.Settings.DirectHaul.Feature.Description>
@@ -39,11 +36,9 @@
   <PressR.Settings.DirectHaul.StorageHighlight.Enable.Description>Markera befintliga lagringszoner/byggnader vid hovring i Lagringsläge.</PressR.Settings.DirectHaul.StorageHighlight.Enable.Description>
   <PressR.Settings.DirectHaul.InvertKeys.Enable.Label>Invertera Standard/Lagringstangenter</PressR.Settings.DirectHaul.InvertKeys.Enable.Label>
   <PressR.Settings.DirectHaul.InvertKeys.Enable.Description>Byt modifieringstangenterna som används för Standardhämtning och Lagringsläge.</PressR.Settings.DirectHaul.InvertKeys.Enable.Description>
-
   <!-- Direct Haul Gizmos -->
-  <PressR.DirectHaul.CancelHeldStatusGizmo.Label>Avbryt Hållen Status</PressR.DirectHaul.CancelHeldStatusGizmo.Label>
-  <PressR.DirectHaul.CancelHeldStatusGizmo.Desc>Avbryt den hållna statusen för detta föremål i Direkt hämtning.</PressR.DirectHaul.CancelHeldStatusGizmo.Desc>
-  <PressR.DirectHaul.CancelPendingStatusGizmo.Label>Avbryt Väntande Status</PressR.DirectHaul.CancelPendingStatusGizmo.Label>
-  <PressR.DirectHaul.CancelPendingStatusGizmo.Desc>Avbryt den väntande statusen för detta föremål i Direkt hämtning.</PressR.DirectHaul.CancelPendingStatusGizmo.Desc>
-
+  <PressR.DirectHaul.Command_CancelHeldStatus.Label>Avbryt Hållen Status</PressR.DirectHaul.Command_CancelHeldStatus.Label>
+  <PressR.DirectHaul.Command_CancelHeldStatus.Desc>Avbryt den hållna statusen för detta föremål i Direkt hämtning.</PressR.DirectHaul.Command_CancelHeldStatus.Desc>
+  <PressR.DirectHaul.Command_CancelPendingStatus.Label>Avbryt Väntande Status</PressR.DirectHaul.Command_CancelPendingStatus.Label>
+  <PressR.DirectHaul.Command_CancelPendingStatus.Desc>Avbryt den väntande statusen för detta föremål i Direkt hämtning.</PressR.DirectHaul.Command_CancelPendingStatus.Desc>
 </LanguageData>

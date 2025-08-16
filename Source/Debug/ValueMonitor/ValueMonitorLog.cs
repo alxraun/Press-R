@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -13,18 +12,11 @@ namespace PressR.Debug.ValueMonitor
         Error,
     }
 
-    public struct ValueMonitorLogEntry
+    public struct ValueMonitorLogEntry(float timestamp, ValueMonitorLogLevel level, string message)
     {
-        public float Timestamp { get; }
-        public ValueMonitorLogLevel Level { get; }
-        public string Message { get; }
-
-        public ValueMonitorLogEntry(float timestamp, ValueMonitorLogLevel level, string message)
-        {
-            Timestamp = timestamp;
-            Level = level;
-            Message = message ?? string.Empty;
-        }
+        public float Timestamp { get; } = timestamp;
+        public ValueMonitorLogLevel Level { get; } = level;
+        public string Message { get; } = message ?? string.Empty;
 
         public override string ToString()
         {
@@ -35,8 +27,7 @@ namespace PressR.Debug.ValueMonitor
 
     public static class ValueMonitorLog
     {
-        private static readonly List<ValueMonitorLogEntry> _logEntries =
-            new List<ValueMonitorLogEntry>();
+        private static readonly List<ValueMonitorLogEntry> _logEntries = [];
         private static readonly int MaxLogEntries = 500;
 
         public static IEnumerable<ValueMonitorLogEntry> GetLogs()

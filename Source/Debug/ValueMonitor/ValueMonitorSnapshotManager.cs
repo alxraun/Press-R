@@ -6,29 +6,21 @@ using Verse;
 
 namespace PressR.Debug.ValueMonitor
 {
-    public class ValueMonitorSnapshotManager
+    public class ValueMonitorSnapshotManager(ValueResolver valueResolver)
     {
         public int MaxHistorySize { get; set; } = 1000;
-        public List<Dictionary<string, object>> SnapshotsHistory { get; private set; } =
-            new List<Dictionary<string, object>>();
-        public Dictionary<string, object> LastSnapshot { get; private set; } =
-            new Dictionary<string, object>();
+        public List<Dictionary<string, object>> SnapshotsHistory { get; private set; } = [];
+        public Dictionary<string, object> LastSnapshot { get; private set; } = [];
 
-        private readonly ValueResolver _valueResolver;
-        private List<ValueMonitorTrackedValueInfo> _currentTrackedValues =
-            new List<ValueMonitorTrackedValueInfo>();
+        private readonly ValueResolver _valueResolver =
+            valueResolver ?? throw new System.ArgumentNullException(nameof(valueResolver));
+        private List<ValueMonitorTrackedValueInfo> _currentTrackedValues = [];
 
         private RecordingStartInfo _recordingStartInfo;
 
-        public ValueMonitorSnapshotManager(ValueResolver valueResolver)
-        {
-            _valueResolver =
-                valueResolver ?? throw new System.ArgumentNullException(nameof(valueResolver));
-        }
-
         public void SetTrackedValues(List<ValueMonitorTrackedValueInfo> trackedValues)
         {
-            _currentTrackedValues = trackedValues ?? new List<ValueMonitorTrackedValueInfo>();
+            _currentTrackedValues = trackedValues ?? [];
 
             LastSnapshot = _currentTrackedValues.ToDictionary(
                 tvi => tvi.DisplayName,
@@ -67,7 +59,7 @@ namespace PressR.Debug.ValueMonitor
                         _currentTrackedValues?.ToDictionary(
                             tvi => tvi.DisplayName,
                             tvi => (object)"-"
-                        ) ?? new Dictionary<string, object>();
+                        ) ?? [];
                 return;
             }
 

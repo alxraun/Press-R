@@ -9,7 +9,7 @@ namespace PressR
     {
         public static PressRSettings Settings { get; private set; }
 
-        private readonly PressRSettingsDraw _settingsUI = new PressRSettingsDraw();
+        private readonly PressRSettingsDraw _settingsUI = new();
 
         public PressRMod(ModContentPack content)
             : base(content)

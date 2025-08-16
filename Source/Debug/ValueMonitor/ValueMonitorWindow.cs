@@ -24,10 +24,10 @@ namespace PressR.Debug.ValueMonitor
         private const float LogConsoleHeight = 150f;
         private const string LogPrefix = "[ValueMonitor] ";
 
-        private static readonly Color RowEvenColor = new Color(0.21f, 0.21f, 0.21f, 0.7f);
-        private static readonly Color RowOddColor = new Color(0.25f, 0.25f, 0.25f, 0.7f);
-        private static readonly Color RowErrorColor = new Color(0.5f, 0.1f, 0.1f, 0.7f);
-        private static readonly Color RowHighlightColor = new Color(0.3f, 0.3f, 0.2f, 0.7f);
+        private static readonly Color RowEvenColor = new(0.21f, 0.21f, 0.21f, 0.7f);
+        private static readonly Color RowOddColor = new(0.25f, 0.25f, 0.25f, 0.7f);
+        private static readonly Color RowErrorColor = new(0.5f, 0.1f, 0.1f, 0.7f);
+        private static readonly Color RowHighlightColor = new(0.3f, 0.3f, 0.2f, 0.7f);
 
         private const float SnapshotKeyColumnWidth = 0.4f;
         private const float RowPadding = 4f;
@@ -36,7 +36,7 @@ namespace PressR.Debug.ValueMonitor
         private const float TooltipDelay = 0.4f;
         private const float MaxTooltipWidth = 400f;
 
-        public override Vector2 InitialSize => new Vector2(500f, 700f);
+        public override Vector2 InitialSize => new(500f, 700f);
 
         public static bool IsWindowOpen => _instance != null;
 
@@ -100,8 +100,8 @@ namespace PressR.Debug.ValueMonitor
                 float currentY = 0f;
                 float availableWidth = inRect.width;
 
-                Listing_Standard headerCalcListing = new Listing_Standard();
-                Rect headerCalcRect = new Rect(0, 0, availableWidth, 9999f);
+                Listing_Standard headerCalcListing = new();
+                Rect headerCalcRect = new(0, 0, availableWidth, 9999f);
                 headerCalcListing.Begin(headerCalcRect);
 
                 headerCalcListing.Gap(ElementSpacing * 0.5f);
@@ -116,13 +116,8 @@ namespace PressR.Debug.ValueMonitor
                 float headerHeight = headerCalcListing.CurHeight;
                 headerCalcListing.End();
 
-                Rect headerRect = new Rect(
-                    inRect.x,
-                    inRect.y + currentY,
-                    availableWidth,
-                    headerHeight
-                );
-                Listing_Standard headerListing = new Listing_Standard();
+                Rect headerRect = new(inRect.x, inRect.y + currentY, availableWidth, headerHeight);
+                Listing_Standard headerListing = new();
                 headerListing.Begin(headerRect);
                 DrawHelpButton(headerListing);
                 headerListing.Gap(ElementSpacing * 0.5f);
@@ -159,7 +154,7 @@ namespace PressR.Debug.ValueMonitor
                     150f,
                     inRect.height - currentY - totalBottomSectionHeight
                 );
-                Rect snapshotRect = new Rect(
+                Rect snapshotRect = new(
                     inRect.x,
                     inRect.y + currentY,
                     availableWidth,
@@ -168,31 +163,31 @@ namespace PressR.Debug.ValueMonitor
                 DrawSnapshotScrollView(snapshotRect);
                 currentY += snapshotRect.height + ElementSpacing;
 
-                Rect statusRect = new Rect(
+                Rect statusRect = new(
                     inRect.x,
                     inRect.y + currentY,
                     availableWidth,
                     statusLabelHeight
                 );
-                Listing_Standard statusListing = new Listing_Standard();
+                Listing_Standard statusListing = new();
                 statusListing.Begin(statusRect);
                 DrawStatusLabel(statusListing);
                 statusListing.End();
                 currentY += statusRect.height + ElementSpacing;
 
-                Rect controlsRect = new Rect(
+                Rect controlsRect = new(
                     inRect.x,
                     inRect.y + currentY,
                     availableWidth,
                     controlsHeight
                 );
-                Listing_Standard controlsListing = new Listing_Standard();
+                Listing_Standard controlsListing = new();
                 controlsListing.Begin(controlsRect);
                 DrawControlButtons(controlsListing);
                 controlsListing.End();
                 currentY += controlsRect.height + ElementSpacing;
 
-                Rect briefMessageRect = new Rect(
+                Rect briefMessageRect = new(
                     inRect.x,
                     inRect.y + currentY,
                     availableWidth,
@@ -215,18 +210,13 @@ namespace PressR.Debug.ValueMonitor
 
                 currentY += briefMessageRect.height + ElementSpacing;
 
-                Rect toggleRect = new Rect(
-                    inRect.x,
-                    inRect.y + currentY,
-                    availableWidth,
-                    toggleHeight
-                );
+                Rect toggleRect = new(inRect.x, inRect.y + currentY, availableWidth, toggleHeight);
                 Widgets.CheckboxLabeled(toggleRect, "Show ValueMonitor Log", ref _showLogConsole);
                 currentY += toggleRect.height + ElementSpacing;
 
                 if (_showLogConsole)
                 {
-                    Rect logAreaRect = new Rect(
+                    Rect logAreaRect = new(
                         inRect.x,
                         inRect.y + currentY,
                         availableWidth,
@@ -239,30 +229,25 @@ namespace PressR.Debug.ValueMonitor
                         logAreaRect.height - logControlsRequiredHeight
                     );
 
-                    Rect logControlsRect = new Rect(
+                    Rect logControlsRect = new(
                         logAreaRect.x,
                         logAreaRect.y,
                         logAreaRect.width,
                         ButtonHeight
                     );
-                    Rect logScrollViewOuterRect = new Rect(
+                    Rect logScrollViewOuterRect = new(
                         logAreaRect.x,
                         logAreaRect.y + logControlsRequiredHeight,
                         logAreaRect.width,
                         logScrollViewHeight
                     );
 
-                    Listing_Standard logControlsListing = new Listing_Standard();
+                    Listing_Standard logControlsListing = new();
                     logControlsListing.Begin(logControlsRect);
 
                     float buttonWidth = (logControlsRect.width - ElementSpacing) / 2f;
-                    Rect copyButtonRect = new Rect(
-                        logControlsRect.x,
-                        0f,
-                        buttonWidth,
-                        ButtonHeight
-                    );
-                    Rect clearButtonRect = new Rect(
+                    Rect copyButtonRect = new(logControlsRect.x, 0f, buttonWidth, ButtonHeight);
+                    Rect clearButtonRect = new(
                         copyButtonRect.xMax + ElementSpacing,
                         0f,
                         buttonWidth,
@@ -297,7 +282,7 @@ namespace PressR.Debug.ValueMonitor
 
         private void DrawHelpButton(Listing_Standard listing)
         {
-            Rect helpRect = new Rect(listing.GetRect(0).width - 24f, 0f, 24f, 24f);
+            Rect helpRect = new(listing.GetRect(0).width - 24f, 0f, 24f, 24f);
             TooltipHandler.TipRegion(
                 helpRect,
                 new TipSignal(ValueMonitorTrackedValueInfo.ValuePathSyntax.FormatExamplesForHelp())
@@ -320,8 +305,7 @@ namespace PressR.Debug.ValueMonitor
 
         private void DrawConfigSelector(Listing_Standard listing)
         {
-            var configs =
-                ValueMonitorCore.AvailableConfigs?.ToList() ?? new List<IValueMonitorConfig>();
+            var configs = ValueMonitorCore.AvailableConfigs?.ToList() ?? [];
             string currentConfigName = ValueMonitorCore.CurrentConfig?.Name ?? "Select Config";
             Rect buttonRect = listing.GetRect(ButtonHeight);
 
@@ -395,14 +379,14 @@ namespace PressR.Debug.ValueMonitor
 
         private void DrawSnapshotScrollView(Rect outerRect)
         {
-            Rect headerRect = new Rect(outerRect.x, outerRect.y, outerRect.width, 22f);
+            Rect headerRect = new(outerRect.x, outerRect.y, outerRect.width, 22f);
             GUI.color = new Color(0.9f, 0.9f, 0.9f);
             Text.Font = GameFont.Medium;
             Widgets.Label(headerRect, "Snapshot Data");
             Text.Font = GameFont.Small;
             GUI.color = Color.white;
 
-            Rect contentRect = new Rect(
+            Rect contentRect = new(
                 outerRect.x,
                 outerRect.y + 24f,
                 outerRect.width,
@@ -419,7 +403,7 @@ namespace PressR.Debug.ValueMonitor
                 return;
             }
 
-            Rect viewRect = new Rect(0f, 0f, contentRect.width - 16f, 0f);
+            Rect viewRect = new(0f, 0f, contentRect.width - 16f, 0f);
 
             float contentHeight = CalculateSnapshotContentHeight(lastSnapshot, viewRect.width);
             viewRect.height = contentHeight;
@@ -434,7 +418,7 @@ namespace PressR.Debug.ValueMonitor
             float curY = 0f;
 
             GUI.color = new Color(0.7f, 0.7f, 0.7f);
-            Rect infoRect = new Rect(0f, curY, viewRect.width, 22f);
+            Rect infoRect = new(0f, curY, viewRect.width, 22f);
             Widgets.DrawBoxSolid(infoRect, new Color(0.18f, 0.18f, 0.18f, 0.7f));
             Widgets.Label(
                 infoRect.ContractedBy(keyPadding, 0),
@@ -456,7 +440,7 @@ namespace PressR.Debug.ValueMonitor
                     Mathf.Max(keyHeight, valueHeight) + RowPadding * 2
                 );
 
-                Rect rowRect = new Rect(0f, curY, viewRect.width, rowHeight);
+                Rect rowRect = new(0f, curY, viewRect.width, rowHeight);
 
                 bool isError = IsErrorValue(valueStr);
 
@@ -472,14 +456,14 @@ namespace PressR.Debug.ValueMonitor
                         Widgets.DrawBoxSolid(rowRect, RowEvenColor);
                 }
 
-                Rect keyRect = new Rect(
+                Rect keyRect = new(
                     keyPadding,
                     curY + RowPadding,
                     keyColumnWidth - keyPadding * 2,
                     rowHeight - RowPadding * 2
                 );
 
-                Rect valueRect = new Rect(
+                Rect valueRect = new(
                     keyColumnWidth + valuePadding,
                     curY + RowPadding,
                     valueColumnWidth - valuePadding * 2,
@@ -569,8 +553,8 @@ namespace PressR.Debug.ValueMonitor
 
             Rect controlRect = listing.GetRect(ButtonHeight * 2 + ElementSpacing);
 
-            Rect row1 = new Rect(controlRect.x, controlRect.y, controlRect.width, ButtonHeight);
-            Rect row2 = new Rect(
+            Rect row1 = new(controlRect.x, controlRect.y, controlRect.width, ButtonHeight);
+            Rect row2 = new(
                 controlRect.x,
                 controlRect.y + ButtonHeight + ElementSpacing,
                 controlRect.width,
@@ -579,8 +563,8 @@ namespace PressR.Debug.ValueMonitor
 
             float buttonWidth = (row1.width - ElementSpacing) / 2f;
 
-            Rect startPauseResumeRect = new Rect(row1.x, row1.y, buttonWidth, ButtonHeight);
-            Rect stopRect = new Rect(
+            Rect startPauseResumeRect = new(row1.x, row1.y, buttonWidth, ButtonHeight);
+            Rect stopRect = new(
                 startPauseResumeRect.xMax + ElementSpacing,
                 row1.y,
                 buttonWidth,
@@ -718,7 +702,7 @@ namespace PressR.Debug.ValueMonitor
             var logEntries = ValueMonitorLog.GetLogs().ToList();
 
             float logContentHeight = CalculateLogContentHeight(logEntries);
-            Rect logScrollViewInnerRect = new Rect(0f, 0f, viewWidth - 16f, logContentHeight);
+            Rect logScrollViewInnerRect = new(0f, 0f, viewWidth - 16f, logContentHeight);
 
             Widgets.BeginScrollView(
                 logScrollViewOuterRect,
@@ -735,7 +719,7 @@ namespace PressR.Debug.ValueMonitor
                 float textHeight = Text.CalcHeight(logText, logScrollViewInnerRect.width - 8f);
                 textHeight = Mathf.Max(MinRowHeight, textHeight + 2f);
 
-                Rect entryRect = new Rect(0f, currentY, logScrollViewInnerRect.width, textHeight);
+                Rect entryRect = new(0f, currentY, logScrollViewInnerRect.width, textHeight);
 
                 if (isAlternate)
                     Widgets.DrawBoxSolid(entryRect, RowOddColor);

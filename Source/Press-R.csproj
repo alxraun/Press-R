@@ -1,23 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-        <TargetFramework>net48</TargetFramework>
-        <AssemblyName>Press-R</AssemblyName>
-        <RootNamespace>PressR</RootNamespace>
-        <OutputPath>..\Mods\Press-R\1.6\Assemblies</OutputPath>
-        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-        <Configurations>Debug;Release</Configurations>
-        <Platforms>AnyCPU</Platforms>
-        <LangVersion>latest</LangVersion>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-        <DebugType>none</DebugType>
-        <DebugSymbols>false</DebugSymbols>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <AssemblyName>Press-R</AssemblyName>
+    <RootNamespace>PressR</RootNamespace>
+    <OutputPath>..\Mods\Press-R\1.6\Assemblies</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <Configurations>Debug;Release</Configurations>
+    <Platforms>AnyCPU</Platforms>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Krafs.Rimworld.Ref" Version="*" />
     <PackageReference Include="Lib.Harmony.Ref" Version="*" />
   </ItemGroup>
-    <ItemGroup Condition="'$(Configuration)'=='Release'">
-        <Compile Remove="Debug\**\*.cs" />
-    </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)'=='Release'">
+    <Compile Remove="Debug\**\*.cs" />
+  </ItemGroup>
 </Project>

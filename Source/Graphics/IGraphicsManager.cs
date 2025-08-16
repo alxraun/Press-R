@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using PressR.Graphics.GraphicObjects;
 using PressR.Graphics.Tween;
 
 namespace PressR.Graphics

@@ -12,8 +12,7 @@ namespace PressR.Debug.ValueMonitor
         public IEnumerable<IValueMonitorConfig> AvailableConfigs { get; private set; }
         public IValueMonitorConfig CurrentConfig { get; private set; }
         public string ConfigLoadingError { get; private set; }
-        public List<ValueMonitorTrackedValueInfo> CurrentTrackedValues { get; private set; } =
-            new List<ValueMonitorTrackedValueInfo>();
+        public List<ValueMonitorTrackedValueInfo> CurrentTrackedValues { get; private set; } = [];
 
         public void Initialize()
         {
@@ -65,9 +64,7 @@ namespace PressR.Debug.ValueMonitor
             {
                 try
                 {
-                    CurrentTrackedValues =
-                        config.GetTrackedValues()?.ToList()
-                        ?? new List<ValueMonitorTrackedValueInfo>();
+                    CurrentTrackedValues = config.GetTrackedValues()?.ToList() ?? [];
                 }
                 catch (Exception ex)
                 {

@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using UnityEngine;
-using Verse;
 using static PressR.Debug.ValueMonitor.ValueMonitorTrackedValueInfo;
 
 namespace PressR.Debug.ValueMonitor.Configs

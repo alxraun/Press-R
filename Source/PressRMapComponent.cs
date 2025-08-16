@@ -1,56 +1,153 @@
-using System;
-using PressR.Features.DirectHaul.Core;
-using PressR.Utils.Throttler;
-using RimWorld;
+using System.Collections.Generic;
+using PressR.Features;
+using PressR.Features.DirectHaul;
+using PressR.Features.DirectHaulStorageMode;
+using PressR.Features.StorageLens;
+using PressR.Graphics;
+using RimWorld.Planet;
 using Verse;
 
 namespace PressR
 {
     public class PressRMapComponent : MapComponent
     {
-        private DirectHaulExposableData _directHaulExposableData;
-        private readonly ThrottledValue<bool> _drawingMapCache;
+        public IGraphicsManager GraphicsManager { get; }
+        public DirectHaul DirectHaul { get; private set; }
+        public DirectHaulStorageMode DirectHaulStorageMode { get; private set; }
+        public StorageLens StorageLens { get; private set; }
 
-        public DirectHaulExposableData DirectHaulExposableData => _directHaulExposableData;
+        public bool IsActive { get; private set; }
+
+        private readonly List<IPressRFeature> _features = [];
+        private IPressRFeature _activeFeature;
+        private readonly Input _input;
+        private bool _shouldCaptureInput;
 
         public PressRMapComponent(Map map)
             : base(map)
         {
-            _directHaulExposableData = new DirectHaulExposableData(map);
-            _drawingMapCache = new ThrottledValue<bool>(
-                1,
-                () => RimWorld.Planet.WorldRendererUtility.DrawingMap
-            );
-            PressRMain.GraphicsManager?.Clear();
+            GraphicsManager = new GraphicsManager();
+            _input = new Input();
+
+            DirectHaul = new DirectHaul(GraphicsManager, _input);
+            DirectHaulStorageMode = new DirectHaulStorageMode(GraphicsManager, _input);
+            StorageLens = new StorageLens(GraphicsManager, _input);
+
+            _features.Add(StorageLens);
+            _features.Add(DirectHaulStorageMode);
+            _features.Add(DirectHaul);
         }
 
         public override void MapComponentOnGUI()
         {
-            PressRMain.MainUpdateLoop();
-        }
-
-        public override void MapComponentUpdate()
-        {
-            if (!_drawingMapCache.GetValue())
+            if (!IsActive)
             {
                 return;
             }
 
-            PressRMain.GraphicsManager?.UpdateTweens();
-            PressRMain.GraphicsManager?.UpdateGraphicObjects();
-            PressRMain.GraphicsManager?.RenderGraphicObjects();
+            if (_input.IsPressRModifierKeyPressed && _shouldCaptureInput)
+            {
+                _input.OnGUI();
+            }
+        }
+
+        public override void MapComponentUpdate()
+        {
+            bool shouldBeActive = Find.CurrentMap == map && !WorldRendererUtility.WorldSelected;
+
+            if (!shouldBeActive)
+            {
+                if (IsActive)
+                {
+                    DeactivateActiveFeature();
+                    foreach (var feature in _features)
+                    {
+                        feature.ConstantClear();
+                    }
+                    IsActive = false;
+                }
+                _shouldCaptureInput = false;
+                return;
+            }
+
+            if (!IsActive)
+            {
+                IsActive = true;
+            }
+
+            foreach (var feature in _features)
+            {
+                feature.ConstantUpdate();
+            }
+
+            _shouldCaptureInput = false;
+            bool isPressRPressed = _input.IsPressRModifierKeyPressed;
+
+            if (!isPressRPressed)
+            {
+                DeactivateActiveFeature();
+            }
+            else
+            {
+                if (_activeFeature == null)
+                {
+                    var featureToActivate = FindFirstActivatableFeature();
+                    if (featureToActivate != null)
+                    {
+                        _activeFeature = featureToActivate;
+                        _activeFeature.Activate();
+                    }
+                }
+
+                if (_activeFeature != null)
+                {
+                    if (_activeFeature.CanActivate())
+                    {
+                        _activeFeature.Update();
+                        _shouldCaptureInput = true;
+                    }
+                    else
+                    {
+                        DeactivateActiveFeature();
+                    }
+                }
+            }
+
+            GraphicsManager?.UpdateTweens();
+            GraphicsManager?.UpdateGraphicObjects();
+            GraphicsManager?.RenderGraphicObjects();
+        }
+
+        private void DeactivateActiveFeature()
+        {
+            if (_activeFeature == null)
+            {
+                return;
+            }
+            _activeFeature.Deactivate();
+            _activeFeature = null;
+            _input.Reset();
+        }
+
+        private IPressRFeature FindFirstActivatableFeature()
+        {
+            foreach (var feature in _features)
+            {
+                if (feature.CanActivate())
+                {
+                    return feature;
+                }
+            }
+            return null;
         }
 
         public override void ExposeData()
         {
             base.ExposeData();
 
-            Scribe_Deep.Look(ref _directHaulExposableData, "directHaulData", this.map);
-
-            if (Scribe.mode == LoadSaveMode.LoadingVars && _directHaulExposableData == null)
-            {
-                _directHaulExposableData = new DirectHaulExposableData(this.map);
-            }
+            Scribe.EnterNode("DirectHaul");
+            DirectHaul.ExposeData();
+            Scribe.ExitNode();
         }
     }
 }

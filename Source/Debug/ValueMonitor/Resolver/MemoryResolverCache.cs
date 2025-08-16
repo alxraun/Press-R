@@ -5,10 +5,8 @@ namespace PressR.Debug.ValueMonitor.Resolver
 {
     public class MemoryResolverCache
     {
-        private readonly Dictionary<string, Func<object>> _compiledGettersCache =
-            new Dictionary<string, Func<object>>();
-        private readonly Dictionary<string, string> _compilationErrorsCache =
-            new Dictionary<string, string>();
+        private readonly Dictionary<string, Func<object>> _compiledGettersCache = [];
+        private readonly Dictionary<string, string> _compilationErrorsCache = [];
 
         public bool TryGetGetter(string path, out Func<object> getter)
         {

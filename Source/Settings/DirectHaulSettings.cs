@@ -17,6 +17,7 @@ namespace PressR.Settings
         public bool enableStorageCreationPreview = EnableStorageCreationPreviewDefault;
         public bool enableStorageHighlightOnHover = EnableStorageHighlightOnHoverDefault;
         public bool invertStandardAndStorageKeys = InvertStandardAndStorageKeysDefault;
+        public bool enableStorageGizmos = true;
 
         public void ExposeData()
         {

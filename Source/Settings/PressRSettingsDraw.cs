@@ -1,8 +1,5 @@
-using System.Collections.Generic;
-using PressR.UI.Components.Container;
-using RimWorld;
+using PressR.UI.Components;
 using UnityEngine;
-using Verse;
 
 namespace PressR.Settings
 {

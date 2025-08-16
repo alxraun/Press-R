@@ -1,11 +1,9 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-
   <!-- Settings Reset Button -->
   <PressR.Settings.ResetButton.Label>Επαναφορά στις προεπιλογές</PressR.Settings.ResetButton.Label>
   <PressR.Settings.ResetButton.Tooltip>Επαναφορά όλων των ρυθμίσεων Press-R στις προεπιλεγμένες τους τιμές.</PressR.Settings.ResetButton.Tooltip>
   <PressR.Settings.ResetButton.Message>Οι ρυθμίσεις Press-R επανήλθαν στις προεπιλογές.</PressR.Settings.ResetButton.Message>
-
   <!-- Mod Settings Container -->
   <!-- Tab Lens Feature Section -->
   <PressR.Settings.TabLens.Feature.Label>Λειτουργία Tab Lens</PressR.Settings.TabLens.Feature.Label>
@@ -23,7 +21,6 @@
   <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>Εστίαση αντικειμένου στην καρτέλα κατά την αιώρηση</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>
   <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>Φιλτράρισμα της λίστας καρτελών στο αντικείμενο/κατηγορία πάνω από το οποίο αιωρείται ο κέρσορας.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>
   <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>Απαιτεί να είναι ενεργοποιημένη η επιλογή 'Εστίαση αντικειμένου στην καρτέλα με κλικ'.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>
-
   <!-- Direct Haul Feature Section -->
   <PressR.Settings.DirectHaul.Feature.Label>Λειτουργία Direct Haul</PressR.Settings.DirectHaul.Feature.Label>
   <PressR.Settings.DirectHaul.Feature.Description>Δώστε απευθείας εντολή στους αποίκους να μεταφέρουν επιλεγμένα αντικείμενα σε μια συγκεκριμένη τοποθεσία.</PressR.Settings.DirectHaul.Feature.Description>
@@ -39,11 +36,9 @@
   <PressR.Settings.DirectHaul.StorageHighlight.Enable.Description>Επισήμανση υπαρχουσών ζωνών/κτιρίων αποθήκευσης κατά την αιώρηση σε λειτουργία Αποθήκευσης.</PressR.Settings.DirectHaul.StorageHighlight.Enable.Description>
   <PressR.Settings.DirectHaul.InvertKeys.Enable.Label>Αντιστροφή πλήκτρων Κανονική/Αποθήκευση</PressR.Settings.DirectHaul.InvertKeys.Enable.Label>
   <PressR.Settings.DirectHaul.InvertKeys.Enable.Description>Ανταλλάξτε τα πλήκτρα τροποποίησης που χρησιμοποιούνται για την Κανονική μεταφορά και τη λειτουργία Αποθήκευσης στο Direct Haul.</PressR.Settings.DirectHaul.InvertKeys.Enable.Description>
-
   <!-- Direct Haul Gizmos -->
-  <PressR.DirectHaul.CancelHeldStatusGizmo.Label>Ακύρωση κατάστασης 'Κρατείται'</PressR.DirectHaul.CancelHeldStatusGizmo.Label>
-  <PressR.DirectHaul.CancelHeldStatusGizmo.Desc>Ακύρωση της κατάστασης 'Κρατείται' για αυτό το αντικείμενο στο Direct Haul.</PressR.DirectHaul.CancelHeldStatusGizmo.Desc>
-  <PressR.DirectHaul.CancelPendingStatusGizmo.Label>Ακύρωση κατάστασης 'Εκκρεμεί'</PressR.DirectHaul.CancelPendingStatusGizmo.Label>
-  <PressR.DirectHaul.CancelPendingStatusGizmo.Desc>Ακύρωση της κατάστασης 'Εκκρεμεί' για αυτό το αντικείμενο στο Direct Haul.</PressR.DirectHaul.CancelPendingStatusGizmo.Desc>
-  
+  <PressR.DirectHaul.Command_CancelHeldStatus.Label>Ακύρωση κατάστασης 'Κρατείται'</PressR.DirectHaul.Command_CancelHeldStatus.Label>
+  <PressR.DirectHaul.Command_CancelHeldStatus.Desc>Ακύρωση της κατάστασης 'Κρατείται' για αυτό το αντικείμενο στο Direct Haul.</PressR.DirectHaul.Command_CancelHeldStatus.Desc>
+  <PressR.DirectHaul.Command_CancelPendingStatus.Label>Ακύρωση κατάστασης 'Εκκρεμεί'</PressR.DirectHaul.Command_CancelPendingStatus.Label>
+  <PressR.DirectHaul.Command_CancelPendingStatus.Desc>Ακύρωση της κατάστασης 'Εκκρεμεί' για αυτό το αντικείμενο στο Direct Haul.</PressR.DirectHaul.Command_CancelPendingStatus.Desc>
 </LanguageData>

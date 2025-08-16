@@ -41,9 +41,9 @@
   <PressR.Settings.DirectHaul.InvertKeys.Enable.Description>Vyměnit modifikační klávesy používané pro Standardní přenášení a režim Sklad.</PressR.Settings.DirectHaul.InvertKeys.Enable.Description>
 
   <!-- Direct Haul Gizmos -->
-  <PressR.DirectHaul.CancelHeldStatusGizmo.Label>Zrušit stav 'Držený'</PressR.DirectHaul.CancelHeldStatusGizmo.Label>
-  <PressR.DirectHaul.CancelHeldStatusGizmo.Desc>Zrušit stav 'Držený' pro tento předmět v Direct Haul.</PressR.DirectHaul.CancelHeldStatusGizmo.Desc>
-  <PressR.DirectHaul.CancelPendingStatusGizmo.Label>Zrušit stav 'Čekající'</PressR.DirectHaul.CancelPendingStatusGizmo.Label>
-  <PressR.DirectHaul.CancelPendingStatusGizmo.Desc>Zrušit stav 'Čekající' pro tento předmět v Direct Haul.</PressR.Settings.DirectHaul.CancelPendingStatusGizmo.Desc>
+  <PressR.DirectHaul.Command_CancelHeldStatus.Label>Zrušit stav 'Držený'</PressR.DirectHaul.Command_CancelHeldStatus.Label>
+  <PressR.DirectHaul.Command_CancelHeldStatus.Desc>Zrušit stav 'Držený' pro tento předmět v Direct Haul.</PressR.DirectHaul.Command_CancelHeldStatus.Desc>
+  <PressR.DirectHaul.Command_CancelPendingStatus.Label>Zrušit stav 'Čekající'</PressR.DirectHaul.Command_CancelPendingStatus.Label>
+  <PressR.DirectHaul.Command_CancelPendingStatus.Desc>Zrušit stav 'Čekající' pro tento předmět v Direct Haul.</PressR.Settings.DirectHaul.CancelPendingStatusGizmo.Desc>
 
 </LanguageData>

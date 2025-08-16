@@ -1,49 +1,35 @@
 using System;
 using UnityEngine;
-using Verse;
 
 namespace PressR.Graphics.Tween
 {
-    public class Tween<TValue> : ITween
+    public class Tween<TValue>(
+        Func<TValue> getter,
+        Action<TValue> setter,
+        TValue endValue,
+        float duration,
+        string propertyId,
+        EasingFunction easing = null
+    ) : ITween
     {
-        public Guid Key { get; }
-        public string PropertyId { get; }
-        public bool IsFinished { get; private set; }
+        public Guid Key { get; } = Guid.NewGuid();
+        public string PropertyId { get; } =
+            propertyId ?? throw new ArgumentNullException(nameof(propertyId));
+        public bool IsFinished { get; private set; } = false;
         public Action OnComplete { get; set; }
 
-        private readonly Func<TValue> _getter;
-        private readonly Action<TValue> _setter;
-        private readonly TValue _endValue;
-        private readonly float _duration;
-        private readonly EasingFunction _easingFunction;
+        private readonly Func<TValue> _getter =
+            getter ?? throw new ArgumentNullException(nameof(getter));
+        private readonly Action<TValue> _setter =
+            setter ?? throw new ArgumentNullException(nameof(setter));
+        private readonly TValue _endValue = endValue;
+        private readonly float _duration = duration > 0f ? duration : 0.001f;
+        private readonly EasingFunction _easingFunction = easing ?? Equations.Linear;
 
         private TValue _startValue;
-        private float _elapsedTime;
-        private bool _isInitialized;
-        private bool _killed;
-
-        public Tween(
-            Func<TValue> getter,
-            Action<TValue> setter,
-            TValue endValue,
-            float duration,
-            string propertyId,
-            EasingFunction easing = null
-        )
-        {
-            Key = Guid.NewGuid();
-            PropertyId = propertyId ?? throw new ArgumentNullException(nameof(propertyId));
-            _getter = getter ?? throw new ArgumentNullException(nameof(getter));
-            _setter = setter ?? throw new ArgumentNullException(nameof(setter));
-            _endValue = endValue;
-            _duration = duration > 0f ? duration : 0.001f;
-            _easingFunction = easing ?? Equations.Linear;
-
-            _isInitialized = false;
-            _elapsedTime = 0f;
-            IsFinished = false;
-            _killed = false;
-        }
+        private float _elapsedTime = 0f;
+        private bool _isInitialized = false;
+        private bool _killed = false;
 
         public void Update(float deltaTime)
         {

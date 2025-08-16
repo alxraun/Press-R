@@ -1,11 +1,9 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-
   <!-- Settings Reset Button -->
   <PressR.Settings.ResetButton.Label>Resetează la valorile implicite</PressR.Settings.ResetButton.Label>
   <PressR.Settings.ResetButton.Tooltip>Resetează toate setările Press-R la valorile lor implicite.</PressR.Settings.ResetButton.Tooltip>
   <PressR.Settings.ResetButton.Message>Setările Press-R au fost resetate la valorile implicite.</PressR.Settings.ResetButton.Message>
-
   <!-- Mod Settings Container -->
   <!-- Tab Lens Feature Section -->
   <PressR.Settings.TabLens.Feature.Label>Funcția Tab Lens</PressR.Settings.TabLens.Feature.Label>
@@ -23,7 +21,6 @@
   <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>Focalizează obiectul în filă la trecerea cursorului</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>
   <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>Filtrează lista filei la obiectul/categoria peste care se află cursorul.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>
   <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>Necesită activarea opțiunii 'Focalizează obiectul în filă la clic'.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>
-
   <!-- Direct Haul Feature Section -->
   <PressR.Settings.DirectHaul.Feature.Label>Funcția Direct Haul</PressR.Settings.DirectHaul.Feature.Label>
   <PressR.Settings.DirectHaul.Feature.Description>Comandă direct coloniștilor să transporte obiectele selectate într-o locație specifică.</PressR.Settings.DirectHaul.Feature.Description>
@@ -31,11 +28,9 @@
   <PressR.Settings.DirectHaul.RadiusIndicator.Enable.Description>Afișează un cerc care cuprinde toate locațiile de plasare.</PressR.Settings.DirectHaul.RadiusIndicator.Enable.Description>
   <PressR.Settings.DirectHaul.InvertKeys.Enable.Label>Inversează tastele Standard/Depozit</PressR.Settings.DirectHaul.InvertKeys.Enable.Label>
   <PressR.Settings.DirectHaul.InvertKeys.Enable.Description>Schimbă tastele modificatoare utilizate pentru transportul Standard și modul Depozit.</PressR.Settings.DirectHaul.InvertKeys.Enable.Description>
-
   <!-- Direct Haul Gizmos -->
-  <PressR.DirectHaul.CancelHeldStatusGizmo.Label>Anulează starea 'Reținut'</PressR.DirectHaul.CancelHeldStatusGizmo.Label>
-  <PressR.DirectHaul.CancelHeldStatusGizmo.Desc>Anulează starea 'Reținut' pentru acest obiect în Direct Haul.</PressR.DirectHaul.CancelHeldStatusGizmo.Desc>
-  <PressR.DirectHaul.CancelPendingStatusGizmo.Label>Anulează starea 'În așteptare'</PressR.DirectHaul.CancelPendingStatusGizmo.Label>
-  <PressR.DirectHaul.CancelPendingStatusGizmo.Desc>Anulează starea 'În așteptare' pentru acest obiect în Direct Haul.</PressR.DirectHaul.CancelPendingStatusGizmo.Desc>
-  
+  <PressR.DirectHaul.Command_CancelHeldStatus.Label>Anulează starea 'Reținut'</PressR.DirectHaul.Command_CancelHeldStatus.Label>
+  <PressR.DirectHaul.Command_CancelHeldStatus.Desc>Anulează starea 'Reținut' pentru acest obiect în Direct Haul.</PressR.DirectHaul.Command_CancelHeldStatus.Desc>
+  <PressR.DirectHaul.Command_CancelPendingStatus.Label>Anulează starea 'În așteptare'</PressR.DirectHaul.Command_CancelPendingStatus.Label>
+  <PressR.DirectHaul.Command_CancelPendingStatus.Desc>Anulează starea 'În așteptare' pentru acest obiect în Direct Haul.</PressR.DirectHaul.Command_CancelPendingStatus.Desc>
 </LanguageData>

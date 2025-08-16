@@ -1,11 +1,9 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-
   <!-- Settings Reset Button -->
   <PressR.Settings.ResetButton.Label>重置设置</PressR.Settings.ResetButton.Label>
   <PressR.Settings.ResetButton.Tooltip>将所有 Press-R 设置重置为默认值。</PressR.Settings.ResetButton.Tooltip>
   <PressR.Settings.ResetButton.Message>Press-R 设置已重置为默认值。</PressR.Settings.ResetButton.Message>
-
   <!-- Mod Settings Container -->
   <!-- Tab Lens Feature Section -->
   <PressR.Settings.TabLens.Feature.Label>Tab Lens 功能</PressR.Settings.TabLens.Feature.Label>
@@ -23,7 +21,6 @@
   <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>悬停时聚焦标签页中的物品</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>
   <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>将标签页列表过滤到悬停的物品/类别。</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>
   <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>需要启用“点击时聚焦标签页中的物品”选项。</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>
-
   <!-- Direct Haul Feature Section -->
   <PressR.Settings.DirectHaul.Feature.Label>Direct Haul 功能</PressR.Settings.DirectHaul.Feature.Label>
   <PressR.Settings.DirectHaul.Feature.Description>直接命令殖民者将选定的物品搬运到指定位置。</PressR.Settings.DirectHaul.Feature.Description>
@@ -31,11 +28,9 @@
   <PressR.Settings.DirectHaul.RadiusIndicator.Enable.Description>显示一个包含所有放置位置的圆圈。</PressR.Settings.DirectHaul.RadiusIndicator.Enable.Description>
   <PressR.Settings.DirectHaul.InvertKeys.Enable.Label>反转 标准/存储 键位</PressR.Settings.DirectHaul.InvertKeys.Enable.Label>
   <PressR.Settings.DirectHaul.InvertKeys.Enable.Description>在 Direct Haul 中交换用于 标准 搬运和 存储 模式的修饰键。</PressR.Settings.DirectHaul.InvertKeys.Enable.Description>
-
   <!-- Direct Haul Gizmos -->
-  <PressR.DirectHaul.CancelHeldStatusGizmo.Label>取消“已持有”状态</PressR.DirectHaul.CancelHeldStatusGizmo.Label>
-  <PressR.DirectHaul.CancelHeldStatusGizmo.Desc>取消此物品在 Direct Haul 中的“已持有”状态。</PressR.DirectHaul.CancelHeldStatusGizmo.Desc>
-  <PressR.DirectHaul.CancelPendingStatusGizmo.Label>取消“待定”状态</PressR.DirectHaul.CancelPendingStatusGizmo.Label>
-  <PressR.DirectHaul.CancelPendingStatusGizmo.Desc>取消此物品在 Direct Haul 中的“待定”状态。</PressR.DirectHaul.CancelPendingStatusGizmo.Desc>
-
+  <PressR.DirectHaul.Command_CancelHeldStatus.Label>取消“已持有”状态</PressR.DirectHaul.Command_CancelHeldStatus.Label>
+  <PressR.DirectHaul.Command_CancelHeldStatus.Desc>取消此物品在 Direct Haul 中的“已持有”状态。</PressR.DirectHaul.Command_CancelHeldStatus.Desc>
+  <PressR.DirectHaul.Command_CancelPendingStatus.Label>取消“待定”状态</PressR.DirectHaul.Command_CancelPendingStatus.Label>
+  <PressR.DirectHaul.Command_CancelPendingStatus.Desc>取消此物品在 Direct Haul 中的“待定”状态。</PressR.DirectHaul.Command_CancelPendingStatus.Desc>
 </LanguageData>

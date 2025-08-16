@@ -1,5 +1,4 @@
 using UnityEngine;
-using Verse;
 
 namespace PressR.Debug.ValueMonitor
 {
@@ -11,16 +10,10 @@ namespace PressR.Debug.ValueMonitor
         Paused,
     }
 
-    public class RecordingStartInfo
+    public class RecordingStartInfo(float startTime, int startFrame)
     {
-        public float StartTime { get; }
-        public int StartFrame { get; }
-
-        public RecordingStartInfo(float startTime, int startFrame)
-        {
-            StartTime = startTime;
-            StartFrame = startFrame;
-        }
+        public float StartTime { get; } = startTime;
+        public int StartFrame { get; } = startFrame;
     }
 
     public class ValueMonitorStateManager

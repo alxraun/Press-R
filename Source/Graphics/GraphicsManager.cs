@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using PressR.Graphics.GraphicObjects;
 using PressR.Graphics.Tween;
 using UnityEngine;
 using Verse;
@@ -11,10 +10,10 @@ namespace PressR.Graphics
 {
     public class GraphicsManager : IGraphicsManager
     {
-        private readonly Dictionary<object, IGraphicObject> _graphicObjects = new();
-        private readonly Dictionary<Guid, ITween> _activeTweens = new();
-        private readonly Dictionary<object, HashSet<Guid>> _objectToActiveTweenIds = new();
-        private readonly List<Guid> _finishedTweenKeysToRemove = new();
+        private readonly Dictionary<object, IGraphicObject> _graphicObjects = [];
+        private readonly Dictionary<Guid, ITween> _activeTweens = [];
+        private readonly Dictionary<object, HashSet<Guid>> _objectToActiveTweenIds = [];
+        private readonly List<Guid> _finishedTweenKeysToRemove = [];
 
         public IGraphicObject RegisterGraphicObject(IGraphicObject graphicObject)
         {
@@ -120,7 +119,7 @@ namespace PressR.Graphics
 
             if (!_objectToActiveTweenIds.TryGetValue(targetKey, out var tweenIds))
             {
-                tweenIds = new HashSet<Guid>();
+                tweenIds = [];
                 _objectToActiveTweenIds[targetKey] = tweenIds;
             }
             tweenIds.Add(tweenKey);
@@ -291,7 +290,7 @@ namespace PressR.Graphics
 
         private void RemoveTweenFromObjectLinks(Guid tweenKey)
         {
-            List<object> keysToRemoveLinkFrom = new List<object>();
+            List<object> keysToRemoveLinkFrom = [];
             foreach (var kvp in _objectToActiveTweenIds)
             {
                 if (kvp.Value.Contains(tweenKey))

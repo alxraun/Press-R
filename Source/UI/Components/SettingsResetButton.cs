@@ -1,4 +1,3 @@
-using System;
 using PressR.Settings;
 using RimWorld;
 using UnityEngine;
@@ -10,7 +9,7 @@ namespace PressR.UI.Components
 {
     public static class SettingsResetButton
     {
-        private static readonly Color BackgroundColor = new Color(0.55f, 0.55f, 0.4f, 0.2f);
+        private static readonly Color BackgroundColor = new(0.55f, 0.55f, 0.4f, 0.2f);
 
         public static void Draw(Listing_Standard listing, PressRSettings settings)
         {

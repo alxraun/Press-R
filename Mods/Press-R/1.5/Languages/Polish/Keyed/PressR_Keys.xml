@@ -1,11 +1,9 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-
   <!-- Settings Reset Button -->
   <PressR.Settings.ResetButton.Label>Resetuj do domyślnych</PressR.Settings.ResetButton.Label>
   <PressR.Settings.ResetButton.Tooltip>Resetuj wszystkie ustawienia Press-R do wartości domyślnych.</PressR.Settings.ResetButton.Tooltip>
   <PressR.Settings.ResetButton.Message>Ustawienia Press-R zresetowane do domyślnych.</PressR.Settings.ResetButton.Message>
-
   <!-- Mod Settings Container -->
   <!-- Tab Lens Feature Section -->
   <PressR.Settings.TabLens.Feature.Label>Funkcja Tab Lens</PressR.Settings.TabLens.Feature.Label>
@@ -23,7 +21,6 @@
   <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>Skup przedmiot w karcie po najechaniu myszą</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>
   <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>Filtruj listę karty do przedmiotu/kategorii pod kursorem.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>
   <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>Wymaga włączenia opcji 'Skup przedmiot w karcie po kliknięciu'.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>
-
   <!-- Direct Haul Feature Section -->
   <PressR.Settings.DirectHaul.Feature.Label>Funkcja Direct Haul</PressR.Settings.DirectHaul.Feature.Label>
   <PressR.Settings.DirectHaul.Feature.Description>Bezpośrednio nakazuj kolonistom transport wybranych przedmiotów do określonej lokalizacji.</PressR.Settings.DirectHaul.Feature.Description>
@@ -39,11 +36,9 @@
   <PressR.Settings.DirectHaul.StorageHighlight.Enable.Description>Podświetl istniejące strefy/budynki magazynowe podczas najechania myszą w trybie Magazyn.</PressR.Settings.DirectHaul.StorageHighlight.Enable.Description>
   <PressR.Settings.DirectHaul.InvertKeys.Enable.Label>Odwróć klawisze Standard/Magazyn</PressR.Settings.DirectHaul.InvertKeys.Enable.Label>
   <PressR.Settings.DirectHaul.InvertKeys.Enable.Description>Zamień klawisze modyfikujące używane do transportu Standardowego i trybu Magazyn.</PressR.Settings.DirectHaul.InvertKeys.Enable.Description>
-
   <!-- Direct Haul Gizmos -->
-  <PressR.DirectHaul.CancelHeldStatusGizmo.Label>Anuluj status 'Trzymany'</PressR.DirectHaul.CancelHeldStatusGizmo.Label>
-  <PressR.DirectHaul.CancelHeldStatusGizmo.Desc>Anuluj status 'Trzymany' dla tego przedmiotu w Direct Haul.</PressR.DirectHaul.CancelHeldStatusGizmo.Desc>
-  <PressR.DirectHaul.CancelPendingStatusGizmo.Label>Anuluj status 'Oczekujący'</PressR.DirectHaul.CancelPendingStatusGizmo.Label>
-  <PressR.DirectHaul.CancelPendingStatusGizmo.Desc>Anuluj status 'Oczekujący' dla tego przedmiotu w Direct Haul.</PressR.DirectHaul.CancelPendingStatusGizmo.Desc>
-
+  <PressR.DirectHaul.Command_CancelHeldStatus.Label>Anuluj status 'Trzymany'</PressR.DirectHaul.Command_CancelHeldStatus.Label>
+  <PressR.DirectHaul.Command_CancelHeldStatus.Desc>Anuluj status 'Trzymany' dla tego przedmiotu w Direct Haul.</PressR.DirectHaul.Command_CancelHeldStatus.Desc>
+  <PressR.DirectHaul.Command_CancelPendingStatus.Label>Anuluj status 'Oczekujący'</PressR.DirectHaul.Command_CancelPendingStatus.Label>
+  <PressR.DirectHaul.Command_CancelPendingStatus.Desc>Anuluj status 'Oczekujący' dla tego przedmiotu w Direct Haul.</PressR.DirectHaul.Command_CancelPendingStatus.Desc>
 </LanguageData>
