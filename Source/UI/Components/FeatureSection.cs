@@ -74,7 +74,7 @@ namespace PressR.UI.Components
 
             DrawBackgroundAndHighlight(headerRect);
 
-            Rect contentRect = new Rect(
+            Rect contentRect = new(
                 headerRect.x,
                 headerRect.y,
                 headerRect.width - CheckboxSize - CheckboxRightMargin,
@@ -124,7 +124,7 @@ namespace PressR.UI.Components
                 labelY = contentRect.y + (contentRect.height - labelHeight) / 2f;
             }
 
-            Rect labelRect = new Rect(
+            Rect labelRect = new(
                 contentRect.x + TextHorizontalPadding,
                 labelY,
                 contentRect.width - TextHorizontalPadding * 2,
@@ -139,7 +139,7 @@ namespace PressR.UI.Components
             if (descriptionProvided)
             {
                 float descriptionY = labelRect.yMax + DescriptionGap;
-                Rect descRect = new Rect(
+                Rect descRect = new(
                     contentRect.x + TextHorizontalPadding,
                     descriptionY,
                     contentRect.width - TextHorizontalPadding * 2,

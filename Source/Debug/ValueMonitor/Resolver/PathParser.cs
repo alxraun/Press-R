@@ -28,7 +28,7 @@ namespace PressR.Debug.ValueMonitor.Resolver
         };
 
         private static HashSet<string> _knownTypes;
-        private static Dictionary<string, Type> _typeCache = new Dictionary<string, Type>();
+        private static Dictionary<string, Type> _typeCache = [];
 
         public PathParser()
         {

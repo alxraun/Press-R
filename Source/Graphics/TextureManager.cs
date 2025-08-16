@@ -8,8 +8,7 @@ namespace PressR.Graphics
     [StaticConstructorOnStartup]
     public static class TextureManager
     {
-        private static readonly Dictionary<string, Texture2D> _cachedTextures =
-            new Dictionary<string, Texture2D>();
+        private static readonly Dictionary<string, Texture2D> _cachedTextures = [];
         private static readonly AssetBundle _textureBundle;
         private const string BundleName = "alx_pressr_textures";
 

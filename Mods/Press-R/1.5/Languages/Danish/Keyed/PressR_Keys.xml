@@ -1,11 +1,9 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-
   <!-- Settings Reset Button -->
   <PressR.Settings.ResetButton.Label>Nulstil til standard</PressR.Settings.ResetButton.Label>
   <PressR.Settings.ResetButton.Tooltip>Nulstil alle Press-R-indstillinger til deres standardværdier.</PressR.Settings.ResetButton.Tooltip>
   <PressR.Settings.ResetButton.Message>Press-R-indstillinger nulstillet til standard.</PressR.Settings.ResetButton.Message>
-
   <!-- Mod Settings Container -->
   <!-- Tab Lens Feature Section -->
   <PressR.Settings.TabLens.Feature.Label>Tab Lens Funktion</PressR.Settings.TabLens.Feature.Label>
@@ -23,7 +21,6 @@
   <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>Fokuser på genstand i fanen ved hover</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>
   <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>Filtrer fanelisten til den genstand/kategori, der holdes over.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>
   <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>Kræver, at 'Fokuser på genstand i fanen ved klik' er aktiveret.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>
-
   <!-- Direct Haul Feature Section -->
   <PressR.Settings.DirectHaul.Feature.Label>Direct Haul Funktion</PressR.Settings.DirectHaul.Feature.Label>
   <PressR.Settings.DirectHaul.Feature.Description>Befal direkte kolonister at transportere valgte genstande til en bestemt placering.</PressR.Settings.DirectHaul.Feature.Description>
@@ -39,11 +36,9 @@
   <PressR.Settings.DirectHaul.StorageHighlight.Enable.Description>Fremhæv eksisterende lagerzoner/bygninger, når der holdes over i Lagertilstand.</PressR.Settings.DirectHaul.StorageHighlight.Enable.Description>
   <PressR.Settings.DirectHaul.InvertKeys.Enable.Label>Inverter Standard/Lager-taster</PressR.Settings.DirectHaul.InvertKeys.Enable.Label>
   <PressR.Settings.DirectHaul.InvertKeys.Enable.Description>Byt om på modifikatortasterne, der bruges til Standard transport og Lagertilstand i Direct Haul.</PressR.Settings.DirectHaul.InvertKeys.Enable.Description>
-
   <!-- Direct Haul Gizmos -->
-  <PressR.DirectHaul.CancelHeldStatusGizmo.Label>Annuller status 'Holdt'</PressR.DirectHaul.CancelHeldStatusGizmo.Label>
-  <PressR.DirectHaul.CancelHeldStatusGizmo.Desc>Annuller status 'Holdt' for denne genstand i Direct Haul.</PressR.DirectHaul.CancelHeldStatusGizmo.Desc>
-  <PressR.DirectHaul.CancelPendingStatusGizmo.Label>Annuller status 'Afventende'</PressR.DirectHaul.CancelPendingStatusGizmo.Label>
-  <PressR.DirectHaul.CancelPendingStatusGizmo.Desc>Annuller status 'Afventende' for denne genstand i Direct Haul.</PressR.DirectHaul.CancelPendingStatusGizmo.Desc>
-  
+  <PressR.DirectHaul.Command_CancelHeldStatus.Label>Annuller status 'Holdt'</PressR.DirectHaul.Command_CancelHeldStatus.Label>
+  <PressR.DirectHaul.Command_CancelHeldStatus.Desc>Annuller status 'Holdt' for denne genstand i Direct Haul.</PressR.DirectHaul.Command_CancelHeldStatus.Desc>
+  <PressR.DirectHaul.Command_CancelPendingStatus.Label>Annuller status 'Afventende'</PressR.DirectHaul.Command_CancelPendingStatus.Label>
+  <PressR.DirectHaul.Command_CancelPendingStatus.Desc>Annuller status 'Afventende' for denne genstand i Direct Haul.</PressR.DirectHaul.Command_CancelPendingStatus.Desc>
 </LanguageData>

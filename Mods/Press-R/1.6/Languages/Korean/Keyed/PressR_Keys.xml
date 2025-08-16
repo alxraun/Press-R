@@ -1,11 +1,9 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-
   <!-- Settings Reset Button -->
   <PressR.Settings.ResetButton.Label>기본값으로 재설정</PressR.Settings.ResetButton.Label>
   <PressR.Settings.ResetButton.Tooltip>모든 Press-R 설정을 기본값으로 되돌립니다.</PressR.Settings.ResetButton.Tooltip>
   <PressR.Settings.ResetButton.Message>Press-R 설정이 기본값으로 재설정되었습니다.</PressR.Settings.ResetButton.Message>
-
   <!-- Mod Settings Container -->
   <!-- Tab Lens Feature Section -->
   <PressR.Settings.TabLens.Feature.Label>Tab Lens 기능</PressR.Settings.TabLens.Feature.Label>
@@ -23,7 +21,6 @@
   <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>마우스 올렸을 때 탭에서 아이템에 초점 맞추기</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>
   <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>마우스 커서 아래의 아이템/카테고리로 탭 목록을 필터링합니다.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>
   <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>'클릭 시 탭에서 아이템에 초점 맞추기' 옵션을 활성화해야 합니다.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>
-
   <!-- Direct Haul Feature Section -->
   <PressR.Settings.DirectHaul.Feature.Label>Direct Haul 기능</PressR.Settings.DirectHaul.Feature.Label>
   <PressR.Settings.DirectHaul.Feature.Description>선택한 아이템을 특정 위치로 운반하도록 정착민에게 직접 명령합니다.</PressR.Settings.DirectHaul.Feature.Description>
@@ -31,11 +28,9 @@
   <PressR.Settings.DirectHaul.RadiusIndicator.Enable.Description>모든 배치 위치를 포함하는 원을 표시합니다.</PressR.Settings.DirectHaul.RadiusIndicator.Enable.Description>
   <PressR.Settings.DirectHaul.InvertKeys.Enable.Label>표준/저장고 키 반전</PressR.Settings.DirectHaul.InvertKeys.Enable.Label>
   <PressR.Settings.DirectHaul.InvertKeys.Enable.Description>Direct Haul에서 표준 운반 및 저장고 모드에 사용되는 보조 키를 교체합니다.</PressR.Settings.DirectHaul.InvertKeys.Enable.Description>
-
   <!-- Direct Haul Gizmos -->
-  <PressR.DirectHaul.CancelHeldStatusGizmo.Label>'보유 중' 상태 취소</PressR.DirectHaul.CancelHeldStatusGizmo.Label>
-  <PressR.DirectHaul.CancelHeldStatusGizmo.Desc>Direct Haul에서 이 아이템의 '보유 중' 상태를 취소합니다.</PressR.DirectHaul.CancelHeldStatusGizmo.Desc>
-  <PressR.DirectHaul.CancelPendingStatusGizmo.Label>'대기 중' 상태 취소</PressR.DirectHaul.CancelPendingStatusGizmo.Label>
-  <PressR.DirectHaul.CancelPendingStatusGizmo.Desc>Direct Haul에서 이 아이템의 '대기 중' 상태를 취소합니다.</PressR.DirectHaul.CancelPendingStatusGizmo.Desc>
-
+  <PressR.DirectHaul.Command_CancelHeldStatus.Label>'보유 중' 상태 취소</PressR.DirectHaul.Command_CancelHeldStatus.Label>
+  <PressR.DirectHaul.Command_CancelHeldStatus.Desc>Direct Haul에서 이 아이템의 '보유 중' 상태를 취소합니다.</PressR.DirectHaul.Command_CancelHeldStatus.Desc>
+  <PressR.DirectHaul.Command_CancelPendingStatus.Label>'대기 중' 상태 취소</PressR.DirectHaul.Command_CancelPendingStatus.Label>
+  <PressR.DirectHaul.Command_CancelPendingStatus.Desc>Direct Haul에서 이 아이템의 '대기 중' 상태를 취소합니다.</PressR.DirectHaul.Command_CancelPendingStatus.Desc>
 </LanguageData>

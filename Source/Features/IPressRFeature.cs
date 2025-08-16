@@ -1,14 +1,15 @@
+using Verse;
+
 namespace PressR.Features
 {
-    public interface IPressRFeature
+    public interface IPressRFeature : IExposable
     {
-        string FeatureId { get; }
-        string Label { get; }
         bool IsActive { get; }
-
-        void ConstantUpdate();
-        bool TryActivate();
-        void Deactivate();
         void Update();
+        virtual void ConstantUpdate() { }
+        virtual void ConstantClear() { }
+        bool CanActivate();
+        void Activate();
+        void Deactivate();
     }
 }

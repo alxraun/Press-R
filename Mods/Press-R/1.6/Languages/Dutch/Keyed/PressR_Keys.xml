@@ -1,11 +1,9 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-
   <!-- Settings Reset Button -->
   <PressR.Settings.ResetButton.Label>Standaardinstellingen herstellen</PressR.Settings.ResetButton.Label>
   <PressR.Settings.ResetButton.Tooltip>Herstel alle Press-R-instellingen naar hun standaardwaarden.</PressR.Settings.ResetButton.Tooltip>
   <PressR.Settings.ResetButton.Message>Press-R-instellingen hersteld naar standaard.</PressR.Settings.ResetButton.Message>
-
   <!-- Mod Settings Container -->
   <!-- Tab Lens Feature Section -->
   <PressR.Settings.TabLens.Feature.Label>Tab Lens Functie</PressR.Settings.TabLens.Feature.Label>
@@ -23,7 +21,6 @@
   <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>Focus item in tabblad bij zweven</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>
   <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>Filter de tabbladlijst naar het item/categorie waarboven wordt gezweefd.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>
   <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>Vereist dat 'Focus item in tabblad bij klikken' is ingeschakeld.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>
-
   <!-- Direct Haul Feature Section -->
   <PressR.Settings.DirectHaul.Feature.Label>Direct Haul Functie</PressR.Settings.DirectHaul.Feature.Label>
   <PressR.Settings.DirectHaul.Feature.Description>Geef kolonisten direct opdracht om geselecteerde items naar een specifieke locatie te transporteren.</PressR.Settings.DirectHaul.Feature.Description>
@@ -39,11 +36,9 @@
   <PressR.Settings.DirectHaul.StorageHighlight.Enable.Description>Markeer bestaande opslagzones/gebouwen bij het zweven in Opslagmodus.</PressR.Settings.DirectHaul.StorageHighlight.Enable.Description>
   <PressR.Settings.DirectHaul.InvertKeys.Enable.Label>Keer Standaard/Opslag-toetsen om</PressR.Settings.DirectHaul.InvertKeys.Enable.Label>
   <PressR.Settings.DirectHaul.InvertKeys.Enable.Description>Wissel de modificatietoetsen om die worden gebruikt voor Standaard transport en Opslagmodus in Direct Haul.</PressR.Settings.DirectHaul.InvertKeys.Enable.Description>
-
   <!-- Direct Haul Gizmos -->
-  <PressR.DirectHaul.CancelHeldStatusGizmo.Label>Annuleer status 'Vastgehouden'</PressR.DirectHaul.CancelHeldStatusGizmo.Label>
-  <PressR.DirectHaul.CancelHeldStatusGizmo.Desc>Annuleer de status 'Vastgehouden' voor dit item in Direct Haul.</PressR.DirectHaul.CancelHeldStatusGizmo.Desc>
-  <PressR.DirectHaul.CancelPendingStatusGizmo.Label>Annuleer status 'In behandeling'</PressR.DirectHaul.CancelPendingStatusGizmo.Label>
-  <PressR.DirectHaul.CancelPendingStatusGizmo.Desc>Annuleer de status 'In behandeling' voor dit item in Direct Haul.</PressR.DirectHaul.CancelPendingStatusGizmo.Desc>
-  
+  <PressR.DirectHaul.Command_CancelHeldStatus.Label>Annuleer status 'Vastgehouden'</PressR.DirectHaul.Command_CancelHeldStatus.Label>
+  <PressR.DirectHaul.Command_CancelHeldStatus.Desc>Annuleer de status 'Vastgehouden' voor dit item in Direct Haul.</PressR.DirectHaul.Command_CancelHeldStatus.Desc>
+  <PressR.DirectHaul.Command_CancelPendingStatus.Label>Annuleer status 'In behandeling'</PressR.DirectHaul.Command_CancelPendingStatus.Label>
+  <PressR.DirectHaul.Command_CancelPendingStatus.Desc>Annuleer de status 'In behandeling' voor dit item in Direct Haul.</PressR.DirectHaul.Command_CancelPendingStatus.Desc>
 </LanguageData>

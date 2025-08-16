@@ -11,8 +11,6 @@ namespace PressR.Graphics
         public static readonly Shader HSVColorizeCutoutShader;
         public static readonly Shader SobelEdgeDetectShader;
 
-        private static readonly Dictionary<Shader, IMpbConfigurator> _configurators;
-
         private const string HSVColorizeCutoutAssetName = "HSVColorizeCutout";
         private const string SobelEdgeDetectAssetName = "SobelEdgeDetect";
 
@@ -26,19 +24,6 @@ namespace PressR.Graphics
                 HSVColorizeCutoutAssetName
             );
             SobelEdgeDetectShader = LoadShaderFromBundles(loadedBundles, SobelEdgeDetectAssetName);
-
-            _configurators = new Dictionary<Shader, IMpbConfigurator>();
-
-            RegisterConfigurator(
-                HSVColorizeCutoutShader,
-                new MpbConfigurators.HSVColorizeCutoutConfigurator(),
-                HSVColorizeCutoutAssetName
-            );
-            RegisterConfigurator(
-                SobelEdgeDetectShader,
-                new MpbConfigurators.SobelEdgeDetectConfigurator(),
-                SobelEdgeDetectAssetName
-            );
         }
 
         private static Shader LoadShaderFromBundles(List<AssetBundle> bundles, string shaderName)
@@ -54,26 +39,6 @@ namespace PressR.Graphics
                 );
             }
             return shader;
-        }
-
-        private static void RegisterConfigurator(
-            Shader shader,
-            IMpbConfigurator configurator,
-            string shaderName
-        )
-        {
-            if (shader != null)
-            {
-                _configurators.Add(shader, configurator);
-            }
-            else { }
-        }
-
-        public static IMpbConfigurator GetConfigurator(Shader shader)
-        {
-            return shader != null && _configurators.TryGetValue(shader, out var configurator)
-                ? configurator
-                : null;
         }
     }
 }

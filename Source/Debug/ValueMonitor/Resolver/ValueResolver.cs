@@ -1,22 +1,16 @@
 using System;
 using System.Reflection;
-using System.Runtime.ExceptionServices;
 using System.Text.RegularExpressions;
-using Verse;
 
 namespace PressR.Debug.ValueMonitor.Resolver
 {
-    public class ValueResolver
+    public class ValueResolver(MemoryResolverCache cache, ExpressionCompiler compiler)
     {
-        private readonly MemoryResolverCache _cache;
-        private readonly ExpressionCompiler _compiler;
+        private readonly MemoryResolverCache _cache =
+            cache ?? throw new ArgumentNullException(nameof(cache));
+        private readonly ExpressionCompiler _compiler =
+            compiler ?? throw new ArgumentNullException(nameof(compiler));
         private const string LogPrefix = "[ValueMonitor] ";
-
-        public ValueResolver(MemoryResolverCache cache, ExpressionCompiler compiler)
-        {
-            _cache = cache ?? throw new ArgumentNullException(nameof(cache));
-            _compiler = compiler ?? throw new ArgumentNullException(nameof(compiler));
-        }
 
         public ValueResolutionResult Resolve(string expressionPath)
         {

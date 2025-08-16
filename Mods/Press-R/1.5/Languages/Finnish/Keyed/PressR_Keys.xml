@@ -1,11 +1,9 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-
   <!-- Settings Reset Button -->
   <PressR.Settings.ResetButton.Label>Palauta oletusasetukset</PressR.Settings.ResetButton.Label>
   <PressR.Settings.ResetButton.Tooltip>Palauta kaikki Press-R -asetukset oletusarvoihinsa.</PressR.Settings.ResetButton.Tooltip>
   <PressR.Settings.ResetButton.Message>Press-R -asetukset palautettu oletusarvoihin.</PressR.Settings.ResetButton.Message>
-
   <!-- Mod Settings Container -->
   <!-- Tab Lens Feature Section -->
   <PressR.Settings.TabLens.Feature.Label>Tab Lens -toiminto</PressR.Settings.TabLens.Feature.Label>
@@ -23,7 +21,6 @@
   <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>Kohdista esine välilehdessä hiiren ollessa päällä</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>
   <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>Suodata välilehden luettelo esineeseen/kategoriaan, jonka päällä hiiri on.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>
   <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>Vaatii, että 'Kohdista esine välilehdessä napsauttamalla' on käytössä.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>
-
   <!-- Direct Haul Feature Section -->
   <PressR.Settings.DirectHaul.Feature.Label>Direct Haul -toiminto</PressR.Settings.DirectHaul.Feature.Label>
   <PressR.Settings.DirectHaul.Feature.Description>Käske kolonisteja suoraan kuljettamaan valitut esineet tiettyyn paikkaan.</PressR.Settings.DirectHaul.Feature.Description>
@@ -39,11 +36,9 @@
   <PressR.Settings.DirectHaul.StorageHighlight.Enable.Description>Korosta olemassa olevat varastoalueet/rakennukset, kun hiiri on päällä Varastotilassa.</PressR.Settings.DirectHaul.StorageHighlight.Enable.Description>
   <PressR.Settings.DirectHaul.InvertKeys.Enable.Label>Käännä Vakio/Varasto-näppäimet</PressR.Settings.DirectHaul.InvertKeys.Enable.Label>
   <PressR.Settings.DirectHaul.InvertKeys.Enable.Description>Vaihda modifiointinäppäimet, joita käytetään Vakio-kuljetukseen ja Varastotilaan Direct Haulissa.</PressR.Settings.DirectHaul.InvertKeys.Enable.Description>
-
   <!-- Direct Haul Gizmos -->
-  <PressR.DirectHaul.CancelHeldStatusGizmo.Label>Peruuta tila 'Pidetty'</PressR.DirectHaul.CancelHeldStatusGizmo.Label>
-  <PressR.DirectHaul.CancelHeldStatusGizmo.Desc>Peruuta tämän esineen 'Pidetty'-tila Direct Haulissa.</PressR.DirectHaul.CancelHeldStatusGizmo.Desc>
-  <PressR.DirectHaul.CancelPendingStatusGizmo.Label>Peruuta tila 'Odottaa'</PressR.DirectHaul.CancelPendingStatusGizmo.Label>
-  <PressR.DirectHaul.CancelPendingStatusGizmo.Desc>Peruuta tämän esineen 'Odottaa'-tila Direct Haulissa.</PressR.DirectHaul.CancelPendingStatusGizmo.Desc>
-  
+  <PressR.DirectHaul.Command_CancelHeldStatus.Label>Peruuta tila 'Pidetty'</PressR.DirectHaul.Command_CancelHeldStatus.Label>
+  <PressR.DirectHaul.Command_CancelHeldStatus.Desc>Peruuta tämän esineen 'Pidetty'-tila Direct Haulissa.</PressR.DirectHaul.Command_CancelHeldStatus.Desc>
+  <PressR.DirectHaul.Command_CancelPendingStatus.Label>Peruuta tila 'Odottaa'</PressR.DirectHaul.Command_CancelPendingStatus.Label>
+  <PressR.DirectHaul.Command_CancelPendingStatus.Desc>Peruuta tämän esineen 'Odottaa'-tila Direct Haulissa.</PressR.DirectHaul.Command_CancelPendingStatus.Desc>
 </LanguageData>

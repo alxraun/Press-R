@@ -1,11 +1,9 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-
   <!-- Settings Reset Button -->
   <PressR.Settings.ResetButton.Label>Alapértékek visszaállítása</PressR.Settings.ResetButton.Label>
   <PressR.Settings.ResetButton.Tooltip>Minden Press-R beállítás visszaállítása az alapértelmezett értékekre.</PressR.Settings.ResetButton.Tooltip>
   <PressR.Settings.ResetButton.Message>A Press-R beállításai visszaállítva az alapértelmezett értékekre.</PressR.Settings.ResetButton.Message>
-
   <!-- Mod Settings Container -->
   <!-- Tab Lens Feature Section -->
   <PressR.Settings.TabLens.Feature.Label>Tab Lens Funkció</PressR.Settings.TabLens.Feature.Label>
@@ -23,7 +21,6 @@
   <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>Tárgy Fókuszálása a Fülön Lebegtetéskor</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>
   <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>Szűrje a fül listáját a fölé vitt tárgyra/kategóriára.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>
   <PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>A 'Tárgy Fókuszálása a Fülön Kattintáskor' opciót engedélyezni kell.</PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>
-
   <!-- Direct Haul Feature Section -->
   <PressR.Settings.DirectHaul.Feature.Label>Direct Haul Funkció</PressR.Settings.DirectHaul.Feature.Label>
   <PressR.Settings.DirectHaul.Feature.Description>Közvetlenül utasítsa a kolonistákat a kiválasztott tárgyak meghatározott helyre történő szállítására.</PressR.Settings.DirectHaul.Feature.Description>
@@ -31,11 +28,9 @@
   <PressR.Settings.DirectHaul.RadiusIndicator.Enable.Description>Egy kört mutat, amely magában foglalja az összes elhelyezési helyet.</PressR.Settings.DirectHaul.RadiusIndicator.Enable.Description>
   <PressR.Settings.DirectHaul.InvertKeys.Enable.Label>Standard/Tároló Gombok Felcserélése</PressR.Settings.DirectHaul.InvertKeys.Enable.Label>
   <PressR.Settings.DirectHaul.InvertKeys.Enable.Description>Cserélje fel a Standard szállítás és a Tároló módhoz használt módosító gombokat.</PressR.Settings.DirectHaul.InvertKeys.Enable.Description>
-
   <!-- Direct Haul Gizmos -->
-  <PressR.DirectHaul.CancelHeldStatusGizmo.Label>Tartott Állapot Törlése</PressR.DirectHaul.CancelHeldStatusGizmo.Label>
-  <PressR.DirectHaul.CancelHeldStatusGizmo.Desc>Törölje a tartott állapotot ennél a tárgynál a Direct Haul-ban.</PressR.DirectHaul.CancelHeldStatusGizmo.Desc>
-  <PressR.DirectHaul.CancelPendingStatusGizmo.Label>Függőben Lévő Állapot Törlése</PressR.DirectHaul.CancelPendingStatusGizmo.Label>
-  <PressR.DirectHaul.CancelPendingStatusGizmo.Desc>Törölje a függőben lévő állapotot ennél a tárgynál a Direct Haul-ban.</PressR.DirectHaul.CancelPendingStatusGizmo.Desc>
-  
+  <PressR.DirectHaul.Command_CancelHeldStatus.Label>Tartott Állapot Törlése</PressR.DirectHaul.Command_CancelHeldStatus.Label>
+  <PressR.DirectHaul.Command_CancelHeldStatus.Desc>Törölje a tartott állapotot ennél a tárgynál a Direct Haul-ban.</PressR.DirectHaul.Command_CancelHeldStatus.Desc>
+  <PressR.DirectHaul.Command_CancelPendingStatus.Label>Függőben Lévő Állapot Törlése</PressR.DirectHaul.Command_CancelPendingStatus.Label>
+  <PressR.DirectHaul.Command_CancelPendingStatus.Desc>Törölje a függőben lévő állapotot ennél a tárgynál a Direct Haul-ban.</PressR.DirectHaul.Command_CancelPendingStatus.Desc>
 </LanguageData>
