@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <KeyBindingCategoryDef>
+    <defName>Microtools_Category</defName>
+    <label>Microtools</label>
+    <checkForConflicts />
+  </KeyBindingCategoryDef>
+  <KeyBindingDef>
+    <defName>Microtools_ModifierKey</defName>
+    <category>Microtools_Category</category>
+    <label>Microtools Key</label>
+    <defaultKeyCodeA>R</defaultKeyCodeA>
+    <description>Modifier key to activate Microtools features</description>
+  </KeyBindingDef>
+</Defs>

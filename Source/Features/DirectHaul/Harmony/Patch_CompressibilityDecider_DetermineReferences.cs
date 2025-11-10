@@ -3,9 +3,9 @@ using System.Reflection;
 using HarmonyLib;
 using Verse;
 
-namespace PressR.Features.DirectHaul.Harmony
+namespace Microtools.Features.DirectHaul.Harmony
 {
-    [HarmonyPatchCategory("PressR")]
+    [HarmonyPatchCategory("Microtools")]
     [HarmonyPatch(typeof(CompressibilityDecider), "DetermineReferences")]
     public static class Patch_CompressibilityDecider_DetermineReferences
     {
@@ -34,7 +34,7 @@ namespace PressR.Features.DirectHaul.Harmony
             }
 
             ThingStateManager directHaul =
-                map.GetPressRMapComponent()?.DirectHaul?.ThingStateManager;
+                map.GetMicrotoolsMapComponent()?.DirectHaul?.ThingStateManager;
             if (directHaul == null)
             {
                 return;

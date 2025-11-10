@@ -1,9 +1,9 @@
 using System;
-using PressR.Graphics.Replicator;
+using Microtools.Graphics.Replicator;
 using UnityEngine;
 using Verse;
 
-namespace PressR.Graphics
+namespace Microtools.Graphics
 {
     [Flags]
     public enum TrackedStateParts

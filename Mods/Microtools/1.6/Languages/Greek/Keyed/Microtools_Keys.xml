@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!-- Settings Reset Button -->
+  <Microtools.Settings.ResetButton.Label>Επαναφορά στις προεπιλογές</Microtools.Settings.ResetButton.Label>
+  <Microtools.Settings.ResetButton.Tooltip>Επαναφορά όλων των ρυθμίσεων Microtools στις προεπιλεγμένες τους τιμές.</Microtools.Settings.ResetButton.Tooltip>
+  <Microtools.Settings.ResetButton.Message>Οι ρυθμίσεις Microtools επανήλθαν στις προεπιλογές.</Microtools.Settings.ResetButton.Message>
+  <!-- Mod Settings Container -->
+  <!-- Tab Lens Feature Section -->
+  <Microtools.Settings.TabLens.Feature.Label>Λειτουργία Tab Lens</Microtools.Settings.TabLens.Feature.Label>
+  <Microtools.Settings.TabLens.Feature.Description>Διαχειριστείτε τις ρυθμίσεις αντικειμένων μέσω αλληλεπίδρασης χάρτη όταν οι σχετικές καρτέλες είναι ανοιχτές.</Microtools.Settings.TabLens.Feature.Description>
+  <Microtools.Settings.TabLens.StorageLens.Enable.Label>Ενεργοποίηση Storage Lens</Microtools.Settings.TabLens.StorageLens.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.Enable.Description>Χρησιμοποιήστε το Tab Lens με την καρτέλα 'Αποθήκευση' για να εναλλάξετε την άδεια αντικειμένων κάνοντας κλικ στον χάρτη.</Microtools.Settings.TabLens.StorageLens.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Label>Εμφάνιση επικαλύψεων αντικειμένων</Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Description>Εμφάνιση χρωματιστών επικαλύψεων σε αντικείμενα που υποδεικνύουν την επιτρεπόμενη/απαγορευμένη κατάστασή τους στην αποθήκευση.</Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>Επαναφορά κατάστασης UI κατά την έξοδο</Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>Επαναφορά της προηγούμενης κατάστασης διεπαφής χρήστη (καρτέλα, αναζήτηση, κύλιση) όταν το Storage Lens απενεργοποιείται.</Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>Αυτόματο άνοιγμα καρτέλας 'Αποθήκευση'</Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>Αυτόματο άνοιγμα της καρτέλας 'Αποθήκευση' κατά την εστίαση σε ένα αντικείμενο.</Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>Εστίαση αντικειμένου στην καρτέλα με κλικ</Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>Φιλτράρισμα της λίστας καρτελών στο αντικείμενο/κατηγορία που κάνατε κλικ.</Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>Εστίαση αντικειμένου στην καρτέλα κατά την αιώρηση</Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>Φιλτράρισμα της λίστας καρτελών στο αντικείμενο/κατηγορία πάνω από το οποίο αιωρείται ο κέρσορας.</Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>Απαιτεί να είναι ενεργοποιημένη η επιλογή 'Εστίαση αντικειμένου στην καρτέλα με κλικ'.</Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>
+  <!-- Direct Haul Feature Section -->
+  <Microtools.Settings.DirectHaul.Feature.Label>Λειτουργία Direct Haul</Microtools.Settings.DirectHaul.Feature.Label>
+  <Microtools.Settings.DirectHaul.Feature.Description>Δώστε απευθείας εντολή στους αποίκους να μεταφέρουν επιλεγμένα αντικείμενα σε μια συγκεκριμένη τοποθεσία.</Microtools.Settings.DirectHaul.Feature.Description>
+  <Microtools.Settings.DirectHaul.PlacementGhosts.Enable.Label>Εμφάνιση φαντασμάτων τοποθέτησης</Microtools.Settings.DirectHaul.PlacementGhosts.Enable.Label>
+  <Microtools.Settings.DirectHaul.PlacementGhosts.Enable.Description>Εμφάνιση φαντασμάτων που δείχνουν πού θα τοποθετηθούν τα αντικείμενα.</Microtools.Settings.DirectHaul.PlacementGhosts.Enable.Description>
+  <Microtools.Settings.DirectHaul.StatusOverlays.Enable.Label>Εμφάνιση επικαλύψεων κατάστασης</Microtools.Settings.DirectHaul.StatusOverlays.Enable.Label>
+  <Microtools.Settings.DirectHaul.StatusOverlays.Enable.Description>Εμφάνιση επικαλύψεων σε αντικείμενα που υποδεικνύουν την κατάστασή τους 'Εκκρεμεί' ή 'Κρατείται' για το Direct Haul.</Microtools.Settings.DirectHaul.StatusOverlays.Enable.Description>
+  <Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Label>Εμφάνιση ένδειξης ακτίνας</Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Label>
+  <Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Description>Εμφάνιση ενός κύκλου που περιλαμβάνει όλες τις τοποθεσίες τοποθέτησης.</Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Description>
+  <Microtools.Settings.DirectHaul.StorageCreationPreview.Enable.Label>Εμφάνιση προεπισκόπησης δημιουργίας αποθήκευσης</Microtools.Settings.DirectHaul.StorageCreationPreview.Enable.Label>
+  <Microtools.Settings.DirectHaul.StorageCreationPreview.Enable.Description>Εμφάνιση μιας ορθογώνιας προεπισκόπησης κατά τη δημιουργία/επέκταση ζωνών αποθήκευσης μέσω μεταφοράς.</Microtools.Settings.DirectHaul.StorageCreationPreview.Enable.Description>
+  <Microtools.Settings.DirectHaul.StorageHighlight.Enable.Label>Επισήμανση αποθήκευσης κατά την αιώρηση</Microtools.Settings.DirectHaul.StorageHighlight.Enable.Label>
+  <Microtools.Settings.DirectHaul.StorageHighlight.Enable.Description>Επισήμανση υπαρχουσών ζωνών/κτιρίων αποθήκευσης κατά την αιώρηση σε λειτουργία Αποθήκευσης.</Microtools.Settings.DirectHaul.StorageHighlight.Enable.Description>
+  <Microtools.Settings.DirectHaul.InvertKeys.Enable.Label>Αντιστροφή πλήκτρων Κανονική/Αποθήκευση</Microtools.Settings.DirectHaul.InvertKeys.Enable.Label>
+  <Microtools.Settings.DirectHaul.InvertKeys.Enable.Description>Ανταλλάξτε τα πλήκτρα τροποποίησης που χρησιμοποιούνται για την Κανονική μεταφορά και τη λειτουργία Αποθήκευσης στο Direct Haul.</Microtools.Settings.DirectHaul.InvertKeys.Enable.Description>
+  <!-- Direct Haul Gizmos -->
+  <Microtools.DirectHaul.Command_CancelHeldStatus.Label>Ακύρωση κατάστασης 'Κρατείται'</Microtools.DirectHaul.Command_CancelHeldStatus.Label>
+  <Microtools.DirectHaul.Command_CancelHeldStatus.Desc>Ακύρωση της κατάστασης 'Κρατείται' για αυτό το αντικείμενο στο Direct Haul.</Microtools.DirectHaul.Command_CancelHeldStatus.Desc>
+  <Microtools.DirectHaul.Command_CancelPendingStatus.Label>Ακύρωση κατάστασης 'Εκκρεμεί'</Microtools.DirectHaul.Command_CancelPendingStatus.Label>
+  <Microtools.DirectHaul.Command_CancelPendingStatus.Desc>Ακύρωση της κατάστασης 'Εκκρεμεί' για αυτό το αντικείμενο στο Direct Haul.</Microtools.DirectHaul.Command_CancelPendingStatus.Desc>
+</LanguageData>

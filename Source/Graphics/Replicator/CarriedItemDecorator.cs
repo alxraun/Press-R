@@ -3,7 +3,7 @@ using LudeonTK;
 using UnityEngine;
 using Verse;
 
-namespace PressR.Graphics.Replicator
+namespace Microtools.Graphics.Replicator
 {
     public class CarriedItemDecorator : BaseDecorator
     {
@@ -16,7 +16,7 @@ namespace PressR.Graphics.Replicator
         private const float RandomAngleMultiplier = 542f;
 
 #if DEBUG
-        [TweakValue("PressR.Replicator", 0f, 1f)]
+        [TweakValue("Microtools.Replicator", 0f, 1f)]
         private static bool EnableCarriedItemDecorator = true;
 #endif
 

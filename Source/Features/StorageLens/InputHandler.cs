@@ -1,6 +1,6 @@
 using Verse;
 
-namespace PressR.Features.StorageLens
+namespace Microtools.Features.StorageLens
 {
     public class InputHandler(State state, ActionDispatcher action, Input input)
     {
@@ -12,7 +12,7 @@ namespace PressR.Features.StorageLens
 
         public void ProcessInputEvents()
         {
-            if (PressRMod.Settings.storageLensSettings.FocusItemInTabOnHover)
+            if (MicrotoolsMod.Settings.storageLensSettings.FocusItemInTabOnHover)
             {
                 ProcessHoverEvent();
             }
@@ -52,7 +52,7 @@ namespace PressR.Features.StorageLens
 
                 if (needsCommandCall)
                 {
-                    if (PressRMod.Settings.storageLensSettings.openStorageTabAutomatically)
+                    if (MicrotoolsMod.Settings.storageLensSettings.openStorageTabAutomatically)
                     {
                         _action.OpenStorageTab();
                     }
@@ -75,12 +75,12 @@ namespace PressR.Features.StorageLens
             {
                 var (focusType, toggleType) = GetInteractionTypesFromModifiers();
 
-                if (PressRMod.Settings.storageLensSettings.openStorageTabAutomatically)
+                if (MicrotoolsMod.Settings.storageLensSettings.openStorageTabAutomatically)
                 {
                     _action.OpenStorageTab();
                 }
 
-                if (PressRMod.Settings.storageLensSettings.FocusItemInTabOnClick)
+                if (MicrotoolsMod.Settings.storageLensSettings.FocusItemInTabOnClick)
                 {
                     _action.SetSearchTextFromThing(clickedThing, focusType);
                 }

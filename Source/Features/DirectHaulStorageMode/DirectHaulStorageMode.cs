@@ -1,10 +1,10 @@
-using PressR.Graphics;
+using Microtools.Graphics;
 using RimWorld;
 using Verse;
 
-namespace PressR.Features.DirectHaulStorageMode
+namespace Microtools.Features.DirectHaulStorageMode
 {
-    public class DirectHaulStorageMode : IPressRFeature, IExposable
+    public class DirectHaulStorageMode : IMicrotoolsFeature, IExposable
     {
         private readonly Input _input;
         private readonly InputHandler _inputHandler;
@@ -70,7 +70,7 @@ namespace PressR.Features.DirectHaulStorageMode
 
         public bool CanActivate()
         {
-            if (!PressRMod.Settings.enableDirectHaul)
+            if (!MicrotoolsMod.Settings.enableDirectHaul)
             {
                 return false;
             }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace PressR.Graphics.Replicator
+namespace Microtools.Graphics.Replicator
 {
     public class ThingRenderData(Mesh mesh, Matrix4x4 matrix, Material material)
     {

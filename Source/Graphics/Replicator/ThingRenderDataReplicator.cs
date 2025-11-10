@@ -3,7 +3,7 @@ using LudeonTK;
 using UnityEngine;
 using Verse;
 
-namespace PressR.Graphics.Replicator
+namespace Microtools.Graphics.Replicator
 {
     public static class ThingRenderDataReplicator
     {
@@ -12,7 +12,7 @@ namespace PressR.Graphics.Replicator
         private const float YPositionResetThreshold = 0.0001f;
 
 #if DEBUG
-        [TweakValue("PressR.Replicator.Altitude", -1f, 1f)]
+        [TweakValue("Microtools.Replicator.Altitude", -1f, 1f)]
         private static float GlobalAltitudeOffset = 0f;
 #else
         private const float GlobalAltitudeOffset = 0f;

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using LudeonTK;
 using Verse;
 
-namespace PressR.Graphics.Replicator
+namespace Microtools.Graphics.Replicator
 {
     internal static class RenderStrategyFactory
     {
@@ -16,7 +16,7 @@ namespace PressR.Graphics.Replicator
         ];
 
 #if DEBUG
-        [TweakValue("PressR.Replicator", 0f, 1f)]
+        [TweakValue("Microtools.Replicator", 0f, 1f)]
         private static bool EnableStrategyFactory = true;
 #endif
 

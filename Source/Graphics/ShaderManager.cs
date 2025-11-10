@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 using Verse;
 
-namespace PressR.Graphics
+namespace Microtools.Graphics
 {
     [StaticConstructorOnStartup]
     public static class ShaderManager
@@ -16,7 +16,7 @@ namespace PressR.Graphics
 
         static ShaderManager()
         {
-            ModContentPack contentPack = LoadedModManager.GetMod<PressRMod>().Content;
+            ModContentPack contentPack = LoadedModManager.GetMod<MicrotoolsMod>().Content;
             List<AssetBundle> loadedBundles = contentPack.assetBundles.loadedAssetBundles;
 
             HSVColorizeCutoutShader = LoadShaderFromBundles(
@@ -35,7 +35,7 @@ namespace PressR.Graphics
             if (shader == null)
             {
                 Log.Error(
-                    $"[Press-R] Could not load shader '{shaderName}' from any loaded asset bundle."
+                    $"[Microtools] Could not load shader '{shaderName}' from any loaded asset bundle."
                 );
             }
             return shader;

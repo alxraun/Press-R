@@ -1,0 +1,14 @@
+[global]
+unity_version = "2022.3.35f1"
+asset_directory = "Assets/"
+output_directory = "Mods/Microtools/AssetBundles/"
+bundle_path = "alx.microtools"
+link_method = "symlink"
+temp_project_path = "/home/alx/projects/rw-mods/Microtools/.build/cache/unity-project"
+clean_temp_project = false
+
+[bundles.shaders]
+bundle_name = "alx.microtools_shaders"
+filename = "[bundle_name]_[target]"
+include_patterns = ["Shaders/*.shader"]
+targetless = false

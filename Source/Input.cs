@@ -2,7 +2,7 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace PressR
+namespace Microtools
 {
     public class Input
     {
@@ -18,7 +18,7 @@ namespace PressR
 
         public bool IsModifierIncrement10xKeyDown => KeyBindingDefOf.ModifierIncrement_10x.IsDown;
         public bool IsModifierIncrement100xKeyDown => KeyBindingDefOf.ModifierIncrement_100x.IsDown;
-        public bool IsPressRModifierKeyPressed => PressRDefOf.PressR_ModifierKey.IsDown;
+        public bool IsMicrotoolsModifierKeyPressed => MicrotoolsDefOf.Microtools_ModifierKey.IsDown;
 
         public bool IsClick { get; private set; }
         public bool IsMouseDown { get; private set; }

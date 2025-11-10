@@ -1,6 +1,6 @@
 using Verse;
 
-namespace PressR.Settings
+namespace Microtools.Settings
 {
     public class StorageLensSettings : IExposable
     {

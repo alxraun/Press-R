@@ -3,9 +3,9 @@ using RimWorld;
 using Verse;
 using Verse.AI;
 
-namespace PressR.Features.DirectHaul.Harmony
+namespace Microtools.Features.DirectHaul.Harmony
 {
-    [HarmonyPatchCategory("PressR")]
+    [HarmonyPatchCategory("Microtools")]
     [HarmonyPatch(typeof(Pawn_ApparelTracker), nameof(Pawn_ApparelTracker.Notify_ApparelAdded))]
     public static class Patch_Pawn_ApparelTracker_Notify_ApparelAdded
     {
@@ -16,12 +16,12 @@ namespace PressR.Features.DirectHaul.Harmony
                 return;
 
             Job curJob = pawn.CurJob;
-            if (curJob != null && curJob.def == PressRDefOf.PressR_DirectHaul)
+            if (curJob != null && curJob.def == MicrotoolsDefOf.Microtools_DirectHaul)
                 return;
 
             var map = apparel?.MapHeld ?? pawn.Map;
             ThingStateManager directHaul = map
-                ?.GetPressRMapComponent()
+                ?.GetMicrotoolsMapComponent()
                 ?.DirectHaul?.ThingStateManager;
             if (directHaul == null)
                 return;

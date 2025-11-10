@@ -5,7 +5,7 @@ using UnityEngine;
 using Verse;
 using static Verse.UI;
 
-namespace PressR
+namespace Microtools
 {
     public static class Utils
     {

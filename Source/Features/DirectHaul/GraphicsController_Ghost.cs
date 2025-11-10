@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using PressR.Graphics;
-using PressR.Graphics.Tween;
+using Microtools.Graphics;
+using Microtools.Graphics.Tween;
 using UnityEngine;
 using Verse;
 
-namespace PressR.Features.DirectHaul
+namespace Microtools.Features.DirectHaul
 {
     [StaticConstructorOnStartup]
     public sealed class GraphicsController_Ghost(
@@ -41,7 +41,7 @@ namespace PressR.Features.DirectHaul
 
         public void Update()
         {
-            if (!PressRMod.Settings.directHaulSettings.enablePlacementGhosts)
+            if (!MicrotoolsMod.Settings.directHaulSettings.enablePlacementGhosts)
             {
                 Clear();
                 return;

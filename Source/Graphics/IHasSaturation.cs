@@ -1,4 +1,4 @@
-namespace PressR.Graphics
+namespace Microtools.Graphics
 {
     public interface IHasSaturation
     {

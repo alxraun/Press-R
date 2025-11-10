@@ -1,7 +1,7 @@
 using System.Reflection;
 using Verse;
 
-namespace PressR.Graphics.Replicator
+namespace Microtools.Graphics.Replicator
 {
     internal static class ReplicatorHelper
     {

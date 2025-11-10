@@ -4,7 +4,7 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace PressR.Graphics.Replicator
+namespace Microtools.Graphics.Replicator
 {
     public class ShelfDecorator : BaseDecorator
     {
@@ -16,16 +16,16 @@ namespace PressR.Graphics.Replicator
         private const int MinItemsForStackRotation = 2;
 
 #if DEBUG
-        [TweakValue("PressR.Replicator", 0f, 1f)]
+        [TweakValue("Microtools.Replicator", 0f, 1f)]
         private static bool EnableShelfDecorator = true;
 
-        [TweakValue("PressR.Replicator", 0f, 1f)]
+        [TweakValue("Microtools.Replicator", 0f, 1f)]
         private static bool EnableGraphicMultiDecorator = true;
 
-        [TweakValue("PressR.Replicator", 0f, 1f)]
+        [TweakValue("Microtools.Replicator", 0f, 1f)]
         private static bool EnableWeaponRotationDecorator = true;
 
-        [TweakValue("PressR.Replicator", 0f, 1f)]
+        [TweakValue("Microtools.Replicator", 0f, 1f)]
         private static bool EnableApparelRotationDecorator = true;
 #endif
 

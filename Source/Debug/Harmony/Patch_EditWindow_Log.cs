@@ -4,7 +4,7 @@ using LudeonTK;
 using UnityEngine;
 using Verse;
 
-namespace PressR.Debug.Harmony
+namespace Microtools.Debug.Harmony
 {
     [HarmonyPatchCategory("Debug")]
     [HarmonyPatch(typeof(EditWindow_Log))]

@@ -1,6 +1,6 @@
 using System;
 
-namespace PressR.Graphics
+namespace Microtools.Graphics
 {
     public enum GraphicObjectState
     {

@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using PressR.Graphics.Tween;
+using Microtools.Graphics.Tween;
 
-namespace PressR.Graphics
+namespace Microtools.Graphics
 {
     public interface IGraphicsManager
     {

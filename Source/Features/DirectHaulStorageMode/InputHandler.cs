@@ -3,7 +3,7 @@ using RimWorld;
 using Verse;
 using Verse.Sound;
 
-namespace PressR.Features.DirectHaulStorageMode
+namespace Microtools.Features.DirectHaulStorageMode
 {
     public class InputHandler(State state, ActionDispatcher action)
     {

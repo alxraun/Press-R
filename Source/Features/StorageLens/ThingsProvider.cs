@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Verse;
 
-namespace PressR.Features.StorageLens
+namespace Microtools.Features.StorageLens
 {
     public class ThingsProvider(State state)
     {

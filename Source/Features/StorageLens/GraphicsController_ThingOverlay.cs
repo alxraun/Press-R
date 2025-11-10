@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using PressR.Graphics;
-using PressR.Graphics.Tween;
+using Microtools.Graphics;
+using Microtools.Graphics.Tween;
 using UnityEngine;
 using Verse;
 
-namespace PressR.Features.StorageLens
+namespace Microtools.Features.StorageLens
 {
     public sealed class GraphicsController_ThingOverlay(
         IGraphicsManager graphicsManager,
@@ -32,7 +32,7 @@ namespace PressR.Features.StorageLens
         {
             if (
                 _state?.StorableForSelectedStorageInView == null
-                || !PressRMod.Settings.storageLensSettings.enableStorageLensOverlays
+                || !MicrotoolsMod.Settings.storageLensSettings.enableStorageLensOverlays
             )
             {
                 ClearInternal();

@@ -3,9 +3,9 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
-using static PressR.UI.Components.Constants;
+using static Microtools.UI.Components.Constants;
 
-namespace PressR.UI.Components
+namespace Microtools.UI.Components
 {
     public static class SettingsItem
     {

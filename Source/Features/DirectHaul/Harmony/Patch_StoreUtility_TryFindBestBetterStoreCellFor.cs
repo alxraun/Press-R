@@ -2,9 +2,9 @@ using HarmonyLib;
 using RimWorld;
 using Verse;
 
-namespace PressR.Features.DirectHaul.Harmony
+namespace Microtools.Features.DirectHaul.Harmony
 {
-    [HarmonyPatchCategory("PressR")]
+    [HarmonyPatchCategory("Microtools")]
     [HarmonyPatch(typeof(StoreUtility), nameof(StoreUtility.TryFindBestBetterStoreCellFor))]
     public static class Patch_StoreUtility_TryFindBestBetterStoreCellFor
     {
@@ -12,7 +12,7 @@ namespace PressR.Features.DirectHaul.Harmony
         {
             var componentMap = t?.MapHeld ?? map;
             ThingStateManager directHaul = componentMap
-                ?.GetPressRMapComponent()
+                ?.GetMicrotoolsMapComponent()
                 ?.DirectHaul?.ThingStateManager;
 
             if (directHaul == null)

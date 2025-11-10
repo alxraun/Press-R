@@ -1,10 +1,10 @@
-using PressR.Graphics;
+using Microtools.Graphics;
 using RimWorld;
 using Verse;
 
-namespace PressR.Features.StorageLens
+namespace Microtools.Features.StorageLens
 {
-    public class StorageLens : IPressRFeature
+    public class StorageLens : IMicrotoolsFeature
     {
         private readonly IGraphicsManager _graphicsManager;
         private readonly ThingsProvider _thingsProvider;
@@ -50,7 +50,7 @@ namespace PressR.Features.StorageLens
 
         public bool CanActivate()
         {
-            if (!PressRMod.Settings.storageLensSettings.enableStorageLens)
+            if (!MicrotoolsMod.Settings.storageLensSettings.enableStorageLens)
             {
                 if (IsActive)
                 {
@@ -94,7 +94,7 @@ namespace PressR.Features.StorageLens
         {
             IsActive = false;
 
-            if (PressRMod.Settings.storageLensSettings.restoreUIStateOnDeactivate)
+            if (MicrotoolsMod.Settings.storageLensSettings.restoreUIStateOnDeactivate)
             {
                 _action.SetSelection(State.UISnapshot_SelectedObject);
                 _action.SetOpenTab(State.UISnapshot_OpenTabType);

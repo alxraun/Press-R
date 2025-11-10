@@ -3,12 +3,12 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace PressR.Graphics.Replicator
+namespace Microtools.Graphics.Replicator
 {
     public class BookDecorator : BaseDecorator
     {
 #if DEBUG
-        [TweakValue("PressR.Replicator", 0f, 1f)]
+        [TweakValue("Microtools.Replicator", 0f, 1f)]
         private static bool EnableBookRenderingDecorator = true;
 #endif
 
