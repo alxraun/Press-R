@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!-- Settings Reset Button -->
+  <Microtools.Settings.ResetButton.Label>初期設定にリセット</Microtools.Settings.ResetButton.Label>
+  <Microtools.Settings.ResetButton.Tooltip>Microtoolsのすべての設定を初期値に戻します。</Microtools.Settings.ResetButton.Tooltip>
+  <Microtools.Settings.ResetButton.Message>Microtoolsの設定が初期値にリセットされました。</Microtools.Settings.ResetButton.Message>
+  <!-- Mod Settings Container -->
+  <!-- Tab Lens Feature Section -->
+  <Microtools.Settings.TabLens.Feature.Label>Tab Lens 機能</Microtools.Settings.TabLens.Feature.Label>
+  <Microtools.Settings.TabLens.Feature.Description>関連するタブが開いているときに、マップ上のインタラクションで物の設定を管理します。</Microtools.Settings.TabLens.Feature.Description>
+  <Microtools.Settings.TabLens.StorageLens.Enable.Label>Storage Lens を有効化</Microtools.Settings.TabLens.StorageLens.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.Enable.Description>「保管」タブで Tab Lens を使用し、マップ上のクリックでアイテムの許可/禁止を切り替えます。</Microtools.Settings.TabLens.StorageLens.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Label>アイテムのオーバーレイを表示</Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Description>保管ゾーンでの許可/禁止状態を示す色付きのオーバーレイをアイテムに表示します。</Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>終了時にUI状態を復元</Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>Storage Lens が無効になったときに、以前のユーザーインターフェースの状態（タブ、検索、スクロール位置）を復元します。</Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>「保管」タブを自動で開く</Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>アイテムにフォーカスしたときに「保管」タブを自動的に開きます。</Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>クリック時にタブ内のアイテムにフォーカス</Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>クリックしたアイテム/カテゴリにタブのリストを絞り込みます。</Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>ホバー時にタブ内のアイテムにフォーカス</Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>カーソル下のアイテム/カテゴリにタブのリストを絞り込みます。</Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>「クリック時にタブ内のアイテムにフォーカス」を有効にする必要があります。</Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>
+  <!-- Direct Haul Feature Section -->
+  <Microtools.Settings.DirectHaul.Feature.Label>Direct Haul 機能</Microtools.Settings.DirectHaul.Feature.Label>
+  <Microtools.Settings.DirectHaul.Feature.Description>選択したアイテムを特定の場所へ運ぶよう、入植者に直接指示します。</Microtools.Settings.DirectHaul.Feature.Description>
+  <Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Label>半径インジケーターを表示</Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Label>
+  <Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Description>すべての配置場所を囲む円を表示します。</Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Description>
+  <Microtools.Settings.DirectHaul.InvertKeys.Enable.Label>標準/保管庫キーを反転</Microtools.Settings.DirectHaul.InvertKeys.Enable.Label>
+  <Microtools.Settings.DirectHaul.InvertKeys.Enable.Description>Direct Haul で標準運搬と保管庫モードに使用する修飾キーを入れ替えます。</Microtools.Settings.DirectHaul.InvertKeys.Enable.Description>
+  <!-- Direct Haul Gizmos -->
+  <Microtools.DirectHaul.Command_CancelHeldStatus.Label>「保持中」状態を解除</Microtools.DirectHaul.Command_CancelHeldStatus.Label>
+  <Microtools.DirectHaul.Command_CancelHeldStatus.Desc>Direct Haul でのこのアイテムの「保持中」状態を解除します。</Microtools.DirectHaul.Command_CancelHeldStatus.Desc>
+  <Microtools.DirectHaul.Command_CancelPendingStatus.Label>「待機中」状態を解除</Microtools.DirectHaul.Command_CancelPendingStatus.Label>
+  <Microtools.DirectHaul.Command_CancelPendingStatus.Desc>Direct Haul でのこのアイテムの「待機中」状態を解除します。</Microtools.DirectHaul.Command_CancelPendingStatus.Desc>
+</LanguageData>

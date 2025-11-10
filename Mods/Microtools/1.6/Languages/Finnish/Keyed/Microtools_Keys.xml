@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!-- Settings Reset Button -->
+  <Microtools.Settings.ResetButton.Label>Palauta oletusasetukset</Microtools.Settings.ResetButton.Label>
+  <Microtools.Settings.ResetButton.Tooltip>Palauta kaikki Microtools -asetukset oletusarvoihinsa.</Microtools.Settings.ResetButton.Tooltip>
+  <Microtools.Settings.ResetButton.Message>Microtools -asetukset palautettu oletusarvoihin.</Microtools.Settings.ResetButton.Message>
+  <!-- Mod Settings Container -->
+  <!-- Tab Lens Feature Section -->
+  <Microtools.Settings.TabLens.Feature.Label>Tab Lens -toiminto</Microtools.Settings.TabLens.Feature.Label>
+  <Microtools.Settings.TabLens.Feature.Description>Hallitse esineiden asetuksia karttavuorovaikutuksen kautta, kun asiaankuuluvat välilehdet ovat auki.</Microtools.Settings.TabLens.Feature.Description>
+  <Microtools.Settings.TabLens.StorageLens.Enable.Label>Ota Storage Lens käyttöön</Microtools.Settings.TabLens.StorageLens.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.Enable.Description>Käytä Tab Lensiä Varasto-välilehden kanssa vaihtaaksesi esineiden sallimista napsauttamalla karttaa.</Microtools.Settings.TabLens.StorageLens.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Label>Näytä esineiden peittokuvat</Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Description>Näytä värilliset peittokuvat esineissä, jotka ilmaisevat niiden sallitun/kielletyn tilan varastossa.</Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>Palauta käyttöliittymän tila poistuttaessa</Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>Palauta edellinen käyttöliittymän tila (välilehti, haku, vieritys), kun Storage Lens poistetaan käytöstä.</Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>Avaa Varasto-välilehti automaattisesti</Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>Avaa Varasto-välilehti automaattisesti, kun kohdistetaan esineeseen.</Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>Kohdista esine välilehdessä napsauttamalla</Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>Suodata välilehden luettelo napsautettuun esineeseen/kategoriaan.</Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>Kohdista esine välilehdessä hiiren ollessa päällä</Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>Suodata välilehden luettelo esineeseen/kategoriaan, jonka päällä hiiri on.</Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>Vaatii, että 'Kohdista esine välilehdessä napsauttamalla' on käytössä.</Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>
+  <!-- Direct Haul Feature Section -->
+  <Microtools.Settings.DirectHaul.Feature.Label>Direct Haul -toiminto</Microtools.Settings.DirectHaul.Feature.Label>
+  <Microtools.Settings.DirectHaul.Feature.Description>Käske kolonisteja suoraan kuljettamaan valitut esineet tiettyyn paikkaan.</Microtools.Settings.DirectHaul.Feature.Description>
+  <Microtools.Settings.DirectHaul.PlacementGhosts.Enable.Label>Näytä sijoitusaaveet</Microtools.Settings.DirectHaul.PlacementGhosts.Enable.Label>
+  <Microtools.Settings.DirectHaul.PlacementGhosts.Enable.Description>Näytä aaveet, jotka osoittavat, mihin esineet sijoitetaan.</Microtools.Settings.DirectHaul.PlacementGhosts.Enable.Description>
+  <Microtools.Settings.DirectHaul.StatusOverlays.Enable.Label>Näytä tilapeittokuvat</Microtools.Settings.DirectHaul.StatusOverlays.Enable.Label>
+  <Microtools.Settings.DirectHaul.StatusOverlays.Enable.Description>Näytä peittokuvat esineissä, jotka ilmaisevat niiden 'Odottaa' tai 'Pidetty' tilan Direct Haulille.</Microtools.Settings.DirectHaul.StatusOverlays.Enable.Description>
+  <Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Label>Näytä sädeindikaattori</Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Label>
+  <Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Description>Näytä ympyrä, joka kattaa kaikki sijoituspaikat.</Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Description>
+  <Microtools.Settings.DirectHaul.StorageCreationPreview.Enable.Label>Näytä varaston luonnin esikatselu</Microtools.Settings.DirectHaul.StorageCreationPreview.Enable.Label>
+  <Microtools.Settings.DirectHaul.StorageCreationPreview.Enable.Description>Näytä suorakulmainen esikatselu, kun luodaan/laajennetaan varastoalueita vetämällä.</Microtools.Settings.DirectHaul.StorageCreationPreview.Enable.Description>
+  <Microtools.Settings.DirectHaul.StorageHighlight.Enable.Label>Korosta varasto hiiren ollessa päällä</Microtools.Settings.DirectHaul.StorageHighlight.Enable.Label>
+  <Microtools.Settings.DirectHaul.StorageHighlight.Enable.Description>Korosta olemassa olevat varastoalueet/rakennukset, kun hiiri on päällä Varastotilassa.</Microtools.Settings.DirectHaul.StorageHighlight.Enable.Description>
+  <Microtools.Settings.DirectHaul.InvertKeys.Enable.Label>Käännä Vakio/Varasto-näppäimet</Microtools.Settings.DirectHaul.InvertKeys.Enable.Label>
+  <Microtools.Settings.DirectHaul.InvertKeys.Enable.Description>Vaihda modifiointinäppäimet, joita käytetään Vakio-kuljetukseen ja Varastotilaan Direct Haulissa.</Microtools.Settings.DirectHaul.InvertKeys.Enable.Description>
+  <!-- Direct Haul Gizmos -->
+  <Microtools.DirectHaul.Command_CancelHeldStatus.Label>Peruuta tila 'Pidetty'</Microtools.DirectHaul.Command_CancelHeldStatus.Label>
+  <Microtools.DirectHaul.Command_CancelHeldStatus.Desc>Peruuta tämän esineen 'Pidetty'-tila Direct Haulissa.</Microtools.DirectHaul.Command_CancelHeldStatus.Desc>
+  <Microtools.DirectHaul.Command_CancelPendingStatus.Label>Peruuta tila 'Odottaa'</Microtools.DirectHaul.Command_CancelPendingStatus.Label>
+  <Microtools.DirectHaul.Command_CancelPendingStatus.Desc>Peruuta tämän esineen 'Odottaa'-tila Direct Haulissa.</Microtools.DirectHaul.Command_CancelPendingStatus.Desc>
+</LanguageData>

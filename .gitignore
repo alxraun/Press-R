@@ -24,7 +24,6 @@
 /.idea/
 /.vscode/
 /.vs/
-/.config/
 *.swp
 *.swo
 
@@ -60,3 +59,16 @@ temp/
 
 # TODO
 todo.md
+
+# Python
+__pycache__/
+.mypy_cache/
+
+# AssetBundleBuilder
+assetbundlebuilder
+
+# dotnet
+.store/
+
+# Build artifacts and local tools
+.build/

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!-- Settings Reset Button -->
+  <Microtools.Settings.ResetButton.Label>Скинути налаштування</Microtools.Settings.ResetButton.Label>
+  <Microtools.Settings.ResetButton.Tooltip>Скинути всі налаштування моду Microtools до значень за замовчуванням.</Microtools.Settings.ResetButton.Tooltip>
+  <Microtools.Settings.ResetButton.Message>Налаштування Microtools скинуто до значень за замовчуванням.</Microtools.Settings.ResetButton.Message>
+  <!-- Mod Settings Container -->
+  <!-- Tab Lens Feature Section -->
+  <Microtools.Settings.TabLens.Feature.Label>Функція Tab Lens</Microtools.Settings.TabLens.Feature.Label>
+  <Microtools.Settings.TabLens.Feature.Description>Керування налаштуваннями об'єктів через взаємодію на мапі, коли відкриті відповідні вкладки.</Microtools.Settings.TabLens.Feature.Description>
+  <Microtools.Settings.TabLens.StorageLens.Enable.Label>Увімкнути Storage Lens</Microtools.Settings.TabLens.StorageLens.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.Enable.Description>Використовувати Tab Lens із вкладкою 'Сховище' для перемикання дозволу предметів кліком на мапі.</Microtools.Settings.TabLens.StorageLens.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Label>Показувати оверлеї предметів</Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Description>Показувати кольорові оверлеї на предметах, що вказують їхній статус (дозволено/заборонено) у сховищі.</Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>Відновлювати інтерфейс при виході</Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>Відновлювати попередній стан інтерфейсу (вкладка, пошук, прокручування) при деактивації Storage Lens.</Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>Автоматично відкривати вкладку 'Сховище'</Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>Автоматично відкривати вкладку 'Сховище' при фокусуванні на предметі.</Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>Фокусуватися на предметі у вкладці за кліком</Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>Фільтрувати список у вкладці сховища за натиснутим предметом/категорією.</Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>Фокусуватися на предметі у вкладці при наведенні</Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>Фільтрувати список у вкладці сховища за предметом/категорією під курсором.</Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>Потребує увімкнення опції 'Фокусуватися на предметі у вкладці за кліком'.</Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>
+  <!-- Direct Haul Feature Section -->
+  <Microtools.Settings.DirectHaul.Feature.Label>Функція Direct Haul</Microtools.Settings.DirectHaul.Feature.Label>
+  <Microtools.Settings.DirectHaul.Feature.Description>Напряму наказати колоністам перенести вибрані предмети у вказане місце.</Microtools.Settings.DirectHaul.Feature.Description>
+  <Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Label>Показувати індикатор радіуса</Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Label>
+  <Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Description>Показувати коло, що охоплює всі місця розміщення.</Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Description>
+  <Microtools.Settings.DirectHaul.InvertKeys.Enable.Label>Інвертувати клавіші Стандарт/Сховище</Microtools.Settings.DirectHaul.InvertKeys.Enable.Label>
+  <Microtools.Settings.DirectHaul.InvertKeys.Enable.Description>Поміняти місцями клавіші-модифікатори, що використовуються для режиму 'Стандарт' та режиму 'Сховище' в Direct Haul.</Microtools.Settings.DirectHaul.InvertKeys.Enable.Description>
+  <!-- Direct Haul Gizmos -->
+  <Microtools.DirectHaul.Command_CancelHeldStatus.Label>Скасувати статус 'Утримується'</Microtools.DirectHaul.Command_CancelHeldStatus.Label>
+  <Microtools.DirectHaul.Command_CancelHeldStatus.Desc>Скасувати статус 'Утримується' для цього предмета в Direct Haul.</Microtools.DirectHaul.Command_CancelHeldStatus.Desc>
+  <Microtools.DirectHaul.Command_CancelPendingStatus.Label>Скасувати статус 'В очікуванні'</Microtools.DirectHaul.Command_CancelPendingStatus.Label>
+  <Microtools.DirectHaul.Command_CancelPendingStatus.Desc>Скасувати статус 'В очікуванні' для цього предмета в Direct Haul.</Microtools.DirectHaul.Command_CancelPendingStatus.Desc>
+</LanguageData>

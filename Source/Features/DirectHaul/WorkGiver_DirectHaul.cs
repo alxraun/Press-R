@@ -4,11 +4,12 @@ using RimWorld;
 using Verse;
 using Verse.AI;
 
-namespace PressR.Features.DirectHaul
+namespace Microtools.Features.DirectHaul
 {
     public class WorkGiver_DirectHaul : WorkGiver_Scanner
     {
-        private DirectHaul DirectHaul(Pawn pawn) => pawn.Map?.GetPressRMapComponent()?.DirectHaul;
+        private DirectHaul DirectHaul(Pawn pawn) =>
+            pawn.Map?.GetMicrotoolsMapComponent()?.DirectHaul;
 
         public override ThingRequest PotentialWorkThingRequest =>
             ThingRequest.ForGroup(ThingRequestGroup.HaulableEver);
@@ -75,7 +76,11 @@ namespace PressR.Features.DirectHaul
                 return null;
             }
 
-            var job = JobMaker.MakeJob(PressRDefOf.PressR_DirectHaul, t, targetCellInfo.Cell);
+            var job = JobMaker.MakeJob(
+                MicrotoolsDefOf.Microtools_DirectHaul,
+                t,
+                targetCellInfo.Cell
+            );
             job.count = t.stackCount;
             job.playerForced = forced;
             job.haulMode = HaulMode.ToCellNonStorage;

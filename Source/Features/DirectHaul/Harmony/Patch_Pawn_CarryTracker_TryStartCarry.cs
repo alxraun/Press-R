@@ -2,9 +2,9 @@ using HarmonyLib;
 using Verse;
 using Verse.AI;
 
-namespace PressR.Features.DirectHaul.Harmony
+namespace Microtools.Features.DirectHaul.Harmony
 {
-    [HarmonyPatchCategory("PressR")]
+    [HarmonyPatchCategory("Microtools")]
     [HarmonyPatch(
         typeof(Pawn_CarryTracker),
         nameof(Pawn_CarryTracker.TryStartCarry),
@@ -22,7 +22,7 @@ namespace PressR.Features.DirectHaul.Harmony
                 return;
 
             Job curJob = pawn.CurJob;
-            if (curJob != null && curJob.def == PressRDefOf.PressR_DirectHaul)
+            if (curJob != null && curJob.def == MicrotoolsDefOf.Microtools_DirectHaul)
                 return;
 
             Thing carriedThing = __instance.CarriedThing;
@@ -31,7 +31,7 @@ namespace PressR.Features.DirectHaul.Harmony
 
             var map = carriedThing?.MapHeld ?? pawn.Map;
             ThingStateManager directHaul = map
-                ?.GetPressRMapComponent()
+                ?.GetMicrotoolsMapComponent()
                 ?.DirectHaul?.ThingStateManager;
             if (directHaul == null)
                 return;

@@ -6,7 +6,7 @@ using UnityEngine;
 using Verse;
 using Verse.Sound;
 
-namespace PressR.Features.StorageLens
+namespace Microtools.Features.StorageLens
 {
     public class ActionDispatcher(State state)
     {

@@ -1,9 +1,9 @@
-using PressR.Graphics;
+using Microtools.Graphics;
 using Verse;
 
-namespace PressR.Features.DirectHaul
+namespace Microtools.Features.DirectHaul
 {
-    public class DirectHaul : IPressRFeature, IExposable
+    public class DirectHaul : IMicrotoolsFeature, IExposable
     {
         private readonly PlacementService _placementService;
         private readonly PlacementManager _placementManager;
@@ -95,7 +95,7 @@ namespace PressR.Features.DirectHaul
 
         public bool CanActivate()
         {
-            if (!PressRMod.Settings.enableDirectHaul)
+            if (!MicrotoolsMod.Settings.enableDirectHaul)
             {
                 return false;
             }

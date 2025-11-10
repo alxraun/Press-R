@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!-- Settings Reset Button -->
+  <Microtools.Settings.ResetButton.Label>重設設定</Microtools.Settings.ResetButton.Label>
+  <Microtools.Settings.ResetButton.Tooltip>將所有 Microtools 設定重設為預設值。</Microtools.Settings.ResetButton.Tooltip>
+  <Microtools.Settings.ResetButton.Message>Microtools 設定已重設為預設值。</Microtools.Settings.ResetButton.Message>
+  <!-- Mod Settings Container -->
+  <!-- Tab Lens Feature Section -->
+  <Microtools.Settings.TabLens.Feature.Label>Tab Lens 功能</Microtools.Settings.TabLens.Feature.Label>
+  <Microtools.Settings.TabLens.Feature.Description>當相關標籤頁開啟時，透過地圖互動管理物件設定。</Microtools.Settings.TabLens.Feature.Description>
+  <Microtools.Settings.TabLens.StorageLens.Enable.Label>啟用 Storage Lens</Microtools.Settings.TabLens.StorageLens.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.Enable.Description>使用 Tab Lens 和「儲存」標籤頁，透過點擊地圖來切換物品許可。</Microtools.Settings.TabLens.StorageLens.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Label>顯示物品覆蓋層</Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Description>在物品上顯示彩色覆蓋層，指示其在儲存區中的允許/禁止狀態。</Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>退出時恢復介面狀態</Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>當 Storage Lens 關閉時，恢復先前的使用者介面狀態（標籤頁、搜尋、捲動位置）。</Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>自動開啟「儲存」標籤頁</Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>聚焦物品時自動開啟「儲存」標籤頁。</Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>點擊時聚焦標籤頁中的物品</Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>將標籤頁清單篩選到點擊的物品/類別。</Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>懸停時聚焦標籤頁中的物品</Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>將標籤頁清單篩選到懸停的物品/類別。</Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>需要啟用「點擊時聚焦標籤頁中的物品」選項。</Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>
+  <!-- Direct Haul Feature Section -->
+  <Microtools.Settings.DirectHaul.Feature.Label>Direct Haul 功能</Microtools.Settings.DirectHaul.Feature.Label>
+  <Microtools.Settings.DirectHaul.Feature.Description>直接命令殖民者將選定的物品搬運到指定位置。</Microtools.Settings.DirectHaul.Feature.Description>
+  <Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Label>顯示範圍指示器</Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Label>
+  <Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Description>顯示一個包含所有放置位置的圓圈。</Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Description>
+  <Microtools.Settings.DirectHaul.InvertKeys.Enable.Label>反轉 標準/儲存 鍵位</Microtools.Settings.DirectHaul.InvertKeys.Enable.Label>
+  <Microtools.Settings.DirectHaul.InvertKeys.Enable.Description>在 Direct Haul 中交換用於 標準 搬運和 儲存 模式的修飾鍵。</Microtools.Settings.DirectHaul.InvertKeys.Enable.Description>
+  <!-- Direct Haul Gizmos -->
+  <Microtools.DirectHaul.Command_CancelHeldStatus.Label>取消「已持有」狀態</Microtools.DirectHaul.Command_CancelHeldStatus.Label>
+  <Microtools.DirectHaul.Command_CancelHeldStatus.Desc>取消此物品在 Direct Haul 中的「已持有」狀態。</Microtools.DirectHaul.Command_CancelHeldStatus.Desc>
+  <Microtools.DirectHaul.Command_CancelPendingStatus.Label>取消「待定」狀態</Microtools.DirectHaul.Command_CancelPendingStatus.Label>
+  <Microtools.DirectHaul.Command_CancelPendingStatus.Desc>取消此物品在 Direct Haul 中的「待定」狀態。</Microtools.DirectHaul.Command_CancelPendingStatus.Desc>
+</LanguageData>

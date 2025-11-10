@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!-- Settings Reset Button -->
+  <Microtools.Settings.ResetButton.Label>Restablir als valors predeterminats</Microtools.Settings.ResetButton.Label>
+  <Microtools.Settings.ResetButton.Tooltip>Restablir tots els paràmetres de Microtools a leurs valors predeterminats.</Microtools.Settings.ResetButton.Tooltip>
+  <Microtools.Settings.ResetButton.Message>Paràmetres de Microtools restablerts als valors predeterminats.</Microtools.Settings.ResetButton.Message>
+  <!-- Mod Settings Container -->
+  <!-- Tab Lens Feature Section -->
+  <Microtools.Settings.TabLens.Feature.Label>Funció Tab Lens</Microtools.Settings.TabLens.Feature.Label>
+  <Microtools.Settings.TabLens.Feature.Description>Gestionar la configuració d'objectes mitjançant la interacció al mapa quan les pestanyes rellevants estan obertes.</Microtools.Settings.TabLens.Feature.Description>
+  <Microtools.Settings.TabLens.StorageLens.Enable.Label>Activar Storage Lens</Microtools.Settings.TabLens.StorageLens.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.Enable.Description>Utilitzar Tab Lens amb la pestanya 'Emmagatzematge' per alternar el permís d'objectes fent clic al mapa.</Microtools.Settings.TabLens.StorageLens.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Label>Mostrar superposicions d'objectes</Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Description>Mostrar superposicions acolorides als objectes indicant el seu estat (permès/prohibit) a l'emmagatzematge.</Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>Restaurar l'estat de la IU en sortir</Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>Restaurar l'estat anterior de la interfície d'usuari (pestanya, cerca, desplaçament) quan Storage Lens es desactiva.</Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>Obrir automàticament la pestanya 'Emmagatzematge'</Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>Obrir automàticament la pestanya 'Emmagatzematge' en enfocar un objecte.</Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>Enfocar l'objecte a la pestanya en fer clic</Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>Filtrar la llista de la pestanya a l'objecte/categoria seleccionat.</Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>Enfocar l'objecte a la pestanya en passar el cursor</Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>Filtrar la llista de la pestanya a l'objecte/categoria sobre el qual està el cursor.</Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>Requereix que 'Enfocar l'objecte a la pestanya en fer clic' estigui activat.</Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>
+  <!-- Direct Haul Feature Section -->
+  <Microtools.Settings.DirectHaul.Feature.Label>Funció Direct Haul</Microtools.Settings.DirectHaul.Feature.Label>
+  <Microtools.Settings.DirectHaul.Feature.Description>Ordenar directament als colons que transportin els objectes seleccionats a una ubicació específica.</Microtools.Settings.DirectHaul.Feature.Description>
+  <Microtools.Settings.DirectHaul.PlacementGhosts.Enable.Label>Mostrar fantasmes de col·locació</Microtools.Settings.DirectHaul.PlacementGhosts.Enable.Label>
+  <Microtools.Settings.DirectHaul.PlacementGhosts.Enable.Description>Mostrar fantasmes que indiquen on es col·locaran els objectes.</Microtools.Settings.DirectHaul.PlacementGhosts.Enable.Description>
+  <Microtools.Settings.DirectHaul.StatusOverlays.Enable.Label>Mostrar superposicions d'estat</Microtools.Settings.DirectHaul.StatusOverlays.Enable.Label>
+  <Microtools.Settings.DirectHaul.StatusOverlays.Enable.Description>Mostrar superposicions als objectes indicant el seu estat 'Pendent' o 'Retingut' per a Direct Haul.</Microtools.Settings.DirectHaul.StatusOverlays.Enable.Description>
+  <Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Label>Mostrar indicador de radi</Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Label>
+  <Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Description>Mostrar un cercle que abasti totes les ubicacions de col·locació.</Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Description>
+  <Microtools.Settings.DirectHaul.StorageCreationPreview.Enable.Label>Mostrar previsualització de creació d'emmagatzematge</Microtools.Settings.DirectHaul.StorageCreationPreview.Enable.Label>
+  <Microtools.Settings.DirectHaul.StorageCreationPreview.Enable.Description>Mostrar una previsualització rectangular en crear/expandir zones d'emmagatzematge mitjançant l'arrossegament.</Microtools.Settings.DirectHaul.StorageCreationPreview.Enable.Description>
+  <Microtools.Settings.DirectHaul.StorageHighlight.Enable.Label>Ressaltar emmagatzematge en passar el cursor</Microtools.Settings.DirectHaul.StorageHighlight.Enable.Label>
+  <Microtools.Settings.DirectHaul.StorageHighlight.Enable.Description>Ressaltar zones/edificis d'emmagatzematge existents en passar el cursor en mode Emmagatzematge.</Microtools.Settings.DirectHaul.StorageHighlight.Enable.Description>
+  <Microtools.Settings.DirectHaul.InvertKeys.Enable.Label>Invertir tecles Estàndard/Emmagatzematge</Microtools.Settings.DirectHaul.InvertKeys.Enable.Label>
+  <Microtools.Settings.DirectHaul.InvertKeys.Enable.Description>Intercanviar les tecles modificadores utilitzades per al transport Estàndard i el mode Emmagatzematge a Direct Haul.</Microtools.Settings.DirectHaul.InvertKeys.Enable.Description>
+  <!-- Direct Haul Gizmos -->
+  <Microtools.DirectHaul.Command_CancelHeldStatus.Label>Cancel·lar estat 'Retingut'</Microtools.DirectHaul.Command_CancelHeldStatus.Label>
+  <Microtools.DirectHaul.Command_CancelHeldStatus.Desc>Cancel·lar l'estat 'Retingut' per a aquest objecte a Direct Haul.</Microtools.DirectHaul.Command_CancelHeldStatus.Desc>
+  <Microtools.DirectHaul.Command_CancelPendingStatus.Label>Cancel·lar estat 'Pendent'</Microtools.DirectHaul.Command_CancelPendingStatus.Label>
+  <Microtools.DirectHaul.Command_CancelPendingStatus.Desc>Cancel·lar l'estat 'Pendent' per a aquest objecte a Direct Haul.</Microtools.DirectHaul.Command_CancelPendingStatus.Desc>
+</LanguageData>

@@ -1,8 +1,8 @@
-using PressR.Graphics;
+using Microtools.Graphics;
 using UnityEngine;
 using Verse;
 
-namespace PressR.Features.DirectHaulStorageMode
+namespace Microtools.Features.DirectHaulStorageMode
 {
     public sealed class GraphicsController_StockpileRect(
         IGraphicsManager graphicsManager,
@@ -23,7 +23,7 @@ namespace PressR.Features.DirectHaulStorageMode
                 _input.IsDragging
                 && _input.StartDragCell.IsValid
                 && _input.CurrentDragCell.IsValid
-                && PressRMod.Settings.directHaulSettings.enableStorageCreationPreview;
+                && MicrotoolsMod.Settings.directHaulSettings.enableStorageCreationPreview;
 
             if (_rectGraphicObject == null)
             {
@@ -97,7 +97,9 @@ namespace PressR.Features.DirectHaulStorageMode
                     as GraphicObject_StockpileRect;
                 if (_rectGraphicObject == null)
                 {
-                    Log.Error($"[PressR] Failed to register {nameof(GraphicObject_StockpileRect)}");
+                    Log.Error(
+                        $"[Microtools] Failed to register {nameof(GraphicObject_StockpileRect)}"
+                    );
                 }
             }
             else if (_rectGraphicObject.State == GraphicObjectState.PendingRemoval)
@@ -108,7 +110,7 @@ namespace PressR.Features.DirectHaulStorageMode
             else if (_rectGraphicObject.State != GraphicObjectState.Active)
             {
                 Log.Warning(
-                    $"[PressR] {nameof(GraphicObject_StockpileRect)} found in unexpected state: {_rectGraphicObject.State}. Forcing Active."
+                    $"[Microtools] {nameof(GraphicObject_StockpileRect)} found in unexpected state: {_rectGraphicObject.State}. Forcing Active."
                 );
                 _rectGraphicObject.State = GraphicObjectState.Active;
                 _graphicsManager.RegisterGraphicObject(_rectGraphicObject);

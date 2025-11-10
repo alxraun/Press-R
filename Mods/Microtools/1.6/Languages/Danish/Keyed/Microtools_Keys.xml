@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!-- Settings Reset Button -->
+  <Microtools.Settings.ResetButton.Label>Nulstil til standard</Microtools.Settings.ResetButton.Label>
+  <Microtools.Settings.ResetButton.Tooltip>Nulstil alle Microtools-indstillinger til deres standardværdier.</Microtools.Settings.ResetButton.Tooltip>
+  <Microtools.Settings.ResetButton.Message>Microtools-indstillinger nulstillet til standard.</Microtools.Settings.ResetButton.Message>
+  <!-- Mod Settings Container -->
+  <!-- Tab Lens Feature Section -->
+  <Microtools.Settings.TabLens.Feature.Label>Tab Lens Funktion</Microtools.Settings.TabLens.Feature.Label>
+  <Microtools.Settings.TabLens.Feature.Description>Administrer tingindstillinger via kortinteraktion, når relevante faner er åbne.</Microtools.Settings.TabLens.Feature.Description>
+  <Microtools.Settings.TabLens.StorageLens.Enable.Label>Aktiver Storage Lens</Microtools.Settings.TabLens.StorageLens.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.Enable.Description>Brug Tab Lens med fanen 'Lager' for at skifte tilladelse til genstande ved at klikke på kortet.</Microtools.Settings.TabLens.StorageLens.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Label>Vis genstandsoverlejringer</Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Description>Vis farvede overlejringer på genstande, der angiver deres tilladte/forbudte status i lageret.</Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>Gendan brugergrænsefladetilstand ved afslutning</Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>Gendan tidligere brugergrænsefladetilstand (faneblad, søgning, rulning), når Storage Lens deaktiveres.</Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>Åbn automatisk fanen 'Lager'</Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>Åbn automatisk fanen 'Lager', når der fokuseres på en genstand.</Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>Fokuser på genstand i fanen ved klik</Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>Filtrer fanelisten til den klikkede genstand/kategori.</Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>Fokuser på genstand i fanen ved hover</Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>Filtrer fanelisten til den genstand/kategori, der holdes over.</Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>Kræver, at 'Fokuser på genstand i fanen ved klik' er aktiveret.</Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>
+  <!-- Direct Haul Feature Section -->
+  <Microtools.Settings.DirectHaul.Feature.Label>Direct Haul Funktion</Microtools.Settings.DirectHaul.Feature.Label>
+  <Microtools.Settings.DirectHaul.Feature.Description>Befal direkte kolonister at transportere valgte genstande til en bestemt placering.</Microtools.Settings.DirectHaul.Feature.Description>
+  <Microtools.Settings.DirectHaul.PlacementGhosts.Enable.Label>Vis placeringsspøgelser</Microtools.Settings.DirectHaul.PlacementGhosts.Enable.Label>
+  <Microtools.Settings.DirectHaul.PlacementGhosts.Enable.Description>Vis spøgelser, der viser, hvor genstande vil blive placeret.</Microtools.Settings.DirectHaul.PlacementGhosts.Enable.Description>
+  <Microtools.Settings.DirectHaul.StatusOverlays.Enable.Label>Vis statusoverlejringer</Microtools.Settings.DirectHaul.StatusOverlays.Enable.Label>
+  <Microtools.Settings.DirectHaul.StatusOverlays.Enable.Description>Vis overlejringer på genstande, der angiver deres 'Afventende' eller 'Holdt' status for Direct Haul.</Microtools.Settings.DirectHaul.StatusOverlays.Enable.Description>
+  <Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Label>Vis radiusindikator</Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Label>
+  <Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Description>Vis en cirkel, der omfatter alle placeringssteder.</Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Description>
+  <Microtools.Settings.DirectHaul.StorageCreationPreview.Enable.Label>Vis forhåndsvisning af lageroprettelse</Microtools.Settings.DirectHaul.StorageCreationPreview.Enable.Label>
+  <Microtools.Settings.DirectHaul.StorageCreationPreview.Enable.Description>Vis en rektangulær forhåndsvisning, når der oprettes/udvides lagerzoner via træk.</Microtools.Settings.DirectHaul.StorageCreationPreview.Enable.Description>
+  <Microtools.Settings.DirectHaul.StorageHighlight.Enable.Label>Fremhæv lager ved hover</Microtools.Settings.DirectHaul.StorageHighlight.Enable.Label>
+  <Microtools.Settings.DirectHaul.StorageHighlight.Enable.Description>Fremhæv eksisterende lagerzoner/bygninger, når der holdes over i Lagertilstand.</Microtools.Settings.DirectHaul.StorageHighlight.Enable.Description>
+  <Microtools.Settings.DirectHaul.InvertKeys.Enable.Label>Inverter Standard/Lager-taster</Microtools.Settings.DirectHaul.InvertKeys.Enable.Label>
+  <Microtools.Settings.DirectHaul.InvertKeys.Enable.Description>Byt om på modifikatortasterne, der bruges til Standard transport og Lagertilstand i Direct Haul.</Microtools.Settings.DirectHaul.InvertKeys.Enable.Description>
+  <!-- Direct Haul Gizmos -->
+  <Microtools.DirectHaul.Command_CancelHeldStatus.Label>Annuller status 'Holdt'</Microtools.DirectHaul.Command_CancelHeldStatus.Label>
+  <Microtools.DirectHaul.Command_CancelHeldStatus.Desc>Annuller status 'Holdt' for denne genstand i Direct Haul.</Microtools.DirectHaul.Command_CancelHeldStatus.Desc>
+  <Microtools.DirectHaul.Command_CancelPendingStatus.Label>Annuller status 'Afventende'</Microtools.DirectHaul.Command_CancelPendingStatus.Label>
+  <Microtools.DirectHaul.Command_CancelPendingStatus.Desc>Annuller status 'Afventende' for denne genstand i Direct Haul.</Microtools.DirectHaul.Command_CancelPendingStatus.Desc>
+</LanguageData>

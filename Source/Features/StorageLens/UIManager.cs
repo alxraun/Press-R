@@ -4,7 +4,7 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace PressR.Features.StorageLens
+namespace Microtools.Features.StorageLens
 {
     public class UIManager(State state)
     {

@@ -1,4 +1,4 @@
-namespace PressR.UI.Components
+namespace Microtools.UI.Components
 {
     public static class Constants
     {

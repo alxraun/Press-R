@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
-namespace PressR.Debug
+namespace Microtools.Debug
 {
     public static class Log
     {
@@ -19,7 +19,7 @@ namespace PressR.Debug
             }
             MessageOnceKeys.Add(onceKey);
 
-            Verse.Log.Message($"[PressR] [{callerMemberName}] {text}");
+            Verse.Log.Message($"[Microtools] [{callerMemberName}] {text}");
         }
     }
 }

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!-- Settings Reset Button -->
+  <Microtools.Settings.ResetButton.Label>Auf Standard zurücksetzen</Microtools.Settings.ResetButton.Label>
+  <Microtools.Settings.ResetButton.Tooltip>Alle Microtools-Einstellungen auf ihre Standardwerte zurücksetzen.</Microtools.Settings.ResetButton.Tooltip>
+  <Microtools.Settings.ResetButton.Message>Microtools-Einstellungen auf Standard zurückgesetzt.</Microtools.Settings.ResetButton.Message>
+  <!-- Mod Settings Container -->
+  <!-- Tab Lens Feature Section -->
+  <Microtools.Settings.TabLens.Feature.Label>Tab Lens Funktion</Microtools.Settings.TabLens.Feature.Label>
+  <Microtools.Settings.TabLens.Feature.Description>Objekteinstellungen über Karteninteraktion verwalten, wenn relevante Tabs geöffnet sind.</Microtools.Settings.TabLens.Feature.Description>
+  <Microtools.Settings.TabLens.StorageLens.Enable.Label>Storage Lens aktivieren</Microtools.Settings.TabLens.StorageLens.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.Enable.Description>Tab Lens mit dem 'Lager'-Tab verwenden, um die Gegenstandserlaubnis durch Klicken auf der Karte umzuschalten.</Microtools.Settings.TabLens.StorageLens.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Label>Gegenstands-Overlays anzeigen</Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Description>Farbige Overlays auf Gegenständen anzeigen, die ihren erlaubten/verbotenen Status im Lager anzeigen.</Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>UI-Status beim Beenden wiederherstellen</Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>Vorherigen Benutzeroberflächenstatus (Tab, Suche, Scrollen) wiederherstellen, wenn Storage Lens deaktiviert wird.</Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>'Lager'-Tab automatisch öffnen</Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>Den 'Lager'-Tab automatisch öffnen, wenn ein Gegenstand fokussiert wird.</Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>Gegenstand im Tab bei Klick fokussieren</Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>Die Tab-Liste nach dem angeklickten Gegenstand/Kategorie filtern.</Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>Gegenstand im Tab bei Hover fokussieren</Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>Die Tab-Liste nach dem Gegenstand/Kategorie unter dem Mauszeiger filtern.</Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>Erfordert, dass 'Gegenstand im Tab bei Klick fokussieren' aktiviert ist.</Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>
+  <!-- Direct Haul Feature Section -->
+  <Microtools.Settings.DirectHaul.Feature.Label>Direct Haul Funktion</Microtools.Settings.DirectHaul.Feature.Label>
+  <Microtools.Settings.DirectHaul.Feature.Description>Kolonisten direkt befehlen, ausgewählte Gegenstände an einen bestimmten Ort zu transportieren.</Microtools.Settings.DirectHaul.Feature.Description>
+  <Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Label>Radiusindikator anzeigen</Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Label>
+  <Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Description>Einen Kreis anzeigen, der alle Platzierungsorte umfasst.</Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Description>
+  <Microtools.Settings.DirectHaul.InvertKeys.Enable.Label>Standard/Lager-Tasten invertieren</Microtools.Settings.DirectHaul.InvertKeys.Enable.Label>
+  <Microtools.Settings.DirectHaul.InvertKeys.Enable.Description>Die Modifikatortasten für Standard-Transport und Lager-Modus in Direct Haul vertauschen.</Microtools.Settings.DirectHaul.InvertKeys.Enable.Description>
+  <!-- Direct Haul Gizmos -->
+  <Microtools.DirectHaul.Command_CancelHeldStatus.Label>Status 'Gehalten' abbrechen</Microtools.DirectHaul.Command_CancelHeldStatus.Label>
+  <Microtools.DirectHaul.Command_CancelHeldStatus.Desc>Den Status 'Gehalten' für diesen Gegenstand in Direct Haul abbrechen.</Microtools.DirectHaul.Command_CancelHeldStatus.Desc>
+  <Microtools.DirectHaul.Command_CancelPendingStatus.Label>Status 'Ausstehend' abbrechen</Microtools.DirectHaul.Command_CancelPendingStatus.Label>
+  <Microtools.DirectHaul.Command_CancelPendingStatus.Desc>Den Status 'Ausstehend' für diesen Gegenstand in Direct Haul abbrechen.</Microtools.DirectHaul.Command_CancelPendingStatus.Desc>
+</LanguageData>

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace PressR.Graphics.Tween
+namespace Microtools.Graphics.Tween
 {
     public static class Equations
     {

@@ -1,6 +1,6 @@
 using Verse;
 
-namespace PressR.Graphics.Replicator
+namespace Microtools.Graphics.Replicator
 {
     public interface IRenderDataReplicatorDecorator
     {

@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using Verse;
 
-namespace PressR.UI.Components
+namespace Microtools.UI.Components
 {
     public static class ActionButton
     {

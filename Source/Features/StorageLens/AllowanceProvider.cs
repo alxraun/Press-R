@@ -1,4 +1,4 @@
-namespace PressR.Features.StorageLens
+namespace Microtools.Features.StorageLens
 {
     public class AllowanceProvider(State state)
     {

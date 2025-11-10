@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace PressR.Graphics
+namespace Microtools.Graphics
 {
     public interface IHasColor
     {

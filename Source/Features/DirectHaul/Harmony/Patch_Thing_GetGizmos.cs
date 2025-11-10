@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using HarmonyLib;
-using PressR.Features.DirectHaul;
+using Microtools.Features.DirectHaul;
 using Verse;
 
-namespace PressR.Features.DirectHaul.Harmony
+namespace Microtools.Features.DirectHaul.Harmony
 {
-    [HarmonyPatchCategory("PressR")]
+    [HarmonyPatchCategory("Microtools")]
     [HarmonyPatch(typeof(Thing), nameof(Thing.GetGizmos))]
     public static class Patch_Thing_GetGizmos
     {
@@ -21,7 +21,7 @@ namespace PressR.Features.DirectHaul.Harmony
 
             var map = __instance?.MapHeld ?? __instance?.Map;
             ThingStateManager directHaul = map
-                ?.GetPressRMapComponent()
+                ?.GetMicrotoolsMapComponent()
                 ?.DirectHaul?.ThingStateManager;
 
             if (directHaul == null)

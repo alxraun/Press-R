@@ -1,9 +1,9 @@
 using HarmonyLib;
 using Verse;
 
-namespace PressR.Features.DirectHaul.Harmony
+namespace Microtools.Features.DirectHaul.Harmony
 {
-    [HarmonyPatchCategory("PressR")]
+    [HarmonyPatchCategory("Microtools")]
     [HarmonyPatch(typeof(Thing), nameof(Thing.TryAbsorbStack))]
     public static class Patch_Thing_TryAbsorbStack
     {
@@ -19,7 +19,7 @@ namespace PressR.Features.DirectHaul.Harmony
                 return true;
 
             ThingStateManager directHaul =
-                map.GetPressRMapComponent()?.DirectHaul?.ThingStateManager;
+                map.GetMicrotoolsMapComponent()?.DirectHaul?.ThingStateManager;
             if (directHaul == null)
                 return true;
 

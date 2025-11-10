@@ -4,14 +4,14 @@ using RimWorld;
 using Verse;
 using Verse.AI;
 
-namespace PressR.Features.DirectHaul
+namespace Microtools.Features.DirectHaul
 {
     public class JobDriver_DirectHaul : JobDriver
     {
         private const TargetIndex HaulableInd = TargetIndex.A;
         private const TargetIndex StoreCellInd = TargetIndex.B;
 
-        private DirectHaul DirectHaul => pawn.Map?.GetPressRMapComponent()?.DirectHaul;
+        private DirectHaul DirectHaul => pawn.Map?.GetMicrotoolsMapComponent()?.DirectHaul;
         private Thing HaulableThing => job.GetTarget(HaulableInd).Thing;
         private IntVec3 StoreCell => job.GetTarget(StoreCellInd).Cell;
 

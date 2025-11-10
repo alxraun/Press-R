@@ -1,17 +1,17 @@
-using PressR.Settings;
+using Microtools.Settings;
 using RimWorld;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
-using static PressR.UI.Components.Constants;
+using static Microtools.UI.Components.Constants;
 
-namespace PressR.UI.Components
+namespace Microtools.UI.Components
 {
     public static class SettingsResetButton
     {
         private static readonly Color BackgroundColor = new(0.55f, 0.55f, 0.4f, 0.2f);
 
-        public static void Draw(Listing_Standard listing, PressRSettings settings)
+        public static void Draw(Listing_Standard listing, MicrotoolsSettings settings)
         {
             if (listing == null || settings == null)
                 return;
@@ -37,18 +37,18 @@ namespace PressR.UI.Components
             Text.Anchor = TextAnchor.MiddleCenter;
             using (new TextBlock(GameFont.Small))
             {
-                Widgets.Label(rect, "PressR.Settings.ResetButton.Label".Translate());
+                Widgets.Label(rect, "Microtools.Settings.ResetButton.Label".Translate());
             }
             Text.Anchor = previousAnchor;
         }
 
-        private static void HandleInteraction(Rect buttonRect, PressRSettings settings)
+        private static void HandleInteraction(Rect buttonRect, MicrotoolsSettings settings)
         {
             if (Widgets.ButtonInvisible(buttonRect))
             {
                 settings.ResetToDefaults();
                 Messages.Message(
-                    "PressR.Settings.ResetButton.Message".Translate(),
+                    "Microtools.Settings.ResetButton.Message".Translate(),
                     MessageTypeDefOf.PositiveEvent
                 );
                 SoundDefOf.Click.PlayOneShotOnCamera();

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!-- Settings Reset Button -->
+  <Microtools.Settings.ResetButton.Label>Varsayılana Sıfırla</Microtools.Settings.ResetButton.Label>
+  <Microtools.Settings.ResetButton.Tooltip>Tüm Microtools ayarlarını varsayılan değerlerine sıfırla.</Microtools.Settings.ResetButton.Tooltip>
+  <Microtools.Settings.ResetButton.Message>Microtools ayarları varsayılana sıfırlandı.</Microtools.Settings.ResetButton.Message>
+  <!-- Mod Settings Container -->
+  <!-- Tab Lens Feature Section -->
+  <Microtools.Settings.TabLens.Feature.Label>Sekme Lensi Özelliği</Microtools.Settings.TabLens.Feature.Label>
+  <Microtools.Settings.TabLens.Feature.Description>İlgili sekmeler açıkken harita etkileşimi yoluyla eşya ayarlarını yönetin.</Microtools.Settings.TabLens.Feature.Description>
+  <Microtools.Settings.TabLens.StorageLens.Enable.Label>Depolama Lensi'ni Etkinleştir</Microtools.Settings.TabLens.StorageLens.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.Enable.Description>Haritaya tıklayarak eşya iznini değiştirmek için 'Depolama' sekmesiyle Sekme Lensi'ni kullanın.</Microtools.Settings.TabLens.StorageLens.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Label>Eşya Kaplamalarını Göster</Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Description>Depolamada izin verilen/izin verilmeyen durumlarını gösteren renkli kaplamaları eşyalarda gösterin.</Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>Çıkışta Kullanıcı Arayüzü Durumunu Geri Yükle</Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>Depolama Lensi devre dışı bırakıldığında önceki Kullanıcı Arayüzü durumunu (sekme, arama, kaydırma) geri yükleyin.</Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>'Depolama' Sekmesini Otomatik Aç</Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>Bir eşyaya odaklanıldığında 'Depolama' sekmesini otomatik olarak açın.</Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>Tıklayınca Sekmede Eşyaya Odaklan</Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>Sekme listesini tıklanan eşya/kategoriye filtreleyin.</Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>Üzerine Gelince Sekmede Eşyaya Odaklan</Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>Sekme listesini üzerine gelinen eşya/kategoriye filtreleyin.</Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>'Tıklayınca Sekmede Eşyaya Odaklan' seçeneğinin etkinleştirilmesini gerektirir.</Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>
+  <!-- Direct Haul Feature Section -->
+  <Microtools.Settings.DirectHaul.Feature.Label>Doğrudan Taşıma Özelliği</Microtools.Settings.DirectHaul.Feature.Label>
+  <Microtools.Settings.DirectHaul.Feature.Description>Seçili eşyaları belirli bir konuma taşımaları için kolonistlere doğrudan komut verin.</Microtools.Settings.DirectHaul.Feature.Description>
+  <Microtools.Settings.DirectHaul.PlacementGhosts.Enable.Label>Yerleştirme Hayaletlerini Göster</Microtools.Settings.DirectHaul.PlacementGhosts.Enable.Label>
+  <Microtools.Settings.DirectHaul.PlacementGhosts.Enable.Description>Eşyaların nereye yerleştirileceğini gösteren hayaletleri görüntüleyin.</Microtools.Settings.DirectHaul.PlacementGhosts.Enable.Description>
+  <Microtools.Settings.DirectHaul.StatusOverlays.Enable.Label>Durum Kaplamalarını Göster</Microtools.Settings.DirectHaul.StatusOverlays.Enable.Label>
+  <Microtools.Settings.DirectHaul.StatusOverlays.Enable.Description>Doğrudan Taşıma için 'Beklemede' veya 'Tutulan' durumlarını gösteren kaplamaları eşyalarda gösterin.</Microtools.Settings.DirectHaul.StatusOverlays.Enable.Description>
+  <Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Label>Yarıçap Göstergesini Göster</Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Label>
+  <Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Description>Tüm yerleştirme konumlarını kapsayan bir daire gösterin.</Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Description>
+  <Microtools.Settings.DirectHaul.StorageCreationPreview.Enable.Label>Depolama Oluşturma Önizlemesini Göster</Microtools.Settings.DirectHaul.StorageCreationPreview.Enable.Label>
+  <Microtools.Settings.DirectHaul.StorageCreationPreview.Enable.Description>Sürükleyerek depolama bölgeleri oluştururken/genişletirken bir dikdörtgen önizlemesi gösterin.</Microtools.Settings.DirectHaul.StorageCreationPreview.Enable.Description>
+  <Microtools.Settings.DirectHaul.StorageHighlight.Enable.Label>Üzerine Gelince Depolamayı Vurgula</Microtools.Settings.DirectHaul.StorageHighlight.Enable.Label>
+  <Microtools.Settings.DirectHaul.StorageHighlight.Enable.Description>Depolama modunda üzerine gelindiğinde mevcut depolama bölgelerini/binalarını vurgulayın.</Microtools.Settings.DirectHaul.StorageHighlight.Enable.Description>
+  <Microtools.Settings.DirectHaul.InvertKeys.Enable.Label>Standart/Depolama Tuşlarını Ters Çevir</Microtools.Settings.DirectHaul.InvertKeys.Enable.Label>
+  <Microtools.Settings.DirectHaul.InvertKeys.Enable.Description>Standart taşıma ve Depolama modu için kullanılan değiştirici tuşları değiştirin.</Microtools.Settings.DirectHaul.InvertKeys.Enable.Description>
+  <!-- Direct Haul Gizmos -->
+  <Microtools.DirectHaul.Command_CancelHeldStatus.Label>Tutulan Durumu İptal Et</Microtools.DirectHaul.Command_CancelHeldStatus.Label>
+  <Microtools.DirectHaul.Command_CancelHeldStatus.Desc>Doğrudan Taşımada bu eşya için tutulan durumu iptal et.</Microtools.DirectHaul.Command_CancelHeldStatus.Desc>
+  <Microtools.DirectHaul.Command_CancelPendingStatus.Label>Beklemede Durumu İptal Et</Microtools.DirectHaul.Command_CancelPendingStatus.Label>
+  <Microtools.DirectHaul.Command_CancelPendingStatus.Desc>Doğrudan Taşımada bu eşya için beklemede durumunu iptal et.</Microtools.DirectHaul.Command_CancelPendingStatus.Desc>
+</LanguageData>

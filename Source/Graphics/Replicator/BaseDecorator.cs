@@ -1,7 +1,7 @@
 using RimWorld;
 using Verse;
 
-namespace PressR.Graphics.Replicator
+namespace Microtools.Graphics.Replicator
 {
     public abstract class BaseDecorator : IRenderDataReplicatorDecorator
     {

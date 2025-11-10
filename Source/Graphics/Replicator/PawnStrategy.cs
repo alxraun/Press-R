@@ -4,7 +4,7 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace PressR.Graphics.Replicator
+namespace Microtools.Graphics.Replicator
 {
     [StaticConstructorOnStartup]
     public class PawnStrategy : BaseRenderStrategy
@@ -19,7 +19,7 @@ namespace PressR.Graphics.Replicator
         private const float HumanlikeBaseYOffset = -0.06f;
 
 #if DEBUG
-        [TweakValue("PressR.Replicator", 0f, 1f)]
+        [TweakValue("Microtools.Replicator", 0f, 1f)]
         private static bool EnablePawnStrategy = true;
 #else
         private static bool EnablePawnStrategy = true;
@@ -54,7 +54,7 @@ namespace PressR.Graphics.Replicator
         private class PawnHumanoidTransparencyDecorator : BasePawnRenderDecorator
         {
 #if DEBUG
-            [TweakValue("PressR.Replicator", 0f, 1f)]
+            [TweakValue("Microtools.Replicator", 0f, 1f)]
             public static bool EnablePawnHumanoidTransparency = true;
 #else
             public static bool EnablePawnHumanoidTransparency = true;
@@ -82,7 +82,7 @@ namespace PressR.Graphics.Replicator
         private class PawnCorpseRotationDecorator : BasePawnRenderDecorator
         {
 #if DEBUG
-            [TweakValue("PressR.Replicator", 0f, 1f)]
+            [TweakValue("Microtools.Replicator", 0f, 1f)]
             public static bool EnablePawnCorpseRotationDecorator = true;
 #else
             public static bool EnablePawnCorpseRotationDecorator = true;
@@ -120,7 +120,7 @@ namespace PressR.Graphics.Replicator
         private class PawnPostureRotationDecorator : BasePawnRenderDecorator
         {
 #if DEBUG
-            [TweakValue("PressR.Replicator", 0f, 1f)]
+            [TweakValue("Microtools.Replicator", 0f, 1f)]
             public static bool EnablePawnPostureRotationDecorator = true;
 #else
             public static bool EnablePawnPostureRotationDecorator = true;
@@ -159,7 +159,7 @@ namespace PressR.Graphics.Replicator
             private const float CorpseRottingYOffsetAddition = 0.015f;
 
 #if DEBUG
-            [TweakValue("PressR.Replicator", 0f, 1f)]
+            [TweakValue("Microtools.Replicator", 0f, 1f)]
             public static bool EnablePawnCorpsePositionDecorator = true;
 #else
             public static bool EnablePawnCorpsePositionDecorator = true;
@@ -201,7 +201,7 @@ namespace PressR.Graphics.Replicator
             private const float PawnInBedYOffset = 0.025f;
 
 #if DEBUG
-            [TweakValue("PressR.Replicator", 0f, 1f)]
+            [TweakValue("Microtools.Replicator", 0f, 1f)]
             public static bool EnablePawnBedPositionDecorator = true;
 #else
             public static bool EnablePawnBedPositionDecorator = true;
@@ -237,7 +237,7 @@ namespace PressR.Graphics.Replicator
             private const float CarriedPawnYOffset = 0.035f;
 
 #if DEBUG
-            [TweakValue("PressR.Replicator", 0f, 1f)]
+            [TweakValue("Microtools.Replicator", 0f, 1f)]
             public static bool EnablePawnCarriedPositionDecorator = true;
 #else
             public static bool EnablePawnCarriedPositionDecorator = true;

@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using PressR.Graphics.Tween;
+using Microtools.Graphics.Tween;
 using UnityEngine;
 using Verse;
 
-namespace PressR.Graphics
+namespace Microtools.Graphics
 {
     public class GraphicsManager : IGraphicsManager
     {

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace PressR
+namespace Microtools
 {
     public class Throttler
     {

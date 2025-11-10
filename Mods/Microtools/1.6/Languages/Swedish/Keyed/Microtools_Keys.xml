@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!-- Settings Reset Button -->
+  <Microtools.Settings.ResetButton.Label>Återställ till standard</Microtools.Settings.ResetButton.Label>
+  <Microtools.Settings.ResetButton.Tooltip>Återställ alla Microtools-inställningar till sina standardvärden.</Microtools.Settings.ResetButton.Tooltip>
+  <Microtools.Settings.ResetButton.Message>Microtools-inställningar återställda till standard.</Microtools.Settings.ResetButton.Message>
+  <!-- Mod Settings Container -->
+  <!-- Tab Lens Feature Section -->
+  <Microtools.Settings.TabLens.Feature.Label>Tab Lens-funktion</Microtools.Settings.TabLens.Feature.Label>
+  <Microtools.Settings.TabLens.Feature.Description>Hantera sakinställningar via kartinteraktion när relevanta flikar är öppna.</Microtools.Settings.TabLens.Feature.Description>
+  <Microtools.Settings.TabLens.StorageLens.Enable.Label>Aktivera Storage Lens</Microtools.Settings.TabLens.StorageLens.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.Enable.Description>Använd Tab Lens med fliken 'Lagring' för att växla föremålstillåtelse genom att klicka på kartan.</Microtools.Settings.TabLens.StorageLens.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Label>Visa föremålsöverlägg</Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Description>Visa färgade överlägg på föremål som indikerar deras tillåtna/förbjudna status i lagring.</Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>Återställ UI-läge vid avslut</Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>Återställ föregående användargränssnittsläge (flik, sökning, rullning) när Storage Lens avaktiveras.</Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>Auto-öppna 'Lagring'-fliken</Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>Öppna automatiskt 'Lagring'-fliken när du fokuserar på ett föremål.</Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>Fokusera på föremål i fliken vid klick</Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>Filtrera fliklistan till det klickade föremålet/kategorin.</Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>Fokusera på föremål i fliken vid hovring</Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>Filtrera fliklistan till det hovrade föremålet/kategorin.</Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled>
+  <Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>Kräver att 'Fokusera på föremål i fliken vid klick' är aktiverat.</Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled>
+  <!-- Direct Haul Feature Section -->
+  <Microtools.Settings.DirectHaul.Feature.Label>Direkt hämtning-funktion</Microtools.Settings.DirectHaul.Feature.Label>
+  <Microtools.Settings.DirectHaul.Feature.Description>Kommendera direkt kolonister att hämta valda föremål till en specifik plats.</Microtools.Settings.DirectHaul.Feature.Description>
+  <Microtools.Settings.DirectHaul.PlacementGhosts.Enable.Label>Visa placeringsspöken</Microtools.Settings.DirectHaul.PlacementGhosts.Enable.Label>
+  <Microtools.Settings.DirectHaul.PlacementGhosts.Enable.Description>Visa spöken som visar var föremål kommer att placeras.</Microtools.Settings.DirectHaul.PlacementGhosts.Enable.Description>
+  <Microtools.Settings.DirectHaul.StatusOverlays.Enable.Label>Visa statusöverlägg</Microtools.Settings.DirectHaul.StatusOverlays.Enable.Label>
+  <Microtools.Settings.DirectHaul.StatusOverlays.Enable.Description>Visa överlägg på föremål som indikerar deras 'Väntande' eller 'Hållen' status för Direkt hämtning.</Microtools.Settings.DirectHaul.StatusOverlays.Enable.Description>
+  <Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Label>Visa radieindikator</Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Label>
+  <Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Description>Visa en cirkel som omfattar alla placeringsplatser.</Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Description>
+  <Microtools.Settings.DirectHaul.StorageCreationPreview.Enable.Label>Visa förhandsgranskning av lagringsskapande</Microtools.Settings.DirectHaul.StorageCreationPreview.Enable.Label>
+  <Microtools.Settings.DirectHaul.StorageCreationPreview.Enable.Description>Visa en rektangelförhandsgranskning när du skapar/expanderar lagringszoner via dragning.</Microtools.Settings.DirectHaul.StorageCreationPreview.Enable.Description>
+  <Microtools.Settings.DirectHaul.StorageHighlight.Enable.Label>Markera lagring vid hovring</Microtools.Settings.DirectHaul.StorageHighlight.Enable.Label>
+  <Microtools.Settings.DirectHaul.StorageHighlight.Enable.Description>Markera befintliga lagringszoner/byggnader vid hovring i Lagringsläge.</Microtools.Settings.DirectHaul.StorageHighlight.Enable.Description>
+  <Microtools.Settings.DirectHaul.InvertKeys.Enable.Label>Invertera Standard/Lagringstangenter</Microtools.Settings.DirectHaul.InvertKeys.Enable.Label>
+  <Microtools.Settings.DirectHaul.InvertKeys.Enable.Description>Byt modifieringstangenterna som används för Standardhämtning och Lagringsläge.</Microtools.Settings.DirectHaul.InvertKeys.Enable.Description>
+  <!-- Direct Haul Gizmos -->
+  <Microtools.DirectHaul.Command_CancelHeldStatus.Label>Avbryt Hållen Status</Microtools.DirectHaul.Command_CancelHeldStatus.Label>
+  <Microtools.DirectHaul.Command_CancelHeldStatus.Desc>Avbryt den hållna statusen för detta föremål i Direkt hämtning.</Microtools.DirectHaul.Command_CancelHeldStatus.Desc>
+  <Microtools.DirectHaul.Command_CancelPendingStatus.Label>Avbryt Väntande Status</Microtools.DirectHaul.Command_CancelPendingStatus.Label>
+  <Microtools.DirectHaul.Command_CancelPendingStatus.Desc>Avbryt den väntande statusen för detta föremål i Direkt hämtning.</Microtools.DirectHaul.Command_CancelPendingStatus.Desc>
+</LanguageData>

@@ -4,7 +4,7 @@ using UnityEngine;
 using Verse;
 using Verse.Sound;
 
-namespace PressR.Features.DirectHaul
+namespace Microtools.Features.DirectHaul
 {
     public class Command_CancelPendingStatus : Command_Action
     {
@@ -16,10 +16,10 @@ namespace PressR.Features.DirectHaul
             _pendingThing = pendingThing;
             _thingStateManager = thingStateManager;
 
-            defaultLabel = "PressR.DirectHaul.Command_CancelPendingStatus.Label".Translate();
-            defaultDesc = "PressR.DirectHaul.Command_CancelPendingStatus.Desc".Translate();
+            defaultLabel = "Microtools.DirectHaul.Command_CancelPendingStatus.Label".Translate();
+            defaultDesc = "Microtools.DirectHaul.Command_CancelPendingStatus.Desc".Translate();
 
-            icon = ContentFinder<Texture2D>.Get("DirectHaul/cancel_pending_status_gizmo", true);
+            icon = ContentFinder<Texture2D>.Get("dh_cancel_pending_status_gizmo", true);
             Order = -99f;
             hotKey = KeyBindingDefOf.Designator_Cancel;
 
@@ -37,11 +37,11 @@ namespace PressR.Features.DirectHaul
                 var options = new List<FloatMenuOption>
                 {
                     new(
-                        "PressR.DirectHaul.Command_CancelHeldStatus.CancelAllInView".Translate(),
+                        "Microtools.DirectHaul.Command_CancelHeldStatus.CancelAllInView".Translate(),
                         () => RemoveAllInView()
                     ),
                     new(
-                        "PressR.DirectHaul.Command_CancelHeldStatus.CancelAllOnMap".Translate(),
+                        "Microtools.DirectHaul.Command_CancelHeldStatus.CancelAllOnMap".Translate(),
                         () => RemoveAllOnMap()
                     ),
                 };

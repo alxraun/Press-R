@@ -2,12 +2,12 @@ using LudeonTK;
 using UnityEngine;
 using Verse;
 
-namespace PressR.Graphics.Replicator
+namespace Microtools.Graphics.Replicator
 {
     public class RandomRotatedStrategy : BaseRenderStrategy
     {
 #if DEBUG
-        [TweakValue("PressR.Replicator", 0f, 1f)]
+        [TweakValue("Microtools.Replicator", 0f, 1f)]
         private static bool EnableRandomRotatedStrategy = true;
 #endif
 

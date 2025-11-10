@@ -1,15 +1,15 @@
-using PressR.Settings;
+using Microtools.Settings;
 using UnityEngine;
 using Verse;
-using static PressR.UI.Components.Constants;
+using static Microtools.UI.Components.Constants;
 
-namespace PressR.UI.Components
+namespace Microtools.UI.Components
 {
     public static class ModSettingsContainer
     {
         private static Vector2 scrollPosition = Vector2.zero;
 
-        public static void Draw(Rect rect, PressRSettings settings)
+        public static void Draw(Rect rect, MicrotoolsSettings settings)
         {
             Listing_Standard listingStandard = new();
             Rect contentRect = rect.ContractedBy(10f);
@@ -21,14 +21,14 @@ namespace PressR.UI.Components
             FeatureSection.Draw(
                 listingStandard,
                 ref settings.storageLensSettings.enableStorageLens,
-                label: "PressR.Settings.TabLens.StorageLens.Enable.Label".Translate(),
-                description: "PressR.Settings.TabLens.StorageLens.Enable.Description".Translate(),
+                label: "Microtools.Settings.TabLens.StorageLens.Enable.Label".Translate(),
+                description: "Microtools.Settings.TabLens.StorageLens.Enable.Description".Translate(),
                 drawContentAction: (sectionListing, nextIndentLevel) =>
                 {
                     SettingsItem.Draw(
                         sectionListing,
-                        label: "PressR.Settings.TabLens.StorageLens.Overlays.Enable.Label".Translate(),
-                        description: "PressR.Settings.TabLens.StorageLens.Overlays.Enable.Description".Translate(),
+                        label: "Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Label".Translate(),
+                        description: "Microtools.Settings.TabLens.StorageLens.Overlays.Enable.Description".Translate(),
                         currentValue: settings.storageLensSettings.enableStorageLensOverlays,
                         onValueChanged: (newValue) =>
                             settings.storageLensSettings.enableStorageLensOverlays = newValue,
@@ -36,8 +36,8 @@ namespace PressR.UI.Components
                     );
                     SettingsItem.Draw(
                         sectionListing,
-                        label: "PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Label".Translate(),
-                        description: "PressR.Settings.TabLens.StorageLens.RestoreUI.Enable.Description".Translate(),
+                        label: "Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Label".Translate(),
+                        description: "Microtools.Settings.TabLens.StorageLens.RestoreUI.Enable.Description".Translate(),
                         currentValue: settings.storageLensSettings.restoreUIStateOnDeactivate,
                         onValueChanged: (newValue) =>
                             settings.storageLensSettings.restoreUIStateOnDeactivate = newValue,
@@ -45,8 +45,8 @@ namespace PressR.UI.Components
                     );
                     SettingsItem.Draw(
                         sectionListing,
-                        label: "PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label".Translate(),
-                        description: "PressR.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description".Translate(),
+                        label: "Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Label".Translate(),
+                        description: "Microtools.Settings.TabLens.StorageLens.AutoOpenTab.Enable.Description".Translate(),
                         currentValue: settings.storageLensSettings.openStorageTabAutomatically,
                         onValueChanged: (newValue) =>
                             settings.storageLensSettings.openStorageTabAutomatically = newValue,
@@ -54,8 +54,8 @@ namespace PressR.UI.Components
                     );
                     SettingsItem.Draw(
                         sectionListing,
-                        label: "PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label".Translate(),
-                        description: "PressR.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description".Translate(),
+                        label: "Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Label".Translate(),
+                        description: "Microtools.Settings.TabLens.StorageLens.FocusOnClick.Enable.Description".Translate(),
                         currentValue: settings.storageLensSettings.FocusItemInTabOnClick,
                         onValueChanged: (newValue) =>
                             settings.storageLensSettings.FocusItemInTabOnClick = newValue,
@@ -64,12 +64,12 @@ namespace PressR.UI.Components
 
                     bool isFocusOnClickEnabled = settings.storageLensSettings.FocusItemInTabOnClick;
                     string hoverDescription = isFocusOnClickEnabled
-                        ? "PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled".Translate()
-                        : "PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled".Translate();
+                        ? "Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Enabled".Translate()
+                        : "Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Description.Disabled".Translate();
 
                     SettingsItem.Draw(
                         sectionListing,
-                        label: "PressR.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label".Translate(),
+                        label: "Microtools.Settings.TabLens.StorageLens.FocusOnHover.Enable.Label".Translate(),
                         description: hoverDescription,
                         currentValue: settings.storageLensSettings.FocusItemInTabOnHover,
                         onValueChanged: (newValue) =>
@@ -85,15 +85,15 @@ namespace PressR.UI.Components
             FeatureSection.Draw(
                 listingStandard,
                 ref settings.enableDirectHaul,
-                label: "PressR.Settings.DirectHaul.Feature.Label".Translate(),
-                description: "PressR.Settings.DirectHaul.Feature.Description".Translate(),
+                label: "Microtools.Settings.DirectHaul.Feature.Label".Translate(),
+                description: "Microtools.Settings.DirectHaul.Feature.Description".Translate(),
                 drawContentAction: (sectionListing, nextIndentLevel) =>
                 {
                     /*
                     SettingsItem.Draw(
                         sectionListing,
-                        label: "PressR.Settings.DirectHaul.PlacementGhosts.Enable.Label".Translate(),
-                        description: "PressR.Settings.DirectHaul.PlacementGhosts.Enable.Description".Translate(),
+                        label: "Microtools.Settings.DirectHaul.PlacementGhosts.Enable.Label".Translate(),
+                        description: "Microtools.Settings.DirectHaul.PlacementGhosts.Enable.Description".Translate(),
                         currentValue: settings.directHaulSettings.enablePlacementGhosts,
                         onValueChanged: (newValue) =>
                             settings.directHaulSettings.enablePlacementGhosts = newValue,
@@ -103,8 +103,8 @@ namespace PressR.UI.Components
                     /*
                     SettingsItem.Draw(
                         sectionListing,
-                        label: "PressR.Settings.DirectHaul.StatusOverlays.Enable.Label".Translate(),
-                        description: "PressR.Settings.DirectHaul.StatusOverlays.Enable.Description".Translate(),
+                        label: "Microtools.Settings.DirectHaul.StatusOverlays.Enable.Label".Translate(),
+                        description: "Microtools.Settings.DirectHaul.StatusOverlays.Enable.Description".Translate(),
                         currentValue: settings.directHaulSettings.enableStatusOverlays,
                         onValueChanged: (newValue) =>
                             settings.directHaulSettings.enableStatusOverlays = newValue,
@@ -113,8 +113,8 @@ namespace PressR.UI.Components
                     */
                     SettingsItem.Draw(
                         sectionListing,
-                        label: "PressR.Settings.DirectHaul.RadiusIndicator.Enable.Label".Translate(),
-                        description: "PressR.Settings.DirectHaul.RadiusIndicator.Enable.Description".Translate(),
+                        label: "Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Label".Translate(),
+                        description: "Microtools.Settings.DirectHaul.RadiusIndicator.Enable.Description".Translate(),
                         currentValue: settings.directHaulSettings.enableRadiusIndicator,
                         onValueChanged: (newValue) =>
                             settings.directHaulSettings.enableRadiusIndicator = newValue,
@@ -123,8 +123,8 @@ namespace PressR.UI.Components
                     /*
                     SettingsItem.Draw(
                         sectionListing,
-                        label: "PressR.Settings.DirectHaul.StorageCreationPreview.Enable.Label".Translate(),
-                        description: "PressR.Settings.DirectHaul.StorageCreationPreview.Enable.Description".Translate(),
+                        label: "Microtools.Settings.DirectHaul.StorageCreationPreview.Enable.Label".Translate(),
+                        description: "Microtools.Settings.DirectHaul.StorageCreationPreview.Enable.Description".Translate(),
                         currentValue: settings.directHaulSettings.enableStorageCreationPreview,
                         onValueChanged: (newValue) =>
                             settings.directHaulSettings.enableStorageCreationPreview = newValue,
@@ -132,8 +132,8 @@ namespace PressR.UI.Components
                     );
                     SettingsItem.Draw(
                         sectionListing,
-                        label: "PressR.Settings.DirectHaul.StorageHighlight.Enable.Label".Translate(),
-                        description: "PressR.Settings.DirectHaul.StorageHighlight.Enable.Description".Translate(),
+                        label: "Microtools.Settings.DirectHaul.StorageHighlight.Enable.Label".Translate(),
+                        description: "Microtools.Settings.DirectHaul.StorageHighlight.Enable.Description".Translate(),
                         currentValue: settings.directHaulSettings.enableStorageHighlightOnHover,
                         onValueChanged: (newValue) =>
                             settings.directHaulSettings.enableStorageHighlightOnHover = newValue,
@@ -142,8 +142,8 @@ namespace PressR.UI.Components
                     */
                     SettingsItem.Draw(
                         sectionListing,
-                        label: "PressR.Settings.DirectHaul.InvertKeys.Enable.Label".Translate(),
-                        description: "PressR.Settings.DirectHaul.InvertKeys.Enable.Description".Translate(),
+                        label: "Microtools.Settings.DirectHaul.InvertKeys.Enable.Label".Translate(),
+                        description: "Microtools.Settings.DirectHaul.InvertKeys.Enable.Description".Translate(),
                         currentValue: settings.directHaulSettings.invertStandardAndStorageKeys,
                         onValueChanged: (newValue) =>
                             settings.directHaulSettings.invertStandardAndStorageKeys = newValue,
