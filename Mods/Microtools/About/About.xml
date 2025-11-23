@@ -2,9 +2,8 @@
 <ModMetaData>
   <packageId>alx.microtools</packageId>
   <name>Microtools Alpha</name>
-  <author>Alx</author>
+  <author>alx</author>
   <supportedVersions>
-    <li>1.5</li>
     <li>1.6</li>
   </supportedVersions>
   <modDependencies>
